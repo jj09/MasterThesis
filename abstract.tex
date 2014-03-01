@@ -12,41 +12,16 @@
 % | Enter the text of your abstract below, maximum of 350 words.
 % +--------------------------------------------------------------------+
 
-This template uses a separate file for each section of your ETDR:
-title page, abstract, preface, chapters, reference, etc.  This
-makes it easier to organize and work with a lengthy document.  The
-template is configured with page margins required by the Graduate
-School and will automatically create a table of contents, lists of
-tables and figures, and PDF bookmarks.
+Ada is a language is targeted at embedded and real-time systems.
 
-Although the template gives you a foundation for creating your
-ETDR, you will need a working knowledge of LaTeX in order to
-produce a final document.  You should be familiar with LaTeX
-commands for formatting text, equations, tables, and other
-elements you will need to include in your ETDR.
+SPARK is subset/superset (remove some funcionalities from Ada, but add contracts - in 2005, in 2014: only remove some stuff from Ada like no exceptions, no goto) of Ada with Code Contracts. It is designed for High-Assurance systems. It allows to prove corectness of program and its entities.
 
-This template uses a separate file for each section of your ETDR:
-title page, abstract, preface, chapters, reference, etc.  This
-makes it easier to organize and work with a lengthy document.  The
-template is configured with page margins required by the Graduate
-School and will automatically create a table of contents, lists of
-tables and figures, and PDF bookmarks.
+AADL (Architecture Analysis \& Design Language) is modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems.
 
-Although the template gives you a foundation for creating your
-ETDR, you will need a working knowledge of LaTeX in order to
-produce a final document.  You should be familiar with LaTeX
-commands for formatting text, equations, tables, and other
-elements you will need to include in your ETDR.
+BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sublanguage defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
 
-This template uses a separate file for each section of your ETDR:
-title page, abstract, preface, chapters, reference, etc.  This
-makes it easier to organize and work with a lengthy document.  The
-template is configured with page margins required by the Graduate
-School and will automatically create a table of contents, lists of
-tables and figures, and PDF bookmarks.
+Nowadays, we have trend to generate code from models. The ultimate goal of research, which this thesis if part of, is to create AADL/BLESS to SPARK/Ada traslator. Ultimatelly there will be standarized AADL/BLESS models, which will be generating code base for developers extensions (like sceleton code for some Web Framework).
 
-Although the template gives you a foundation for creating your
-ETDR, you will need a working knowledge of LaTeX in order to
-produce a final document.  You should be familiar with LaTeX
-commands for formatting text, equations, tables, and other
-elements you will need to include in your ETDR.
+Medical Devices are very important part of High-Assurance systems.
+
+This thesis propose mapping from AADL/BLESS to SPARK/Ada. As an example of Medical Device, PCA Pump (Patient Controlled Analgesia) is used. The foundation for this work is System Requirements for \"Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump\" (DRAFT 0.10.1) and AADL Models with BLESS annexes created by Brian Larson. Additionally, there was a contribution made in clarifying the requirements document and extending AADL models.

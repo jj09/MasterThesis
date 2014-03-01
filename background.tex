@@ -1,0 +1,82 @@
+% +--------------------------------------------------------------------+
+% | Sample Chapter 2
+% +--------------------------------------------------------------------+
+
+\cleardoublepage
+
+% +--------------------------------------------------------------------+
+% | Replace "This is Chapter 2" below with the title of your chapter.
+% | LaTeX will automatically number the chapters.
+% +--------------------------------------------------------------------+
+
+\chapter{Background}
+\label{background}
+
+General overview of all below things?
+
+\section{High-assurance systems}
+\label{background:highas}
+What software properties and requirements exists to ensure safety.
+Medical Devices as type of High-assurance systems.
+
+
+\section{SPARK/Ada}
+\label{background:spark}
+History of Ada: http://www.adahome.com/History/Steelman/intro.htm 
+Ada fulfill US DOD requirements.
+Rationale of this language. Good for Software Verification etc.
+http://www.slideshare.net/AdaCore/ada-2012 (slide 11: dev responsibility)
+GNAT Programming Studio.
+Tools for corectness proving.
+
+\subsection{Sireum Kiasan}
+\label{background:spark:sireum}
+Overview: symbolic execution, Pilar, Alir?
+Sireum Kiasan[~\cite{Sireum:RobbyICSE13,Sireum:Kiasan1,Sireum:Kiasan2}] is a tool, which use symbolic execution for finding possible paths in program.
+Plugin for GNAT Programming Studio.
+Plugin for Eclipse (but only SPARK 2005).
+
+\subsection{GNAT Prove}
+\label{background:spark:gnatprove}
+Overview
+
+\subsection{AUnit}
+\label{background:spark:aunit}
+Overview
+
+
+\section{AADL}
+\label{background:aadl}
+Rationale of this language.
+%https://wiki.sei.cmu.edu/aadl/index.php/The_Story_of_AADL
+
+
+\section{BLESS}
+\label{background:bless}
+How it fits into the picture. Why it was developed. Corectness prove in AADL + bahavior, from which we can generate SPARK/Ada code.
+
+
+\section{Integrated Clinical Environment}
+\label{background:ice}
+http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
+http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
+
+
+\section{PCA Pump}
+\label{background:pcapump}
+http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
+
+
+\section{AADL/BLESS to SPARK/Ada code generation}
+\label{background:codegen}
+The ultimate goal of long term research, this thesis is part of.
+AADL->Ada
+BLESS->SPARK contracts + (eventually) behavior
+
+\subsection{Ocarina}
+\label{background:codegen:ocarina}
+Overview: AADL->Ada on PolyOrb, support for other languages?
+
+\subsection{Ramses}
+\label{background:codegen:ramses}
+Overview. Not sure if it is useful at any point here?

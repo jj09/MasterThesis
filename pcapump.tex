@@ -1,0 +1,38 @@
+% +--------------------------------------------------------------------+
+% | Sample Chapter 3
+% +--------------------------------------------------------------------+
+
+\cleardoublepage
+
+% +--------------------------------------------------------------------+
+% | Replace "This is Chapter 3" below with the title of your chapter.
+% | LaTeX will automatically number the chapters.
+% +--------------------------------------------------------------------+
+
+\chapter{PCA Pump Prototype}
+\label{pcapump}
+
+Overview of PCA Pump and issues, which MDCF/ICE will solve.
+
+
+\section{PCA Pump Requirements Document}
+\label{pcapump:requirements-doc}
+Selected use cases for implementation?
+
+
+\section{PCA Pump AADL/BLESS Models}
+\label{pcapump:aadl-bless-models}
+Selected modules for implementation. Pictures etc.
+
+
+\section{BeagleBoard-XM}
+\label{pcapump:beagleboard}
+First step was create PCA Pump prototype on BeagleBoard-XM.
+No gnat compiler at the beginning. Then after cooperation with AdaCore, managed to run Ada program on BB (include source as appendix?). Only Ada (not SPARK), but working!
+Gnat compiler only for Linux Platform (for now).
+
+
+\section{PCA Pump Prototype Implementation}
+\label{pcapump:implementation}
+Issues: Ravenscar Profile, how to deal with different boluses (look at UMinn requirements and annotations for our doc).
+Look at annotated PCA Pump Req document.

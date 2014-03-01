@@ -61,7 +61,7 @@
 % |       the text.                                                    |
 % +--------------------------------------------------------------------+
 
-\bibliographystyle{styles\apa}
+\bibliographystyle{apa}
 
 % +--------------------------------------------------------------------+
 % | Now, we add in all external packages that we will use throughout   |
@@ -268,8 +268,8 @@
 % | Preface Page
 % +--------------------------------------------------------------------+
 
-\addcontentsline{toc}{chapter}{Preface}
-\input{preface.tex}
+%\addcontentsline{toc}{chapter}{Preface}
+%\input{preface.tex}
 
 \phantomsection
 % +--------------------------------------------------------------------+
@@ -293,17 +293,18 @@
 % | Chapters
 % +--------------------------------------------------------------------+
 
-\input{chapter1.tex}
+\input{introduction.tex}
 
 % +--------------------------------------------------------------------+
 % | Uncomment the lines below to add additional chapters.  Name the
 % | files chapter2.tex for Chapter 2, chapter3.tex for Chapter 3, etc.
 % +--------------------------------------------------------------------+
 
-\input{chapter2.tex}
-\input{chapter3.tex}
-%\input{chapter4.tex}
-%\input{chapter5.tex}
+\input{background.tex}
+\input{pcapump.tex}
+\input{codegen.tex}
+\input{summary.tex}
+\input{future_work.tex}
 
 % +-------------------------------------------------------------------------+
 % | References                                                              |
