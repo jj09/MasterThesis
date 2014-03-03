@@ -31,8 +31,8 @@ Tools for corectness proving.
 
 \subsection{Sireum Kiasan}
 \label{background:spark:sireum}
-Overview: symbolic execution, Pilar, Alir?
-Sireum Kiasan[~\cite{Sireum:RobbyICSE13,Sireum:Kiasan1,Sireum:Kiasan2}] is a tool, which use symbolic execution for finding possible paths in program.
+Overview: symbolic execution, Pilar, Alir\cite{THB}?
+Sireum Kiasan\cite{DLR} is a tool, which use symbolic execution for finding possible paths in program.
 Plugin for GNAT Programming Studio.
 Plugin for Eclipse (but only SPARK 2005).
 
@@ -48,7 +48,12 @@ Overview
 \section{AADL}
 \label{background:aadl}
 Rationale of this language.
+“AADL” stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system. %http://libre.adacore.com/tools/ocarina/
 %https://wiki.sei.cmu.edu/aadl/index.php/The_Story_of_AADL
+
+\subsection{Osate}
+\label{background:aadl:osate}
+OSATE is a set of plug-ins on top of the open-source Eclipse platform to provide a toolset for front-end processing of AADL models. It is developed mainly by SEI (Software Engineering Institute - CMU). %http://www.aadl.info/aadl/currentsite/tool/osate.html
 
 
 \section{BLESS}
@@ -67,15 +72,19 @@ http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
 http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
 
 
-\section{AADL/BLESS to SPARK/Ada code generation}
+\section{AADL/BLESS to SPARK/Ada code generation(maybe translation is better word?)}
 \label{background:codegen}
 The ultimate goal of long term research, this thesis is part of.
-AADL->Ada
-BLESS->SPARK contracts + (eventually) behavior
+AADLto Ada
+BLESS to SPARK contracts + (eventually) behavior
 
 \subsection{Ocarina}
 \label{background:codegen:ocarina}
 Overview: AADL->Ada on PolyOrb, support for other languages?
+
+Ocarina generate code from an AADL architecture model to an Ada application running on top of PolyORB framework. In this context, PolyORB acts as both the distribution middleware and execution runtime on all targets supported by PolyORB.
+It generate Ada 2005 and C code.
+
 
 \subsection{Ramses}
 \label{background:codegen:ramses}

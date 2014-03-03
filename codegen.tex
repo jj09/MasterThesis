@@ -14,17 +14,20 @@
 
 First step was to create mock (based on doc, aadl models and implemented PCA Pump).
 
-\section{Extention of exisitn PCA Pump AADL models}
-\label{codegen:translator}
+
+\section{Extention of exisitng PCA Pump AADL models}
+\label{codegen:existing-models}
 I added Subprograms etc.
 How I did it. Code examples.
 
 \section{AADL/BLESS to SPARK/Ada mapping}
 \label{codegen:mapping}
+Mapping is driven by Ocarina and "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document".
+Only high level mapping is done. No implementation (thread interactions). 
 Table, how specific constructs (subset) in AADL/BLESS are translated to SPARK/Ada.
 
 \section{"DeusEx" translator}
 \label{codegen:translator}
 AADL/BLESS to SPARK/Ada translator in Scala. Main idea.
-Maybe at least create base: AADL->AST covertion?
+Maybe at least create base: AADL to AST covertion?
 
