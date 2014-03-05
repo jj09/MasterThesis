@@ -1,4 +1,4 @@
-ux
+*.aux
 *.glo
 *.idx
 *.log
@@ -21,3 +21,4 @@ ux
 *.mtc1
 *.out
 *.synctex.gz
+*.DS_Store

@@ -1,3 +1,4 @@
+%!TEX root = etdrtemplate.tex
 % +--------------------------------------------------------------------+
 % | Sample Chapter 2
 % +--------------------------------------------------------------------+
@@ -17,7 +18,7 @@ General overview of all below things?
 \section{High-assurance systems}
 \label{background:highas}
 What software properties and requirements exists to ensure safety.
-Medical Devices as type of High-assurance systems.
+Medical Devices as High-assurance systems.
 
 
 \section{SPARK/Ada}
@@ -25,8 +26,14 @@ Medical Devices as type of High-assurance systems.
 History of Ada: http://www.adahome.com/History/Steelman/intro.htm 
 Ada fulfill US DOD requirements.
 Rationale of this language. Good for Software Verification etc.
-http://www.slideshare.net/AdaCore/ada-2012 (slide 11: dev responsibility)
-GNAT Programming Studio.
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=4.5in]{figures/developer_responsibility_in_ada.png}
+    	\caption{Developer responsibility in Ada.}
+    \end{center}
+\end{figure}
+%http://www.slideshare.net/AdaCore/ada-2012 (slide 11: dev responsibility)
+GNAT Programming Studio. 
 Tools for corectness proving.
 
 \subsection{GNAT Programming Studio}
@@ -43,16 +50,20 @@ Plugin for Eclipse (but only SPARK 2005).
 \subsection{GNAT Prove}
 \label{background:spark:gnatprove}
 Overview
+%http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 
 \subsection{AUnit}
 \label{background:spark:aunit}
 Overview
+AUnit tutorials \cite{AUnitTutorials:Online}
+AUnit Cookbook \cite{AUnitCookbook:Online}
 
 
 \section{AADL}
 \label{background:aadl}
 Rationale of this language.
 “AADL” stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system. %http://libre.adacore.com/tools/ocarina/
+AADL is a language for Model-Based Engineering\cite{Fei13}.
 %https://wiki.sei.cmu.edu/aadl/index.php/The_Story_of_AADL
 
 \subsection{Osate}

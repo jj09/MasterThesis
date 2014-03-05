@@ -1,3 +1,4 @@
+%!TEX root = etdrtemplate.tex
 % +--------------------------------------------------------------------+
 % | Sample Chapter 4
 % +--------------------------------------------------------------------+
@@ -22,8 +23,52 @@ How I did it. Code examples.
 
 \section{AADL/BLESS to SPARK/Ada mapping}
 \label{codegen:mapping}
-Mapping is driven by Ocarina and "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document".
-Only high level mapping is done. No implementation (thread interactions). 
+Mapping is driven by Ocarina and "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc13}.
+Only high level mapping is done. No implementation (thread interactions) like Ocarina does. 
+
+\begin{table}[!ht]
+	\caption{AADL to SPARK mapping.}
+	\centering
+  	\begin{tabular}{ | p{3in} | p{3in} |}
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+
+		\hline
+		\textbf{AADL/BLESS} & \textbf{SPARK/Ada} \\ \hline	
+
+		\begin{lstlisting}[language=aadl]
+			subprogram sp
+			features
+				e : in parameter T;
+				s : out parameter T;
+			end sp;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			procedure sp(e : in T; s : out T) is 
+			begin
+				null;
+			end sp;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			data Flow_Rate  --dose rate
+  				properties
+    				BLESS::Typed=>"integer";
+    				Data_Model::Base_Type => (classifier(Base_Types::Integer_16));
+    				Data_Model::Measurement_Unit => "ml/hr";
+			end Flow_Rate;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			subtype Flow_Rate is Integer range 0 .. Integer'Last;
+		\end{lstlisting} 
+
+		\\ \hline
+	\end{tabular}
+\end{table}
+
 Table, how specific constructs (subset) in AADL/BLESS are translated to SPARK/Ada.
 
 \section{"DeusEx" translator}
