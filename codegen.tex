@@ -14,6 +14,7 @@
 \label{codegen}
 
 First step was to create mock (based on doc, aadl models and implemented PCA Pump).
+Prototyping Embedded Systems using AADL lasts for a few years \cite{PrototypyingAadl:Paper}.
 
 
 \section{Extention of exisitng PCA Pump AADL models}
@@ -33,7 +34,7 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
 
 		\hline
-		\textbf{AADL/BLESS} & \textbf{SPARK/Ada} \\ \hline	
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
 
 		\begin{lstlisting}[language=aadl]
 			subprogram sp
@@ -63,6 +64,40 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 		& 
 		\begin{lstlisting}
 			subtype Flow_Rate is Integer range 0 .. Integer'Last;
+		\end{lstlisting} 
+
+		\\ \hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+	\caption{BLESS to SPARK contractsmapping.}
+	\centering
+  	\begin{tabular}{ | p{3in} | p{3in} |}
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+
+		\begin{lstlisting}[language=bless]
+			BLESS::Assertion=>"<<VP()>>"
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			--# pre VP;
+			--# post VP; 
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			<<Pre()>>Action()<<Post()>>
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			procedure Action;
+			--# pre Pre;
+			--# post Post;
 		\end{lstlisting} 
 
 		\\ \hline

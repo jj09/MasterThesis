@@ -22,19 +22,38 @@
 
 The tale about software safety: why important, software everywhere, human life, etc. (info from 890).
 
+Software Engineering for Real-Time and Safety-Critical systems is very different than creating Desktop applications. In both types of software we want to ensure correctnes and security. In case of e.g. e-mail client software assurance is not crucial. When something happend, we just restart the app. However, in case of e.g. Airplane, software cannot just crash. If it crashes, then people dies. Behind these reasons, we need different properties of our programming language and its tools. For Web or Mobile apps our priority is Rapid Development. For Safety-Critical systems, security is crucial.
+
 \
 
 \section{Motivation}
 \label{introduction:motivation}
-Why we need this model driven development.
-Model driven development in this case means we will have some base models for medical devices development and developer will extend and customize them. The same like you do File > 'New Java project' in Eclipse, we want to be able to do the same in e.g. GNAT Programming Studio: File > 'New Medical device project'.
-Why AADL?
-Why SPARK? Because is subset, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
+There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between different Medical Devices. [EXAMPLE ACCIDENT]
+The solution for such a problem is to create "Integrated Clinical Environment" (ICE). SAnToS Lab at Kansas State University is working on Medical Device Coordination Framework (MDCF), which is prototype implementation of ICE.  
+
+Devices working under MDCF will need to satisfy some requirements. To make Developer's life easier, the requirements will be not only in documentation, but also in code. The code will be generated from models.
+Model Driven Development in this case means we will have some base models for medical devices development and developer will extend and customize them. The same like you do File > 'New Java project' in Eclipse, we want to be able to do the same in e.g. GNAT Programming Studio: File > 'New Medical device project'.
+Model as specification/requirements.
+
+PCA Pump is as an example of Medical Device, which ultimately will work under Medical Device Coordination Framework (MDCF) developed by SAnToS Lab at Kansas State University.
+Summarizing, we want to be able to have MDCF, which coordinates Medical Devices. Additionally we want set of AADL/BLESS models, which can be automatically translated to SPARK/Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
+Why AADL? Because it describes hardware and software. It allows to validate that the software will work on some device.
+Why SPARK? Because it is subset, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
 
 \section{Contribution}
 \label{introduction:contribution}
-Put all piecies together (SPARK, AADL, BLESS?, ICE, PCA Pump)
+Put all piecies together (SPARK, AADL, BLESS?, ICE, PCA Pump) and analyze current state of target technologies.
+Review PCA Pump Requirements document
+Implement PCA Pump based on document, by resolving ambiguities and analyzing different implementation possibilities. Then the implementation is sort of proof that, this document might be base for future Infusion Pumps and/or Medical Devices implementations.
+Analyzed and extended PCA Pump AADL models, then based on available resource propose possible translation from AADL/BLESS to SPARK/Ada.
+Created AADL/BLESS to SPARK/Ada translator.
 
 \section{Organization}
 \label{introduction:organization}
-How many chapters etc.
+The thesis is organized in \ref{future_work} chapters. 
+Chapter \ref{introduction} is the of the problem and summary of contribution which was made. 
+Chapter \ref{background} is Background that gives details about Model Driven Development, SPARK/Ada, AADL/BLESS, ICE and available tools for such environment. 
+Chapter \ref{pcapump} describes the implementation of PCA Pump Prototype. Faced issues and design decisions made.
+Chapter \ref{codegen} is about code generation from the model. 
+Chapter \ref{summary} summarizes all work which has been done in this thesis. 
+Chapter \ref{future_work} is the future work that can be done on this topic.

@@ -1,63 +1,239 @@
 %!TEX root = etdrtemplate.tex
 
+% months definitions for month fields
+@string{ jan = "Janvier" }
+@string{ feb = "F{\'e}vrier" }
+@string{ mar = "Mars" }
+@string{ apr = "Avril" }
+@string{ may = "Mai" }
+@string{ jun = "Juin" }
+@string{ jul = "Juilliet" }
+@string{ aug = "Ao{\^u}t" }
+@string{ sep = "Septembre" }
+@string{ oct = "Octobre" }
+@string{ nov = "Novembre" }
+@string{ dec = "D{\'e}cembre" }
 
-@book{Fei13,
+@book{AadlBook,
   author    = "Peter H. Feiler and David P. Gluch", 
   title     = "Model-Based Engineering with AADL",
   year      = "2013",
   publisher = "Addison-Wesley",
-  %address   = "Westford, Massachusetts"
+  %address  = "Westford, Massachusetts"
 } 
 
-@inproceedings{Lar14, 
-  author = "Brian R. Larson", 
-  title  = "Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump System Requirements DRAFT 0.10.1 ", 
-  year   = "2014", 
-  %pages  = "1-100", 
+@misc{PcaReq, 
+  author        = "Brian R. Larson", 
+  title         = "Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump System Requirements DRAFT 0.10.1 ", 
+  year          = "2014",
+  month         = feb,
+  %howpublished = "",  
+  %note         = "",
 }
 
 @online{AUnitCookbook:Online,
-author = "AdaCore",
-title  = "AUnit Cookbook",
-month  = mar,
-year   = "2014",
-url    = "http://docs.adacore.com/aunit-docs/aunit.html"
+  author       = "AdaCore",
+  title        = "AUnit Cookbook",
+  month        = mar,
+  year         = "2014",
+  url          = "http://docs.adacore.com/aunit-docs/aunit.html",
+  howpublished = {URL: \url{http://docs.adacore.com/aunit-docs/aunit.html}},
 }
 
 @online{AUnitTutorials:Online,
-author = "Ed Falis",
-title  = "AUnit Tutorials",
-month  = mar,
-year   = "2014",
-url    = "http://libre.adacore.com/tools/aunit"
+  author       = "Ed Falis",
+  title        = "AUnit Tutorials",
+  month        = mar,
+  year         = "2014",
+  url          = "http://libre.adacore.com/tools/aunit",
+  howpublished = {URL: \url{http://libre.adacore.com/tools/aunit}},
 }
 
-@inproceedings{AnnexDoc13, 
-  author = "SAE AS-2C Architecture Description Language Subcommittee and Embedded Computing Systems Committee and Aerospace Avionics Systems Division", 
-  title  = "Aerospace Standard - Architecture Analysis \& Design Language (AADL) V2 Programming Language Annex Document", 
-  year   = "2013", 
-  %pages  = "1-100", 
+@misc{AnnexDoc13, 
+  author        = "SAE AS-2C Architecture Description Language Subcommittee and Embedded Computing Systems Committee and Aerospace Avionics Systems Division", 
+  title         = "Aerospace Standard - Architecture Analysis \& Design Language (AADL) V2 Programming Language Annex Document", 
+  year          = "2013", 
+  %howpublished = "",
+  %month        = "",
+  %note         = "",
 }
 
-@inproceedings{DLR, 
-  author={Xianghua Deng and Jooyong Lee and Robby}, 
-  booktitle={Automated Software Engineering, 2006. ASE '06. 21st IEEE/ACM International Conference on}, 
-  title={Bogor/Kiasan: A k-bounded Symbolic Execution for Checking Strong Heap Properties of Open Systems}, 
-  year={2006}, 
-  pages={157-166}, 
-  keywords={fault diagnosis;formal specification;open systems;program diagnostics;reasoning about programs;Bogor model checking;Kiasan technique;compositional reasoning;error traces;fault evidence;heap property checking;k-bounded symbolic execution;noncompositional reasoning;open systems;specification checking;Computer languages;Contracts;Costs;Java;Open systems;Programming;Software maintenance;Software performance;Software reusability;Software tools}, 
-  doi={10.1109/ASE.2006.26}, 
-  ISSN={1938-4300}, }
+@conference{Bless:Paper, 
+  author    = "Brian R. Larson and Patrice Chalin and John Hatcliff", 
+  title     = "BLESS: Formal Specification and Verification of Behaviors for Embedded Systems with Software", 
+  booktitle = "NASA Formal Methods",
+  pages     = "276-290",
+  year      = "2013", 
+  publisher = "Springer Berlin Heidelberg",
+  %editor   = "",
+  %volume   = "",
+  %number   = "",
+  %series   = "",  
+  %address  = "",
+  %month    = "",
+  %note     = "",  
+}
 
-@article{THB,
-  Address = {Los Alamitos, CA, USA},
-  Author = {Hariharan Thiagarajan and John Hatcliff and Jason Belt and Robby},
-  Doi = {http://doi.ieeecomputersociety.org/10.1109/SCAM.2012.25},
-  Isbn = {978-1-4673-2398-7},
-  Journal = {Source Code Analysis and Manipulation, IEEE International Workshop on},
-  Pages = {132-137},
-  Publisher = {IEEE Computer Society},
-  Title = {Bakar Alir: Supporting Developers in Construction of Information Flow Contracts in SPARK},
-  Volume = {0},
-  Year = {2012},
-  Bdsk-Url-1 = {http://doi.ieeecomputersociety.org/10.1109/SCAM.2012.25}}
+@conference{Kiasan:Paper, 
+  author    = "Jason Belt and John Hatcliff and Robby and Patrice Chalin and David Hardin and Xianghua Deng", 
+  title     = "Bakar Kiasan: Flexibe Contract Checking for Critical Systems Using SYmbolic Execution", 
+  booktitle = "NASA Formal Methods",
+  pages     = "58-72",
+  year      = "2011", 
+  publisher = "Springer Berlin Heidelberg",
+  %editor   = "",
+  %volume   = "",
+  %number   = "",
+  %series   = "",
+  %address  = "",  
+  %month    = "",
+  %note     = "", 
+}
+
+@mastersthesis{Hari:Thesis,
+  author   = "Hariharan Thiagarajan",
+  title    = "Dependence analysis for inferring information flow properties in SPARK Ada programs",  
+  school   = "Kansas State University",
+  type     = "thesis",
+  year     = "2011",
+  %address = "",
+  %note    = "" 
+}
+
+@mastersthesis{Horn:Thesis,
+  author   = "Bartłomiej Horn",
+  title    = "Ada'05 compiler for ARM based systems",
+  school   = "Technical University of Lodz, Poland",
+  type     = "thesis",
+  year     = "2009",
+  %address = "",
+  %note    = "" 
+}
+
+@article{Ocarina:Article, 
+  author  = "Jérôme Hugues and Bechir Zalila and Laurent Pautet and Fabrice Kordon", 
+  title   = "From the Prototype to the Final Embedded System Using the Ocarina AADL Tool Suite", 
+  journal = "ACM Transactions on Embedded Computing Systems",
+  volume  = "7",
+  number  = "4",
+  pages   = "237-250", 
+  year    = "2008",   
+  month   = jul,
+  %note   = "",  
+}
+
+@conference{Ocarina:Paper, 
+  author    = "Gilles Lasnier and Bechir Zalila and Laurent Pautet and Jérôme Hugues", 
+  title     = "Ocarina : An Environment for AADL Models Analysis and Automatic Code Generation for High Integrity Applications", 
+  booktitle = "Reliable Software Technologies – Ada-Europe 2009",
+  pages     = "237-250",
+  year      = "2009", 
+  publisher = "Springer Berlin Heidelberg",
+  %editor   = "",
+  %volume   = "",
+  %number   = "",
+  %series   = "",
+  %address  = "",
+  %month    = "",
+  %note     = "", 
+}
+
+@online{Ocarina:About:Online,
+  author       = "Jérôme Hugues",
+  title        = "About Ocarina",
+  year         = "2013",
+  url          = "http://www.openaadl.org/ocarina.html",
+  howpublished = {URL: \url{http://www.openaadl.org/ocarina.html}},  
+}
+
+@conference{PrototypyingAadl:Paper, 
+  author    = "Mohamed Yassin Chkouri and Marius Bozga", 
+  title     = "Prototypying of Distributed Embedded Systems Using AADL", 
+  booktitle = "ACESMB 2009, Second International Workshop on Model Based Architecting and Construction of Embedded Systems",
+  pages     = "65-79",
+  year      = "2009",
+  publisher = "Springer Berlin Heidelberg",
+  %editor   = "",
+  %volume   = "",
+  %number   = "",
+  %series   = "",
+  %address  = "", 
+  %month    = "",  
+  %note     = "",
+}
+
+@online{Ravenscar:Online, 
+  author       = "SPARK Team",
+  title        = "The SPARK Ravenscar Profile",
+  year         = "2010",
+  url          = "http://docs.adacore.com/sparkdocs-docs/Examiner_Ravenscar.htm",
+  howpublished = {URL: \url{http://docs.adacore.com/sparkdocs-docs/Examiner_Ravenscar.htm}},    
+}
+
+@online{Spark2014userGuide:Online,
+  author       = "AdaCore and Altran UK Ltd",
+  title        = "SPARK 2014 Toolset User’s Guide",
+  year         = "2011-2014",
+  url          = "http://docs.adacore.com/spark2014-docs/html/ug",
+  howpublished = {URL: \url{http://docs.adacore.com/spark2014-docs/html/ug}},   
+}
+
+@online{Spark2014refManual:Online,
+  author       = "AdaCore and Altran UK Ltd",
+  title        = "SPARK 2014 Reference Manual",
+  year         = "2011-2014",
+  url          = "http://docs.adacore.com/spark2014-docs/html/lrm",
+  howpublished = {URL: \url{http://docs.adacore.com/spark2014-docs/html/lrm}}, 
+}
+
+@conference{Spark2014:Paper,
+  author    = "Claire Dross and Pavlos Efstathopoulos and David Lesens and David Mentre and Yannick Moy",
+  title     = "Rail, Space Security: Three Case Studies for SPARK 2014",
+  booktitle = "ERTS 2014: Embedded Real Time Software and Systems",
+  year      = "2014",
+  %editor   = "",
+  %volume   = "",
+  %number   = "",
+  %series   = "",
+  %pages    = "",
+  %address  = "",  
+  %month    = "",
+  %publisher= "",
+  %note     = "",
+}
+
+@online{AdaUsaege:Online,
+  author       = "Michael B. Feldman",
+  title        = "Who's Using Ada? Real-World Projects Powered by the Ada Programming Language",
+  year         = "2012",
+  url          = "http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html",
+  howpublished = {URL: \url{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}},
+}
+
+@article{Spark:Article, 
+  author  = "Andrew Ireland and Bill J. Ellis and Andrew Cook and Roderick Chapman and Janet Barnes", 
+  title   = "An Integrated Approach to High Integrity Software Verification", 
+  journal = "Journal of Automated Reasoning ",
+  volume  = "36",
+  number  = "4",
+  pages   = "379-410", 
+  year    = "2006",
+  month   = apr,
+  %note   = "",   
+}
+
+@book{Barnes:Book,
+  author    = "John Barnes", 
+  title     = "SPARK - The Proven Approach to High Integrity Software",
+  publisher = "Altran",
+  year      = "2013",
+  isbn      = "9780957290518",
+  -pages    = "536",
+  %volume   = "",
+  %number   = "",
+  %series   = "",
+  %address  = "",
+  %edition  = "",
+  %month    = "",
+  %note     = "",
+} 
