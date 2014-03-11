@@ -20,28 +20,87 @@ This chapter is brief introduction of all technologies and tools used in this th
 \section{Integrated Clinical Environment}
 \label{background:ice}
 Medical devices are safety-critical systems.
-http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
-http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
-MDCF conforms to ICE standards. Medical Devices, which are ICE compliant can be connected to MDCF. It enable many Medical Devices cooperation.
-
+%http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
+%http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
+Medical Devices Coordination Framework is an open, experimental ICE-compliant platform to bring together academic researchers, industry vendors, and government regulators.
+Medical Devices, which are ICE compliant can be connected to MDCF. It enables Medical Devices cooperation.
+[add some pictures etc.]
 
 
 \section{AADL}
 \label{background:aadl}
 
-AADL stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system \footnote{http://penelope.enst.fr/aadl}.
+AADL stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system \footnote{http://penelope.enst.fr/aadl}. 
 
-AADL is a language for Model-Based Engineering \cite{AadlBook}.
-%https://wiki.sei.cmu.edu/aadl/index.php/The_Story_of_AADL
+AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first verision (1.0) was approved in 2004 under technical leadership of Peter Feiler \footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
 
-\subsection{Osate}
+AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools (like Osate \ref{background:aadl:osate}), which transforms textual representation into graphical. There is also possiblity to represent AADL in XML (using 3rd party tools). An example AADL model called Thermometer is shown in graphical representation in figure \ref{figure:patient_thermometer} and in textual representation in listing \ref{listing:patient_thermometer}.
+
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=1.5in]{figures/patient_thermometer.png}
+    	\caption{AADL model of simple thermometer}
+    \end{center}
+    \label{figure:patient_thermometer}
+\end{figure}
+
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}, label={listing:patient_thermometer}]
+	package Thermometer
+	public
+	with Base_Types;
+		system patient_thermometer
+		end patient_thermometer;
+
+		system implementation patient_thermometer.impl
+		subcomponents
+			thermomether : device thermometer_device.impl;
+			opi : device operator_interface.impl;
+		connections
+			tdn : port thermomether.temp -> opi.display;
+		end patient_thermometer.impl;
+
+		device operator_interface
+		features
+			display : in data port Base_Types::Integer;
+		end operator_interface;
+
+		device implementation operator_interface.impl
+		end operator_interface.impl;
+
+		device thermometer_device
+		features
+			temp : out data port Base_Types::Integer;
+		end thermometer_device;
+
+		device implementation thermometer_device.impl
+		end thermometer_device.impl;
+	end Thermometer;
+\end{lstlisting} 
+
+%another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
+
+Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: STOOD \footnote{http://www.ellidiss.com/products/stood}, ADELE \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar \footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector \footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina \footnote{http://www.openaadl.org}.
+
+What is important, AADL is for architectural description. It should not be compared with UML suites, which allows to link with source code.
+
+
+\subsection{OSATE}
 \label{background:aadl:osate}
-OSATE is a set of plug-ins on top of the open-source Eclipse platform to provide a toolset for front-end processing of AADL models. It is developed mainly by SEI (Software Engineering Institute - CMU). %http://www.aadl.info/aadl/currentsite/tool/osate.html
+Open Source AADL Tool Environment (OSATE) is a set of plug-ins on top of the open-source Eclipse platform. It provides a toolset for front-end processing of AADL models. OSATE is developed mainly by SEI (Software Engineering Institute - CMU) \footnote{http://www.aadl.info/aadl/currentsite/tool/osate.html}. Latest available version of OSATE in the time when this work was published is OSATE2 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Osate\_2}.
 
 
 
 \section{BLESS}
 \label{background:bless}
+BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sublanguage defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
+
+BLESS contains three AADL annex sublanguages:
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+	\item Assertion - it can be attached individually to AADL features (e.g. ports)
+	\item subBLESS - can be attached only to subprograms; it has only value transformations and Assertions without time expressions
+	\item BLESS - it can be attached to AADL thread, device or system components; it contains states, transitions, timeouts, actions, events and Assertions with time expressions...
+\end{itemize}
+
 How it fits into the picture. Why it was developed. Corectness prove in AADL + behavior \cite{Bless:Paper}, from which we can generate SPARK/Ada code.
 
 
@@ -49,34 +108,51 @@ How it fits into the picture. Why it was developed. Corectness prove in AADL + b
 \section{SPARK/Ada}
 \label{background:spark}
 
-First version of Ada programming language, Ada 83 was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and now we have Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is activelly used in many Real-World projects, e.g. Aviation, Railway Transportation, Commercial Rockets, Satellites and even Banking \cite{AdaUsaege:Online}.
+First version of Ada programming language, Ada 83 was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and now we have Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is activelly used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing \footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software corectness and safety.
 
-SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. First designed over 20 years ago, SPARK has established a track record of use in embedded and critical systems across a diverse range of industrial domains where safety and security are paramount \cite{Barnes:Book}. 
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=3.5in]{figures/developer_responsibility_in_ada.png}
+    	\caption{Developer responsibility in Ada\protect\footnotemark. }    	
+    \end{center}
+\end{figure}
+\footnotetext{http://www.slideshare.net/AdaCore/ada-2012}
 
-SPARK provides a significant degree of automation in proving exception freedom \cite{Spark:Article}. SPARK excludes some Ada constructs to make static analysis feasible \cite{Spark:Article}. First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It includes annotation language that support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline[basicstyle=\ttfamily]{--#}). It makes every SPARK 2005 programm, valid Ada 2005 program.
+SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. First version was designed over 20 years ago. SPARK has established a track record of use in embedded and critical systems across a diverse range of industrial domains where safety and security are paramount \cite{Barnes:Book}. 
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer \cite{Barnes:Book}}]
+SPARK provides a significant degree of automation in proving exception freedom \cite{Spark:Article}. SPARK excludes some Ada constructs to make static analysis feasible \cite{Spark:Article}. Additionally SPARK contains toolset for Software Verification:
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+	\item Examiner - analyse code and ensures that it conforms to the SPARK language; also verify program to some extent using Verification Conditions (VC)
+	\item Simplifier - simplify Verification Conditions generated by Examiner
+	\item Proof Checker - prove the Verification Conditions
+\end{itemize}
+
+First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It includes annotation language that support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 programm, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer \cite{Barnes:Book}}, label={listing:Odometer2005}]
 	package Odometer
 	--# own Trip, Total : Integer;
 	is
-	   procedure Zero_Trip;
-	   --# global out Trip;
-	   --# derives Trip from ;
-	   --# post Trip = 0;
+		procedure Zero_Trip;
+		--# global out Trip;
+		--# derives Trip from ;
+		--# post Trip = 0;
 
-	   function Read_Trip return Integer;
-	   --# global in Trip;
+		function Read_Trip return Integer;
+		--# global in Trip;
 
-	   function Read_Total return Integer;
-	   --# global in Total;
+		function Read_Total return Integer;
+		--# global in Total;
 
-	   procedure Inc;
-	   --# global in out Trip, Total;
-	   --# derives Trip from Trip & Total from Total;
-	   --# post Trip = Trip~ + 1 and Total = Total~ + 1;
+		procedure Inc;
+		--# global in out Trip, Total;
+		--# derives Trip from Trip & Total from Total;
+		--# post Trip = Trip~ + 1 and Total = Total~ + 1;
 
 	end Odometer;
 \end{lstlisting} 
+
+SPARK 2005 is a subset of Ada 2005 with annotations. It does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}.
 
 SPARK 2014 \footnote{http://www.spark-2014.org} is based on Ada 2012 programming language targeted at safety- and security-critical applications \cite{Spark2014:Paper}. Since Ada 2012 contains contracts, there is no need to use annotations like in SPARK 2005. Thus SPARK 2014 is subset of Ada 2012. It contains all features of Ada 2012 except:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
@@ -87,17 +163,36 @@ SPARK 2014 \footnote{http://www.spark-2014.org} is based on Ada 2012 programming
 	\item Side effects in expressions and functions
 \end{itemize}
 
-The notion of executable contracts in Ada 2012, was inspired by SPARK. 
+SPARK 2014 does not contains Examiner. Instead, proofs are made by gnatPROVE.
+The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous Odometer example in SPARK 2014 is shown in figure \ref{listing:Odometer2014}.
+
+\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={SPARK 2014 code: Odometer}, label={listing:Odometer2014}]
+	package Odometer
+	with SPARK_Mode
+	Abstract_State => (Trip, Total)
+	is
+		procedure Zero_Trip
+		with Global => (Output => (Trip)),
+		   Depends => (Trip => null),
+		   Post => (Trip = 0);
+
+		function Read_Trip return Integer
+		with Global => (Input => (Trip));
+
+		function Read_Total return Integer
+		with Global => (Input => (Total));
+
+		procedure Inc	   
+		with Global => (In_Out => (Trip, Total)),
+			Depends => (Trip => Trip, Total => Total),
+			Post => Trip = Trip'Old + 1 and Total = Total'Old + 1;
+
+	end Odometer;
+\end{lstlisting} 
 
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified.
+% http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
-\begin{figure}[ht]%t=top, b=bottom, h=here
-    \begin{center}
-    	\includegraphics[height=4.5in]{figures/developer_responsibility_in_ada.png}
-    	\caption{Developer responsibility in Ada.}
-    \end{center}
-\end{figure}
-%http://www.slideshare.net/AdaCore/ada-2012 (slide 11: dev responsibility)
 The most popular IDE for SPARK/Ada is GNAT Programming Studio \footnote{http://libre.adacore.com/tools/gps}.
 
 There is also plugin for Eclipse: GNATbench \footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
@@ -105,7 +200,7 @@ Tools for corectness proving.
 
 \subsection{GNAT Programming Studio}
 \label{background:spark:gps}
-IDE for SPARK/Ada programs development. Includes proving tools. E.g. Sireum Kiasan (developed by SAnToS lab) or GNAT Prove.
+IDE for SPARK/Ada programs development. Includes proving tools. E.g. Sireum Bakar (developed by SAnToS lab) or GNATprove.
 
 
 \subsection{Sireum Bakar}
@@ -122,7 +217,7 @@ GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a for
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 
 
-\subsection{AUnit}
+\subsection{AUnit(remove it?)}
 \label{background:spark:aunit}
 Overview
 AUnit tutorials \cite{AUnitTutorials:Online}
@@ -132,15 +227,13 @@ AUnit Cookbook \cite{AUnitCookbook:Online}
 
 \section{PCA Pump}
 \label{background:pcapump}
-http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
+%http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
 
 
 
-\section{AADL/BLESS to SPARK/Ada code generation(maybe translation is better word?)}
+\section{AADL/BLESS to SPARK/Ada code generation}
 \label{background:codegen}
-The ultimate goal of long term research, this thesis is part of.
-AADLto Ada
-BLESS to SPARK contracts + (eventually) behavior
+The ultimate goal of long term research, this thesis is part of is AADL (with BLESS) to SPARK/Ada translation.
 
 
 \subsection{Ocarina}

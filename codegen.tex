@@ -16,19 +16,245 @@
 First step was to create mock (based on doc, aadl models and implemented PCA Pump).
 Prototyping Embedded Systems using AADL lasts for a few years \cite{PrototypyingAadl:Paper}.
 
-
-\section{Extention of exisitng PCA Pump AADL models}
-\label{codegen:existing-models}
-I added Subprograms etc.
-How I did it. Code examples.
-
 \section{AADL/BLESS to SPARK/Ada mapping}
 \label{codegen:mapping}
-Mapping is driven by Ocarina and "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc13}.
+
+%https://wiki.sei.cmu.edu/aadl/images/4/40/13_04_24-AADL-Code_Generation.pdf
+
+%https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 35: port connections)
+
+Mapping is driven by "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc13}. Ocarina tool suite (based on older AADL annex documents \cite{Ocarina:Article}) was also helpful in understanding of AADL to Ada translation.
 Only high level mapping is done. No implementation (thread interactions) like Ocarina does. 
 
+3 areas of mapping:
+* data types
+* thread -> subprograms
+* subprogram -> subprogram
+
+\subsection{Data types mapping}
+\label{codegen:mapping:data}
+
+\subsection{AADL ports mapping}
+\label{codegen:mapping:ports}
+
+Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc13}.
+
+% maybe split right column into 2 rows: spec and body?
+\begin{center}
+	\begin{longtable}{| p{2in} | p{4in} |}
+	
+		\caption{AADL to SPARK ports mapping.}
+		\label{table:aadl2spark_ports}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				in data port Port_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads):
+			procedure Receive_Port_Name;
+
+			-- body (.adb):
+			Port_Name : Port_Type;
+
+			procedure Receive_Port_Name 
+			is
+			begin
+				-- TODO: implement receiving Port_Name value
+				-- e.g.:
+				-- Port_Name := Some_Pkg.Get_Port_Name;
+			end Receive_Port_Name;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				out data port Port_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads)
+			function Get_Port_Name : Port_Type;
+
+			-- body (.adb):
+			Port_Name : Port_Type;
+
+			function Get_Port_Name : Port_Type 
+			is
+			begin
+				return Port_Name;
+			end Get_Port_Name;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				in event port;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads)
+			procedure Put_Port_Name(Port_Name_In : Boolean);
+
+			-- body (.adb):
+			Port_Name : Boolean;
+
+			procedure Put_Port_Name (Port_Name_In : Boolean) 
+			is
+			begin
+				Port_Name := Port_Name_In;
+			end Put_Port_Name;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				out event port;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads)
+			procedure Send_Port_Name;
+
+			-- body (.adb):
+			Port_Name : Boolean;
+
+			procedure Send_Port_Name 
+			is
+			begin
+				-- TODO: implement receiving Port_Name value
+				-- e.g.:
+				-- Port_Name := Some_Pkg.Put_Port_Name(Port_Name);
+			end Send_Port_Name;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				in event data port Port_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads)
+			procedure Put_Port_Name(Port_Name_In : Port_Type);
+
+			-- body (.adb):
+			Port_Name : Port_Type;
+
+			procedure Put_Port_Name (Port_Name_In : Port_Type) 
+			is
+			begin
+				Port_Name := Port_Name_In;
+			end Put_Port_Name;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			Port_Name : 
+				out event data port Port_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			-- spec (.ads)
+			procedure Send_Port_Name;
+
+			-- body (.adb):
+			Port_Name : Port_Type;
+
+			procedure Send_Port_Name 
+			is
+			begin
+				-- TODO: implement receiving Port_Name value
+				-- e.g.:
+				-- Port_Name := Some_Pkg.Put_Port_Name(Port_Name);
+			end Send_Port_Name;
+		\end{lstlisting} 
+	\end{longtable}
+\end{center}
+
+
+\subsection{Thread to subprograms mapping}
+\label{codegen:mapping:threads}
+
+AADL package, which contains threads is split into child packages with convention: AADL\_Package\_Name -> AADL\_Package\_Name.Thread\_Name.
+
+In SPARK/Ada we have nested packages and child packages. Sample nested packages are shown in listing \ref{listing:nested_packages}. Equivalent child packages are shown in listing \ref{listing:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{listing:nested_packages} and \ref{listing:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{listing:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK/Ada}, label={listing:nested_packages}]
+	package P is
+	   D: Integer;
+
+	   --  a nested package:
+	   package N is
+	      X: Integer;
+	   private
+	      Foo: Integer;
+	   end N;
+
+	   E: Integer;
+	private
+	   --  nested package in private section:
+	   package M is
+	      Y: Integer;
+	   private
+	      Bar: Integer;
+	   end M;
+
+	end P;
+\end{lstlisting}
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK/Ada}, label={listing:child_packages}]
+	package P is
+	   D: Integer;
+	   E: Integer;
+	end P;
+
+	--  a child package:
+	package P.N is
+      X: Integer;
+   	private
+      Foo: Integer;
+	end P.N;
+
+	--  a child private package:
+	private package M is
+	  Y: Integer;
+	private
+	  Bar: Integer;
+	end M;
+\end{lstlisting}
+
+\subsection{Subprograms mapping}
+\label{codegen:mapping:subprograms}
+
+I added Subprograms to exisitng PCA Pump AADL models etc.
+How I did it. Code examples.
+
 \begin{table}[!ht]
-	\caption{AADL to SPARK mapping.}
+	\caption{AADL subprograms to SPARK/Ada subprograms(procedures/functions) mapping.}
+	\label{table:subprograms_mapping}
 	\centering
   	\begin{tabular}{ | p{3in} | p{3in} |}
 	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
@@ -70,6 +296,11 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 	\end{tabular}
 \end{table}
 
+
+
+\subsection{BLESS mapping}
+\label{codegen:mapping:bless}
+
 \begin{table}[!ht]
 	\caption{BLESS to SPARK contractsmapping.}
 	\centering
@@ -90,7 +321,7 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 
 		\\ \hline
 
-		\begin{lstlisting}[language=aadl]
+		\begin{lstlisting}[language=bless]
 			<<Pre()>>Action()<<Post()>>
 		\end{lstlisting} 
 		& 
@@ -103,8 +334,6 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 		\\ \hline
 	\end{tabular}
 \end{table}
-
-Table, how specific constructs (subset) in AADL/BLESS are translated to SPARK/Ada.
 
 \section{"DeusEx" translator}
 \label{codegen:translator}

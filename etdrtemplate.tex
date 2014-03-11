@@ -85,6 +85,7 @@
 \usepackage{setspace}
 \usepackage[T1]{fontenc}    % Added by Jakub Jedryszek to support < and > in text
 \usepackage[utf8]{inputenc} % Added by Jakub Jedryszek to support non-English letters
+\usepackage{longtable}      % Added by Jakub Jedryszek to support tables bigger than 1 page
 
 
 % +--------------------------------------------------------------------+
@@ -98,7 +99,7 @@
 % | Colors defined for use with this template.                         |
 % +--------------------------------------------------------------------+
 
-\definecolor{  Pink}{rgb}{1.0, 0.5, 0.5}
+\definecolor{Pink}{rgb}{1.0, 0.5, 0.5}
 \definecolor{Maroon}{rgb}{0.8, 0.0, 0.0}
 
 % +--------------------------------------------------------------------+
@@ -132,6 +133,12 @@
     morecomment = [l]{--},
 }
 
+\lstdefinelanguage{ada2012}
+{
+    morekeywords = {abort, else, new, return, abs, elsif, not, reverse, abstract, end, null, accept, entry, select, access, exception, of, separate, aliased, exit, or, some, all, others, subtype, and, for, out, synchronized, array, function,     overriding, at, tagged, generic, package, task, begin, goto, pragma, terminate, body, private, then, if, procedure, type, case, in, protected, constant, interface, until, is, raise, use, declare, range, delay, limited, record, when, delta, loop, rem, while, digits, renames, with, do, mod, requeue, xor},
+    morecomment = [l]{--},   
+}
+
 % Layout for listings
 
 %\lstset{language=aadl,
@@ -152,10 +159,10 @@
   breaklines=true,                 % sets automatic line breaking
   captionpos=b,                    % sets the caption-position to bottom
   columns=fullflexible,
-  commentstyle=\color{mygray},    % comment style
+  commentstyle=\color{mygreen},    % comment style
   %deletekeywords={...},            % if you want to delete keywords from the given language
-  %escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-  %extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
   %frame=single,                    % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\bf,       % keyword style
