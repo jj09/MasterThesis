@@ -26,18 +26,15 @@ Prototyping Embedded Systems using AADL lasts for a few years \cite{Prototypying
 Mapping is driven by "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc13}. Ocarina tool suite (based on older AADL annex documents \cite{Ocarina:Article}) was also helpful in understanding of AADL to Ada translation.
 Only high level mapping is done. No implementation (thread interactions) like Ocarina does. 
 
-3 areas of mapping:
-* data types
-* thread -> subprograms
-* subprogram -> subprogram
-
 \subsection{Data types mapping}
 \label{codegen:mapping:data}
+
+During AADL/BLESS to SPARK/Ada types mapping, SPARK Examiner was helpful. It detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerators, which was a bug. \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
 
 \subsection{AADL ports mapping}
 \label{codegen:mapping:ports}
 
-Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc13}.
+Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc13}. Additionaly, the mapping contains SPARK 2005 contracts.
 
 % maybe split right column into 2 rows: spec and body?
 \begin{center}
@@ -70,6 +67,7 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads):
 			procedure Receive_Port_Name;
+			--# global out Port_Name;
 
 			-- body (.adb):
 			Port_Name : Port_Type;
@@ -80,6 +78,7 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
 				-- Port_Name := Some_Pkg.Get_Port_Name;
+				null;
 			end Receive_Port_Name;
 		\end{lstlisting} 
 
@@ -92,12 +91,13 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
-			function Get_Port_Name : Port_Type;
+			function Get_Port_Name return Port_Type;
+			--# global in Port_Name;
 
 			-- body (.adb):
 			Port_Name : Port_Type;
 
-			function Get_Port_Name : Port_Type 
+			function Get_Port_Name return Port_Type 
 			is
 			begin
 				return Port_Name;
@@ -113,15 +113,14 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
-			procedure Put_Port_Name(Port_Name_In : Boolean);
+			procedure Put_Port_Name;
 
 			-- body (.adb):
-			Port_Name : Boolean;
-
-			procedure Put_Port_Name (Port_Name_In : Boolean) 
+			procedure Put_Port_Name 
 			is
 			begin
-				Port_Name := Port_Name_In;
+				-- TODO: implement event handler
+				null;
 			end Put_Port_Name;
 		\end{lstlisting} 
 
@@ -137,14 +136,14 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 			procedure Send_Port_Name;
 
 			-- body (.adb):
-			Port_Name : Boolean;
 
 			procedure Send_Port_Name 
 			is
 			begin
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
-				-- Port_Name := Some_Pkg.Put_Port_Name(Port_Name);
+				-- Some_Pkg.Put_Port_Name;
+				null;
 			end Send_Port_Name;
 		\end{lstlisting} 
 
@@ -158,6 +157,8 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
 			procedure Put_Port_Name(Port_Name_In : Port_Type);
+			--# global out Port_Name;
+			--# derives Port_Name from Port_Name_In;
 
 			-- body (.adb):
 			Port_Name : Port_Type;
@@ -179,6 +180,7 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
 			procedure Send_Port_Name;
+    		--# global in Port_Name;
 
 			-- body (.adb):
 			Port_Name : Port_Type;
@@ -188,15 +190,71 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 			begin
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
-				-- Port_Name := Some_Pkg.Put_Port_Name(Port_Name);
+				-- Some_Pkg.Put_Port_Name(Port_Name);
+				null;
 			end Send_Port_Name;
 		\end{lstlisting} 
 	\end{longtable}
 \end{center}
 
 
+
+
 \subsection{Thread to subprograms mapping}
 \label{codegen:mapping:threads}
+
+Thread features are mapped into SPARK/Ada subprograms according to table \ref{table:threads2subprograms}
+
+\begin{table}[!ht]
+	\caption{AADL threads to SPARK/Ada subprograms(procedures/functions) mapping.}
+	\label{table:threads2subprograms}
+	\centering
+  	\begin{tabular}{ | p{3.5in} | p{2.5in} |}
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			package Some_Pkg
+				thread Some_Thread
+					features
+						Some_Port : out data port Port_Type;
+				end Some_Thread;
+			end Some_Pkg;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			package Some_Pkg.Some_Thread
+			is
+				function Get_Some_Port return Port_Type;
+			end Some_Pkg.Some_Thread;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			package Some_Pkg
+				thread Some_Thread
+					features
+						Some_Port : out data port Port_Type
+							{Compute_Entrypoint_Source_Text 
+								=> "Custom_Pkg.Custom_Subprogram";};
+				end Some_Thread;
+			end Some_Pkg;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			package Custom_Pkg
+			is
+				function Custom_Subprogram return Port_Type;
+			end Custom_Pkg;
+
+		\end{lstlisting} 
+
+		\\ \hline
+	\end{tabular}
+\end{table}
 
 AADL package, which contains threads is split into child packages with convention: AADL\_Package\_Name -> AADL\_Package\_Name.Thread\_Name.
 

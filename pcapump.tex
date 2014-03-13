@@ -32,6 +32,10 @@ First step was create PCA Pump prototype on BeagleBoard-xM.
 
 BeagleBoard-xM is Embedded device with AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). All these properties makes this device good candidate for prototyping PCA Pump.
 
+Expansion port 14 and 28
+GPIO158
+Java Program to Run the pump for 10 seconds
+
 There is no existing SPARK/Ada compiler running on ARM system. Hence, to compile SPARK/Ada program for ARM device, we need to perform cross-compilation on other machine. There is GNAT compiler \cite{Horn:Thesis} created by AdaCore, but there was no cross-compiler for ARM. However AdaCore was working on it. They had working version in 2013, but tested only on their target, Android-based device. BeagleBoard-xM is coming with Linux Angstrom Operating System. There is possibility to install Android on BeagleBoard-xM, but still not warranty everything will be working. Cooperation with AdaCore allowed to cross-compile SPARK/Ada program for BeagleBoard-xM.
 
 Include source of simple program?
