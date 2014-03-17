@@ -163,6 +163,64 @@ SPARK 2014 \footnote{http://www.spark-2014.org} is based on Ada 2012 programming
 	\item Side effects in expressions and functions
 \end{itemize}
 
+Sample mapping from SPARK 2005 to 2014 is shown on table \ref{table:spark2005and2014mapping}. Complete mapping can be found in SPARK 2014 documentation \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/mapping-spec.html} \cite{Spark2014refManual:Online}.
+
+\begin{table}[!ht]
+	\caption{Sample SPARK 2005 to 2014 mapping.}
+	\label{table:spark2005and2014mapping}
+	\centering
+  	\begin{tabular}{ | p{3in} | p{3in} |}
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+
+		\hline
+		\multicolumn{1}{|c|}{\textbf{SPARK 2005}} & \multicolumn{1}{|c|}{\textbf{SPARK 2014}} \\ \hline
+
+		\begin{lstlisting}
+			--# global in out X, Y;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			with Global  => (In_Out => (X, Y));
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# derives X from Y &
+			--#         Y from X;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Depends => (X => Y,
+			            Y => X);
+		\end{lstlisting}
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# pre Y /= 0 and
+			--#     X > Integer'First;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			with Pre  => Y /= 0 and 
+			             X > Integer'First;
+		\end{lstlisting}
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# post X = Y~ and Y = X~;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			with Post => (X = Y'Old and Y = X'Old);
+		\end{lstlisting} 
+
+		\\ \hline
+	\end{tabular}
+\end{table}
+
 SPARK 2014 does not contains Examiner. Instead, proofs are made by gnatPROVE.
 The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous Odometer example in SPARK 2014 is shown in figure \ref{listing:Odometer2014}.
 
@@ -190,7 +248,7 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous 
 	end Odometer;
 \end{lstlisting} 
 
-It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified.
+It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
 The most popular IDE for SPARK/Ada is GNAT Programming Studio \footnote{http://libre.adacore.com/tools/gps}.
@@ -233,7 +291,7 @@ Description of PCA Pump, its functions, problems and how ICE can solve them.
 
 \section{AADL/BLESS to SPARK/Ada code generation}
 \label{background:codegen}
-The ultimate goal of long term research, this thesis is part of is AADL (with BLESS) to SPARK/Ada translation.
+The ultimate goal of long term research, this thesis is part of, is AADL (with BLESS) to SPARK/Ada translation.
 
 
 \subsection{Ocarina}
@@ -245,6 +303,6 @@ Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is devel
 
 \subsection{Ramses}
 \label{background:codegen:ramses}
-RAMSES is a model transformation framework dedicated to the refinement of AADL models.
+RAMSES is a model transformation framework dedicated to the refinement of AADL models. It contains code generation plugin.
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
 % https://wiki.sei.cmu.edu/aadl/index.php/OSATE_2_on_the_command-line

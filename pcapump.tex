@@ -19,6 +19,8 @@ Overview of PCA Pump and issues, which MDCF/ICE will solve.
 \section{PCA Pump Requirements Document}
 \label{pcapump:requirements-doc}
 Selected use cases for implementation?
+Overview of issues solved: 
+* Bolus options: FBasal + FPatient or FPatient
 
 
 \section{PCA Pump AADL/BLESS Models}
@@ -49,3 +51,15 @@ Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. 
 
 Issues: Ravenscar Profile, how to deal with different boluses (look at UMinn requirements and annotations for our doc).
 Look at annotated PCA Pump Req document.
+
+\subsection{Concurrency in SPARK}
+\label{pcapump:implementation:concurrency}
+
+Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
+
+In SPARK 2005, concurrency is enable using the Ravenscar profile \cite{Ravenscar:Online}.
+
+\subsection{Interface for Integrated Clinical Environment}
+\label{pcapump:implementation:ice}
+
+Describe communication with MDCF/ICE. PCA Pump ports for that etc.
