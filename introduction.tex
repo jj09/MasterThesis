@@ -34,6 +34,7 @@ Incident - event, which not cause loss (but undesired)
 Hazard + Environmental Conditions => Accident (loss)
 Event - state change
 
+
 \section{Motivation}
 \label{introduction:motivation}
 There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between different Medical Devices. [EXAMPLE ACCIDENT]
@@ -48,13 +49,38 @@ Summarizing, we want to be able to have MDCF, which coordinates Medical Devices.
 Why AADL? Because it describes hardware and software. It allows to validate that the software will work on some device.
 Why SPARK? Because it is subset, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
 
+
+\section{Goals}
+\label{introduction:goals}
+\begin{itemize}
+	\item learn about PCA Pump Infusion pumps properties
+	\item SPARK/Ada crosscompilation for ARM-device (BeagleBoard-xM)
+	\item implement PCA Pump based on Brian's Requirement Document (using Ravenscar profile)
+	\item propose AADL/BLESS to SPARK/Ada mapping
+	\item mock PCA Pump AADL/BLESS models in SPARK/Ada
+	\item implement not generated part
+	\item create AADL/BLESS to SPARK/Ada translator
+	\item Use SPARK toolset for software verification:
+		\begin{itemize}
+			\item SPARK Examiner
+			\item GNATprove
+			\item Sireum Kiasan
+			\item Sireum Alir?
+		\end{itemize}
+\end{itemize}
+
+
+
+
 \section{Contribution}
 \label{introduction:contribution}
 Put all piecies together (SPARK, AADL, BLESS?, ICE, PCA Pump) and analyze current state of target technologies.
 Review PCA Pump Requirements document
 Implement PCA Pump based on document, by resolving ambiguities and analyzing different implementation possibilities. Then the implementation is sort of proof that, this document might be base for future Infusion Pumps and/or Medical Devices implementations.
 Analyzed and extended PCA Pump AADL models, then based on available resource propose possible translation from AADL/BLESS to SPARK/Ada.
-Created AADL/BLESS to SPARK/Ada translator.
+Created AADL/BLESS to SPARK/Ada translator?
+Showed use of SPARK toolset.
+
 
 \section{Organization}
 \label{introduction:organization}
@@ -65,3 +91,20 @@ Chapter \ref{pcapump} describes the implementation of PCA Pump Prototype. Faced 
 Chapter \ref{codegen} is about code generation from the model. 
 Chapter \ref{summary} summarizes all work which has been done in this thesis. 
 Chapter \ref{future_work} is the future work that can be done on this topic.
+
+
+\section{Terms and Acronyms}
+\label{introduction:terms}
+
+\begin{itemize}
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+	\item \textbf{BLESS} - Behavioral Language for Embedded Systems with Software
+	\item \textbf{ICE} - Integrated Clinical Environment
+	\item \textbf{MDCF} - Medical Device Coordination Framework
+	\item \textbf{PCA} - Patient-Controlled Analgesia (pump)
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+	\item \textbf{AADL} - Architecture Analysis \& Design Language
+\end{itemize}

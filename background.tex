@@ -32,7 +32,7 @@ Medical Devices, which are ICE compliant can be connected to MDCF. It enables Me
 
 AADL stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system \footnote{http://penelope.enst.fr/aadl}. 
 
-AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first verision (1.0) was approved in 2004 under technical leadership of Peter Feiler \footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
+AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler \footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
 
 AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools (like Osate \ref{background:aadl:osate}), which transforms textual representation into graphical. There is also possiblity to represent AADL in XML (using 3rd party tools). An example AADL model called Thermometer is shown in graphical representation in figure \ref{figure:patient_thermometer} and in textual representation in listing \ref{listing:patient_thermometer}.
 
@@ -108,7 +108,7 @@ How it fits into the picture. Why it was developed. Corectness prove in AADL + b
 \section{SPARK/Ada}
 \label{background:spark}
 
-First version of Ada programming language, Ada 83 was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and now we have Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is activelly used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing \footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software corectness and safety.
+First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing \footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -120,14 +120,14 @@ First version of Ada programming language, Ada 83 was designed to meet the US De
 
 SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. First version was designed over 20 years ago. SPARK has established a track record of use in embedded and critical systems across a diverse range of industrial domains where safety and security are paramount \cite{Barnes:Book}. 
 
-SPARK provides a significant degree of automation in proving exception freedom \cite{Spark:Article}. SPARK excludes some Ada constructs to make static analysis feasible \cite{Spark:Article}. Additionally SPARK contains toolset for Software Verification:
+SPARK provides a significant degree of automation in proving exception freedom \cite{Spark:Article}. SPARK excludes some Ada constructs to make static analysis feasible \cite{Spark:Article}. Additionally SPARK contains tool-set for Software Verification:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
-	\item Examiner - analyse code and ensures that it conforms to the SPARK language; also verify program to some extent using Verification Conditions (VC)
+	\item Examiner - analyze code and ensures that it conforms to the SPARK language; also verify program to some extent using Verification Conditions (VC)
 	\item Simplifier - simplify Verification Conditions generated by Examiner
 	\item Proof Checker - prove the Verification Conditions
 \end{itemize}
 
-First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It includes annotation language that support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 programm, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
+First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 program, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer \cite{Barnes:Book}}, label={listing:Odometer2005}]
 	package Odometer
@@ -152,14 +152,14 @@ First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It 
 	end Odometer;
 \end{lstlisting} 
 
-SPARK 2005 is a subset of Ada 2005 with annotations. It does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}.
+SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}.
 
 SPARK 2014 \footnote{http://www.spark-2014.org} is based on Ada 2012 programming language targeted at safety- and security-critical applications \cite{Spark2014:Paper}. Since Ada 2012 contains contracts, there is no need to use annotations like in SPARK 2005. Thus SPARK 2014 is subset of Ada 2012. It contains all features of Ada 2012 except:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
  	\item Access types (pointers)
  	\item Exceptions
 	\item Aliasing between variables
-	\item Concurrency features of Ada (Tasking)
+	\item Concurrency features of Ada (Tasking) - it's part of SPARK 2014 road-map to include support for tasking in the future, although likely not this year
 	\item Side effects in expressions and functions
 \end{itemize}
 
@@ -248,13 +248,13 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous 
 	end Odometer;
 \end{lstlisting} 
 
-It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation.
+It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some modules.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
 The most popular IDE for SPARK/Ada is GNAT Programming Studio \footnote{http://libre.adacore.com/tools/gps}.
 
 There is also plugin for Eclipse: GNATbench \footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
-Tools for corectness proving.
+Tools for correctness proving.
 
 \subsection{GNAT Programming Studio}
 \label{background:spark:gps}
@@ -287,6 +287,8 @@ AUnit Cookbook \cite{AUnitCookbook:Online}
 \label{background:pcapump}
 %http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
 Description of PCA Pump, its functions, problems and how ICE can solve them.
+Requirements document \cite{PcaReq}.
+Requirements document overview \cite{OpenSourcePCAPump:Paper}.
 
 
 \section{AADL/BLESS to SPARK/Ada code generation}
@@ -298,11 +300,18 @@ The ultimate goal of long term research, this thesis is part of, is AADL (with B
 \label{background:codegen:ocarina}
 Ocarina \cite{Ocarina:Paper,Ocarina:Paper} generates code from an AADL architecture model to an Ada application running on top of PolyORB framework. In this context, PolyORB acts as both the distribution middleware and execution runtime on all targets supported by PolyORB.
 It generate Ada 2005 and C code.
-Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developping another AADL toolchain, based on Eclipse, codenamed RAMSES \cite{Ocarina:About:Online}.
+Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{Ocarina:About:Online}.
+
+examples on github
+
+run:
+ocarina -x scenario.aadl
+
+
 
 
 \subsection{Ramses}
 \label{background:codegen:ramses}
-RAMSES is a model transformation framework dedicated to the refinement of AADL models. It contains code generation plugin.
+RAMSES is a model transformation framework dedicated to the refinement of AADL models. It contains code generation plug-in.
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
 % https://wiki.sei.cmu.edu/aadl/index.php/OSATE_2_on_the_command-line
