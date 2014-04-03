@@ -10,13 +10,13 @@
 % | LaTeX will automatically number the chapters.
 % +--------------------------------------------------------------------+
 
-\chapter{AADL/BLESS to SPARK/Ada translation}
+\chapter{AADL/BLESS to SPARK Ada translation}
 \label{codegen}
 
 First step was to create mock (based on doc, aadl models and implemented PCA Pump).
 Prototyping Embedded Systems using AADL lasts for a few years \cite{PrototypyingAadl:Paper}.
 
-\section{AADL/BLESS to SPARK/Ada mapping}
+\section{AADL/BLESS to SPARK Ada mapping}
 \label{codegen:mapping}
 
 %https://wiki.sei.cmu.edu/aadl/images/4/40/13_04_24-AADL-Code_Generation.pdf
@@ -29,7 +29,7 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 \subsection{Data types mapping}
 \label{codegen:mapping:data}
 
-During AADL/BLESS to SPARK/Ada types mapping, SPARK Examiner was helpful. It detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerators, which was a bug. \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
+During AADL/BLESS to SPARK Ada types mapping, SPARK Examiner was helpful. It detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerators, which was a bug. \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
 
 \subsection{AADL ports mapping}
 \label{codegen:mapping:ports}
@@ -44,13 +44,13 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		\label{table:aadl2spark_ports}
 		\\
 		\hline
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
 		\endfirsthead
 
 		\multicolumn{2}{c}%
 		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
 		\hline 
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
 		\endhead
 
 		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
@@ -203,17 +203,17 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 \subsection{Thread to subprograms mapping}
 \label{codegen:mapping:threads}
 
-Thread features are mapped into SPARK/Ada subprograms according to table \ref{table:threads2subprograms}
+Thread features are mapped into SPARK Ada subprograms according to table \ref{table:threads2subprograms}
 
 \begin{table}[!ht]
-	\caption{AADL threads to SPARK/Ada subprograms(procedures/functions) mapping.}
+	\caption{AADL threads to SPARK Ada subprograms(procedures/functions) mapping.}
 	\label{table:threads2subprograms}
 	\centering
   	\begin{tabular}{ | p{3.5in} | p{2.5in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
 
 		\hline
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
 
 		\begin{lstlisting}[language=aadl]
 			package Some_Pkg
@@ -258,9 +258,9 @@ Thread features are mapped into SPARK/Ada subprograms according to table \ref{ta
 
 AADL package, which contains threads is split into child packages with convention: AADL\_Package\_Name -> AADL\_Package\_Name.Thread\_Name.
 
-In SPARK/Ada we have nested packages and child packages. Sample nested packages are shown in listing \ref{listing:nested_packages}. Equivalent child packages are shown in listing \ref{listing:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{listing:nested_packages} and \ref{listing:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{listing:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
+In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{listing:nested_packages}. Equivalent child packages are shown in listing \ref{listing:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{listing:nested_packages} and \ref{listing:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{listing:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK/Ada}, label={listing:nested_packages}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={listing:nested_packages}]
 	package P is
 	   D: Integer;
 
@@ -283,7 +283,7 @@ In SPARK/Ada we have nested packages and child packages. Sample nested packages 
 	end P;
 \end{lstlisting}
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK/Ada}, label={listing:child_packages}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={listing:child_packages}]
 	package P is
 	   D: Integer;
 	   E: Integer;
@@ -311,14 +311,14 @@ I added Subprograms to exisitng PCA Pump AADL models etc.
 How I did it. Code examples.
 
 \begin{table}[!ht]
-	\caption{AADL subprograms to SPARK/Ada subprograms(procedures/functions) mapping.}
+	\caption{AADL subprograms to SPARK Ada subprograms(procedures/functions) mapping.}
 	\label{table:subprograms_mapping}
 	\centering
   	\begin{tabular}{ | p{3in} | p{3in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
 
 		\hline
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
 
 		\begin{lstlisting}[language=aadl]
 			subprogram sp
@@ -363,10 +363,10 @@ How I did it. Code examples.
 	\caption{BLESS to SPARK contractsmapping.}
 	\centering
   	\begin{tabular}{ | p{3in} | p{3in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
 
 		\hline
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK/Ada}} \\ \hline
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
 
 		\begin{lstlisting}[language=bless]
 			BLESS::Assertion=>"<<VP()>>"
@@ -395,6 +395,6 @@ How I did it. Code examples.
 
 \section{"DeusEx" translator}
 \label{codegen:translator}
-AADL/BLESS to SPARK/Ada translator in Scala. Main idea.
+AADL/BLESS to SPARK Ada translator in Scala. Main idea.
 Maybe at least create base: AADL to AST covertion?
 

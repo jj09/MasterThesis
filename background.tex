@@ -13,7 +13,7 @@
 \chapter{Background}
 \label{background}
 
-This chapter is brief introduction of all technologies and tools used in this thesis. It is SPARK/Ada programming language and its tools (GNAT Programming Studio, Sireum Bakar, GNATprove), AADL modeling language, BLESS (AADL annex language). There is also overview of the context in which this work has been made: Integrated Clinical Environment standard (ICE) and PCA Pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
+This chapter is brief introduction of all technologies and tools used in this thesis. It is SPARK Ada programming language and its tools (GNAT Programming Studio, Sireum Bakar, GNATprove), AADL modeling language, BLESS (AADL annex language). There is also overview of the context in which this work has been made: Integrated Clinical Environment standard (ICE) and PCA Pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
 
 
 
@@ -101,11 +101,11 @@ BLESS contains three AADL annex sublanguages:
 	\item BLESS - it can be attached to AADL thread, device or system components; it contains states, transitions, timeouts, actions, events and Assertions with time expressions...
 \end{itemize}
 
-How it fits into the picture. Why it was developed. Corectness prove in AADL + behavior \cite{Bless:Paper}, from which we can generate SPARK/Ada code.
+How it fits into the picture. Why it was developed. Corectness prove in AADL + behavior \cite{Bless:Paper}, from which we can generate SPARK Ada code.
 
 
 
-\section{SPARK/Ada}
+\section{SPARK Ada}
 \label{background:spark}
 
 First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing \footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety.
@@ -170,7 +170,7 @@ Sample mapping from SPARK 2005 to 2014 is shown on table \ref{table:spark2005and
 	\label{table:spark2005and2014mapping}
 	\centering
   	\begin{tabular}{ | p{3in} | p{3in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK/Ada}\\
+	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
 
 		\hline
 		\multicolumn{1}{|c|}{\textbf{SPARK 2005}} & \multicolumn{1}{|c|}{\textbf{SPARK 2014}} \\ \hline
@@ -251,14 +251,14 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous 
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some modules.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
-The most popular IDE for SPARK/Ada is GNAT Programming Studio \footnote{http://libre.adacore.com/tools/gps}.
+The most popular IDE for SPARK Ada is GNAT Programming Studio \footnote{http://libre.adacore.com/tools/gps}.
 
 There is also plugin for Eclipse: GNATbench \footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
 Tools for correctness proving.
 
 \subsection{GNAT Programming Studio}
 \label{background:spark:gps}
-IDE for SPARK/Ada programs development. Includes proving tools. E.g. Sireum Bakar (developed by SAnToS lab) or GNATprove.
+IDE for SPARK Ada programs development. Includes proving tools. E.g. Sireum Bakar (developed by SAnToS lab) or GNATprove.
 
 
 \subsection{Sireum Bakar}
@@ -271,7 +271,7 @@ Plugin for Eclipse (but only SPARK 2005).
 
 \subsection{GNAT Prove}
 \label{background:spark:gnatprove}
-GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK/Ada programs. It interprets SPARK/Ada annotations exactly like they are interpreted at run time during tests.
+GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK Ada programs. It interprets SPARK Ada annotations exactly like they are interpreted at run time during tests.
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 
 
@@ -291,9 +291,9 @@ Requirements document \cite{PcaReq}.
 Requirements document overview \cite{OpenSourcePCAPump:Paper}.
 
 
-\section{AADL/BLESS to SPARK/Ada code generation}
+\section{AADL/BLESS to SPARK Ada code generation}
 \label{background:codegen}
-The ultimate goal of long term research, this thesis is part of, is AADL (with BLESS) to SPARK/Ada translation.
+The ultimate goal of long term research, this thesis is part of, is AADL (with BLESS) to SPARK Ada translation.
 
 
 \subsection{Ocarina}
