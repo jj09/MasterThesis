@@ -118,7 +118,9 @@ First version of Ada programming language - Ada 83 - was designed to meet the US
 \end{figure}
 \footnotetext{http://www.slideshare.net/AdaCore/ada-2012}
 
-SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. First version was designed over 20 years ago. SPARK has established a track record of use in embedded and critical systems across a diverse range of industrial domains where safety and security are paramount \cite{Barnes:Book}. 
+SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. It is a `safe' subset of Ada designed to be susceptible to formal methods, accompanied with a set of approaches and tools. Using SPARK, a developer takes a Z specification and performs a stepwise refinement from the specification to SPARK code. For each refinement step a tool is used to produce verification conditions (VC's), which are mathematical theorems. If the VC's can be proved then the refinement step will be known to be valid. However if the VC's cannot be proved then the refinement step may be erroneous \footnote{http://www.dwheeler.com/lovelace/s17s4.htm}.
+
+First version was designed over 20 years ago. SPARK has established a track record of use in embedded and critical systems across a diverse range of industrial domains where safety and security are paramount \cite{Barnes:Book}. 
 
 SPARK provides a significant degree of automation in proving exception freedom \cite{Spark:Article}. SPARK excludes some Ada constructs to make static analysis feasible \cite{Spark:Article}. Additionally SPARK contains tool-set for Software Verification:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
@@ -127,7 +129,7 @@ SPARK provides a significant degree of automation in proving exception freedom \
 	\item Proof Checker - prove the Verification Conditions
 \end{itemize}
 
-First version of SPARK was based on Ada 83. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 program, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
+First version of SPARK was based on Ada 83. The second version (SPARK 95) - on Ada 95. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 program, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer \cite{Barnes:Book}}, label={listing:Odometer2005}]
 	package Odometer
@@ -222,7 +224,7 @@ Sample mapping from SPARK 2005 to 2014 is shown on table \ref{table:spark2005and
 \end{table}
 
 SPARK 2014 does not contains Examiner. Instead, proofs are made by gnatPROVE.
-The notion of executable contracts in Ada 2012, was inspired by SPARK. Previous Odometer example in SPARK 2014 is shown in figure \ref{listing:Odometer2014}.
+The notion of executable contracts in Ada 2012, was inspired by SPARK. The previous Odometer example in SPARK 2014 is shown in figure \ref{listing:Odometer2014}.
 
 \begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={SPARK 2014 code: Odometer}, label={listing:Odometer2014}]
 	package Odometer

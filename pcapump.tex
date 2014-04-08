@@ -50,6 +50,8 @@ GNAT cross-compiler only for Linux Platform (cross-compilation has to be done on
 
 Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. For SPARK 2005, GNAT compiler provides Ravenscar Profile \cite{Ravenscar:Online}. It provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs.
 
+In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation.
+
 Issues: Ravenscar Profile, how to deal with different boluses (look at UMinn requirements and annotations for our doc).
 Look at annotated PCA Pump Req document.
 
