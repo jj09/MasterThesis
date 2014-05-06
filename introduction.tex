@@ -1,13 +1,6 @@
 %!TEX root = etdrtemplate.tex
 % +--------------------------------------------------------------------+
-% | Sample Chapter
-% |
-% | This file provides examples of how to
-% | - insert a figure with a caption
-% | - construct a table with a caption
-% | - create subsections within the chapter
-% | - insert a reference to a Figure or Table
-% | - make a citation
+% | Chapter 1
 % +--------------------------------------------------------------------+
 
 \cleardoublepage
@@ -47,7 +40,15 @@ Model as specification/requirements.
 PCA Pump is as an example of Medical Device, which ultimately will work under Medical Device Coordination Framework (MDCF) developed by SAnToS Lab at Kansas State University.
 Summarizing, we want to be able to have MDCF, which coordinates Medical Devices. Additionally we want set of AADL/BLESS models, which can be automatically translated to SPARK Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
 Why AADL? Because it describes hardware and software. It allows to validate that the software will work on some device.
-Why SPARK? Because it is subset, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
+Why SPARK? Because it contains set of verification tools. 
+Testing vs Verification (form 721 slides): Testing starts with a set of possible test cases, simulates the system on each input, and observes the behavior. In general, testing does not cover all possible executions. On the other hand, verification establishes correctness for all possible execution sequences.
+Techniques for Verification:
+\begin{itemize}
+	\item Formal verification: prove mathematically that the program is correct – this can be difficult for large programs.
+	\item Correctness by construction: follow a well- defined methodology for constructing programs.
+	\item Model checking: enumerate all possible executions and states, and check each state for correctness.
+\end{itemize}
+SPARK is a subset of Ada language, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
 
 
 \section{Goals}
