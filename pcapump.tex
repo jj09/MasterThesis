@@ -14,13 +14,14 @@
 \label{pcapump}
 
 Overview of PCA Pump and issues, which MDCF/ICE will solve.
+%http://ppahs.org/2012/05/30/patient-controlled-analgesia-pca-pumps-the-basics/
 In this thesis, only the operation module is implemented.
 Overview of Safety-Critical System loop.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
     	\includegraphics[height=3.5in]{figures/safety-critical-loop.png}
-    	\caption{Basic Process Control Loop\protect\footnotemark.}    	
+    	\caption{Basic Process Control Loop\protect\footnotemark.}
     \end{center}
 \end{figure}
 \footnotetext{http://www.safeware-eng.com/system and software safety publications/Designing Specification Languages.htm}
@@ -61,7 +62,9 @@ First step was create PCA Pump prototype on BeagleBoard-xM.
 
 BeagleBoard-xM is Embedded device with AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). Moreover there is PWM support. All these properties makes this device good candidate for prototyping PCA Pump.
 
-Expansion port 14 and 28
+Pulse width modulation (PWM) is a technique for controlling analog circuits with a processor's digital outputs.
+
+Expansion port 14(PWM) and 28(GND?)
 GPIO158
 Java Program to Run the pump for 10 seconds
 
@@ -69,6 +72,8 @@ There is no existing SPARK Ada compiler running on ARM system. Hence, to compile
 
 Include source of simple program?
 GNAT cross-compiler only for Linux Platform (cross-compilation has to be done on Linux).
+
+compilation+linking command: \lstinline{arm-linux-gnueabi-gnatmake -d -Ppca_ravenscar.gpr}.
 
 %describe how to run the program: compile cmd with arm-gnuaebi... then copy to the board etc.
 
@@ -83,12 +88,12 @@ In real-world applications, the embedded critical components are written in SPAR
 Discuss implementation of basal infusion: 0.1 ml pulses timed according to the desired rate. (based on CADD-Prizm page 14). Easier bolus monitoring/calculations. Possibility to separate pulse from engine logic. Just array with time stamps(?) or array with size = (60 * 60 /min\_possible\_time\_between\_activations) and set 1 if activation occured. In every second, update array: array[i]=array[i+1]. Array is protected object, so bolus thread cannot access it in the same time, when update thread.
 Another option: constant speed of engine and speed-up on boluses. Harder bolus monitoring/calculations?
 
-Calculations in microliters 1 microliters(ul) = 0.001 ml thus 1ml = 1000$\mu$l
+Internal calculations are in micro liters 1 micro liters ($\mu$l) = 0.001 ml thus 1 ml = 1000$\mu$l.
 
 Boluses (look at UMinn requirements and annotations for our doc).
 Look at annotated PCA Pump Req document.
 
-\subsection{Concurrency in SPARK}
+\subsection{Concurrency in SPARK Ada}
 \label{pcapump:implementation:concurrency}
 
 In SPARK 2005, concurrency is enable using the Ravenscar profile \cite{Ravenscar:Online}. 
@@ -99,7 +104,7 @@ There are two ways to access protected variable in task body:
     \item It has to be atomic type
 \end{itemize}
 
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then we get Semantic Error 940 - Variable is a protected own variable. To preserve pre- and postconditions , atomic types has to be used.
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns Semantic Error 940 - Variable is a protected own variable. To preserve opportunity to use pre- and postconditions, atomic types has to be used.
 
 
 Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
@@ -110,3 +115,4 @@ Concurrent programs require the use of different specification and verification 
 \label{pcapump:implementation:ice}
 
 Describe communication with MDCF/ICE. PCA Pump ports for that etc.
+Put it to 
