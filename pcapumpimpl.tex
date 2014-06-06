@@ -5,10 +5,6 @@
 
 \cleardoublepage
 
-% +--------------------------------------------------------------------+
-% | Replace "This is Chapter 5" below with the title of your chapter.
-% | LaTeX will automatically number the chapters.
-% +--------------------------------------------------------------------+
 
 \chapter{PCA Pump Prototype Implementation}
 \label{pcapumpimpl}
@@ -17,18 +13,15 @@ Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. 
 
 In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation.
 
-Discuss implementation of basal infusion: 0.1 ml pulses timed according to the desired rate. (based on CADD-Prizm page 14). Easier bolus monitoring/calculations. Possibility to separate pulse from engine logic. Just array with time stamps(?) or array with size = (60 * 60 /min\_possible\_time\_between\_activations) and set 1 if activation occured. In every second, update array: array[i]=array[i+1]. Array is protected object, so bolus thread cannot access it in the same time, when update thread.
-Another option: constant speed of engine and speed-up on boluses. Harder bolus monitoring/calculations?
+The biggest challenge during PCA Pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it required to isolate some functionalities or implement them in different way. An example might be reading and writing numbers to standard input.
 
-Internal calculations are in micro liters 1 micro liters ($\mu$l) = 0.001 ml thus 1 ml = 1000$\mu$l.
-
-Boluses (look at UMinn requirements and annotations for our doc).
-Look at annotated PCA Pump Req document.
 
 \section{Concurrency in SPARK Ada}
 \label{pcapump:implementation:concurrency}
 
-In SPARK 2005, concurrency is enable using the Ravenscar profile \cite{Ravenscar:Online}. 
+Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency features are needed. In SPARK 2005, concurrency is enable with Ravenscar profile \cite{Ravenscar:Online}. For now, concurrency is not allowed in SPARK 2014.
+
+Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper}
 
 There are two ways to access protected variable in task body:
 \begin{itemize}
@@ -36,15 +29,37 @@ There are two ways to access protected variable in task body:
     \item It has to be atomic type
 \end{itemize}
 
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns Semantic Error 940 - Variable is a protected own variable. To preserve opportunity to use pre- and postconditions, atomic types has to be used.
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns \lstinline{Semantic Error 940 - Variable is a protected own variable}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
 
 
-Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
 
-\cite{Ravenscar:Article}
+\section{Code generation from AADL models}
 
-\section{Interface for Integrated Clinical Environment}
-\label{pcapump:implementation:ice}
+Skeleton code generated from AADL models. Then implemented.
 
-Describe communication with MDCF/ICE. PCA Pump ports for that etc.
-Put it to 
+Show generated code.
+
+
+
+\section{Implementation for generated code}
+
+Overview of issues solved: 
+* Bolus options: FBasal + FPatient or FPatient => implemented: FBasal + FPatient (consistent in doc)
+5 modes:
+* Stopped: F=0
+* KVO: F=0.1
+* Basal: F=Fbasal
+* Patient: F = Fbasal + Fbolus (for vtbi/Fbolus)
+* Clinician: F = Fbalsal + Fbolus (for specified time)
+
+Most common Examiner\cite{Examiner:Online} erroes/warnings:
+***        Warning                     :302: This expression may be
+***        Semantic Error              :725: Protected function or variable XXX may only appear directly in an assignment or return statement.
+
+Discuss implementation of basal infusion: 0.1 ml pulses timed according to the desired rate. (based on CADD-Prizm page 14). Easier bolus monitoring/calculations. Possibility to separate pulse from engine logic. Just array with time stamps(?) or array with size = (60 * 60 /min\_possible\_time\_between\_activations) and set 1 if activation occured. In every second, update array: array[i]=array[i+1]. Array is protected object, so bolus thread cannot access it in the same time, when update thread.
+Another option: constant speed of engine and speed-up on boluses. Harder bolus monitoring/calculations?
+
+
+Internal calculations are in micro liters 1 micro liters ($\mu$l) = 0.001 ml thus 1 ml = 1000$\mu$l.
+
+

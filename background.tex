@@ -5,10 +5,6 @@
 
 \cleardoublepage
 
-% +--------------------------------------------------------------------+
-% | Replace "This is Chapter 2" below with the title of your chapter.
-% | LaTeX will automatically number the chapters.
-% +--------------------------------------------------------------------+
 
 \chapter{Background}
 \label{background}
@@ -26,6 +22,7 @@ Medical devices are safety-critical systems.
 Medical Devices Coordination Framework is an open, experimental ICE-compliant platform to bring together academic researchers, industry vendors, and government regulators.
 Medical Devices, which are ICE compliant can be connected to MDCF. It enables Medical Devices cooperation.
 [add some pictures etc.]
+
 
 
 \section{AADL}
@@ -259,24 +256,21 @@ The most popular IDE for SPARK Ada is GNAT Programming Studio \footnote{http://l
 There is also plugin for Eclipse: GNATbench \footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
 Tools for correctness proving.
 
-\subsection{GNAT Programming Studio}
+
+\subsection{GNAT compiler and Programming Studio}
 \label{background:spark:gps}
+GNAT compiler is front end of gcc...
 IDE for SPARK Ada programs development. Includes proving tools. E.g. Sireum Bakar (developed by SAnToS lab) or GNATprove.
 
 
-\subsection{Sireum Bakar}
-\label{background:spark:sireum}
-Overview: symbolic execution, Pilar, Kiasan and Alir \cite{Hari:Thesis}.
-Sireum Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for finding possible paths in program.
-Plugin for GNAT Programming Studio.
-Plugin for Eclipse (but only SPARK 2005).
+\subsection{Ravenscar Tasking Subset}
+\label{background:spark:ravenscar}
 
+RavenSPARK is subset of the SPARK Ravenscar Profile (which is subset of Ada tasking). The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs \cite{Ravenscar:Online}.
 
-\subsection{GNAT Prove}
-\label{background:spark:gnatprove}
-GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK Ada programs. It interprets SPARK Ada annotations exactly like they are interpreted at run time during tests.
-% http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
-% only for SPARK 2014
+The Ravenscar Profile is a subset of the tasking model, restricted to meet the real-time community requirements for determinism, schedulability analysis and memory-boundedness, as well as being suitable for mapping to a small and efficient run-time system that supports task synchronization and communication, and which could be certifiable to the highest integrity levels. The concurrency model promoted by the Ravenscar Profile is consistent with the use of tools that allow the static properties of programs to be verified. Potential verification techniques include information flow analysis, schedulability analysis, execution-order analysis and model checking. These techniques allow analysis of a system to be performed throughout its development life cycle, thus avoiding the common problem of finding only during system integration and testing that the design fails to meet its non-functional requirements. \cite{Ravenscar:Article}
+
+Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
 
 
 \subsection{AUnit}
@@ -286,13 +280,19 @@ AUnit tutorials \cite{AUnitTutorials:Online}
 AUnit Cookbook \cite{AUnitCookbook:Online}
 
 
+\subsection{Sireum Bakar}
+\label{background:spark:sireum}
+Overview: symbolic execution, Pilar, Kiasan and Alir \cite{Hari:Thesis}.
+Sireum Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for finding possible paths in program.
+Plugin for GNAT Programming Studio (SPARK 2005 and 2014 under development).
+Plugin for Eclipse (only for SPARK 2005).
 
-\section{PCA Pump}
-\label{background:pcapump}
-%http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
-Description of PCA Pump, its functions, problems and how ICE can solve them.
-Requirements document \cite{PcaReq}.
-Requirements document overview \cite{OpenSourcePCAPump:Paper}.
+
+\subsection{GNAT Prove}
+\label{background:spark:gnatprove}
+GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It interprets SPARK Ada annotations exactly like they are interpreted at run time during tests.
+% http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
+% only for SPARK 2014
 
 
 \section{AADL/BLESS to SPARK Ada code generation}
@@ -310,7 +310,6 @@ examples on github
 
 run:
 ocarina -x scenario.aadl
-
 
 
 

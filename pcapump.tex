@@ -5,18 +5,18 @@
 
 \cleardoublepage
 
-% +--------------------------------------------------------------------+
-% | Replace "This is Chapter 3" below with the title of your chapter.
-% | LaTeX will automatically number the chapters.
-% +--------------------------------------------------------------------+
 
-\chapter{PCA Pump Prototype}
+\chapter{PCA Pump}
 \label{pcapump}
 
-Overview of PCA Pump and issues, which MDCF/ICE will solve.
+%http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
 %http://ppahs.org/2012/05/30/patient-controlled-analgesia-pca-pumps-the-basics/
+Description of PCA Pump, its functions, problems and how ICE can solve them.
+Requirements document \cite{PcaReq}.
+Requirements document overview \cite{OpenSourcePCAPump:Paper}.
+
 In this thesis, only the operation module is implemented.
-Overview of Safety-Critical System loop.
+
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -30,6 +30,7 @@ Pump internal implementation based on \cite{CADD-PrizmAmbulatoryInfusionPump:Onl
 - basal dose deliver in increments - easier to track delivered amount (page 14)
 
 
+
 \section{PCA Pump Requirements Document}
 \label{pcapump:requirements-doc}
 
@@ -37,23 +38,13 @@ Selected use cases for implementation?
 
 %state machine image
 
-Overview of issues solved: 
-* Bolus options: FBasal + FPatient or FPatient => implemented: FBasal + FPatient (consistent in doc)
-5 modes:
-* Stopped: F=0
-* KVO: F=0.1
-* Basal: F=Fbasal
-* Patient: F = Fbasal + Fbolus (for vtbi/Fbolus)
-* Clinician: F = Fbalsal + Fbolus (for specified time)
 
-Most common Examiner\cite{Examiner:Online} erroes/warnings:
-***        Warning                     :302: This expression may be
-***        Semantic Error              :725: Protected function or variable XXX may only appear directly in an assignment or return statement.
 
 
 \section{PCA Pump AADL/BLESS Models}
 \label{pcapump:aadl-bless-models}
 Selected modules for implementation. Pictures etc.
+
 
 
 \section{BeagleBoard-XM}
@@ -77,3 +68,10 @@ compilation+linking command: \lstinline{arm-linux-gnueabi-gnatmake -d -Ppca_rave
 
 %describe how to run the program: compile cmd with arm-gnuaebi... then copy to the board etc.
 
+
+
+\section{Interface for Integrated Clinical Environment}
+\label{pcapump:implementation:ice}
+
+PCA Pump will be connected to ICE. It will allow to monitor and control device by MDCF (ICE implementation).
+Describe communication with MDCF/ICE. PCA Pump ports for that etc.

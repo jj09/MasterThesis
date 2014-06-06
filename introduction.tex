@@ -5,10 +5,6 @@
 
 \cleardoublepage
 
-% +--------------------------------------------------------------------+
-% | Replace "Chapter Title" below with the title of your chapter.  LaTeX
-% | will automatically number the chapters.
-% +--------------------------------------------------------------------+
 
 \chapter{Introduction}
 \label{introduction}
@@ -27,6 +23,8 @@ Incident - event, which not cause loss (but undesired), and could lead to accide
 Hazard + Environmental Conditions = Accident (loss)
 Event - state change
 
+Overview of Safety-Critical System loop.
+%take from 721 paper
 
 \section{Motivation}
 \label{introduction:motivation}
@@ -49,6 +47,7 @@ Techniques for Verification:
 	\item Model checking: enumerate all possible executions and states, and check each state for correctness.
 \end{itemize}
 SPARK is a subset of Ada language, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and correctness proving.
+
 
 
 \section{Goals}
@@ -75,12 +74,14 @@ SPARK is a subset of Ada language, which is easy to deal with it. In the future,
 
 \section{Contribution}
 \label{introduction:contribution}
-Put all pieces together (SPARK, AADL, BLESS?, ICE, PCA Pump) and analyze current state of target technologies.
+Put all pieces together (SPARK, AADL, BLESS, ICE, PCA Pump) and analyze current state of target technologies.
 Review PCA Pump Requirements document
-Implement PCA Pump based on document, by resolving ambiguities and analyzing different implementation possibilities. Then the implementation is sort of proof that, this document might be base for future Infusion Pumps and/or Medical Devices implementations.
-Analyzed and extended PCA Pump AADL models, then based on available resource propose possible translation from AADL/BLESS to SPARK Ada.
+Analyzed PCA Pump AADL models, then based on available resources proposed possible translation from AADL/BLESS to SPARK Ada.
+Created skeleton of generated SPARK code from AADL models.
+Implemented PCA Pump based on requirements document and skeleton code. Resolved some ambiguities and analyzed different implementation possibilities. Then the implementation is sort of proof that, this document and AADL models are base for future Infusion Pumps implementations.
+Presented SPARK 2005 Verification tools: its capabilities and issues.
 Created AADL/BLESS to SPARK Ada translator?
-Showed use of SPARK toolset.
+
 
 
 \section{Organization}
@@ -94,6 +95,7 @@ Chapter \ref{pcapumpimpl} describes the implementation of PCA Pump Prototype. Fa
 Chapter \ref{verification} describes verification of implemented PCA Pump Prototype. 
 Chapter \ref{summary} summarizes all work which has been done in this thesis. 
 Chapter \ref{future_work} is the future work that can be done on this topic.
+
 
 
 \section{Terms and Acronyms}

@@ -5,22 +5,45 @@
 
 \cleardoublepage
 
-% +--------------------------------------------------------------------+
-% | Replace "This is Chapter 5" below with the title of your chapter.
-% | LaTeX will automatically number the chapters.
-% +--------------------------------------------------------------------+
-
 \chapter{Verification}
 \label{verification}
 
 Verification
 
+
+
 \section{SPARK Examiner}
 
-\cite{Examiner:Online}
+The Examiner supports several levels of analysis. The Examiner supports:
+\begin{itemize}
+	\item checking of SPARK language syntactic and static semantic rules
+	\item data flow analysis
+	\item data and information flow analysis
+	\item formal program verification via generation of verification conditions
+	\item proof of absence of run-time errors
+	\item dead path analysis
+\end{itemize}
+
+There is also an option to make the Examiner perform syntax checks only. Using this option on a source file does not require access to any other units on which the file depends, so files can be syntax checked on an individual basis. This allows any syntax errors to be corrected before the file is included in a complex examination.  This option must only be used as a pre-processor: the absence of syntax errors does NOT indicate that the source text is a legal SPARK program. \cite{Examiner:Online} (THIS PART IS COPY AND PASTE FROM Examiner doc - is it ok?)
+
+During implementation, code was regularly checked using SPARK Examiner.
+
+What is very important, Examiner can perform data and information analysis of Ravenscar programs in exactly the same manner as for sequential programs \cite{Ravenscar:Online}. Unfortunately it does not allow protected objects in proof annotations (pre- and post-conditions).
+
+
+
+\section{AUnit tests}
+- test incrementing array
+- test moving array
+- test prescription setters and getters
+- test state machine
+	* change to bolus mode
+	* change to KVO rate
+	* etc.
+
+
 
 \section{gnatPROVE?}
 
-\section{AUnit tests}
-
-
+There is a new tool set "gnatPROVE" for SPARK 2014. It was not used because PCA Pump was developed in SPARK 2005.
+I CAN TRANSLATE SOME SINGLE FUNCTIONS AND USE GNAT PROVE TO VERIFY?
