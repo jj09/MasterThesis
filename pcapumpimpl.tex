@@ -13,4 +13,38 @@
 \chapter{PCA Pump Prototype Implementation}
 \label{pcapumpimpl}
 
-Implementation details and decisions made, and issues solved.
+Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. For SPARK 2005, GNAT compiler provides Ravenscar Profile \cite{Ravenscar:Online}. It provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs.
+
+In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation.
+
+Discuss implementation of basal infusion: 0.1 ml pulses timed according to the desired rate. (based on CADD-Prizm page 14). Easier bolus monitoring/calculations. Possibility to separate pulse from engine logic. Just array with time stamps(?) or array with size = (60 * 60 /min\_possible\_time\_between\_activations) and set 1 if activation occured. In every second, update array: array[i]=array[i+1]. Array is protected object, so bolus thread cannot access it in the same time, when update thread.
+Another option: constant speed of engine and speed-up on boluses. Harder bolus monitoring/calculations?
+
+Internal calculations are in micro liters 1 micro liters ($\mu$l) = 0.001 ml thus 1 ml = 1000$\mu$l.
+
+Boluses (look at UMinn requirements and annotations for our doc).
+Look at annotated PCA Pump Req document.
+
+\section{Concurrency in SPARK Ada}
+\label{pcapump:implementation:concurrency}
+
+In SPARK 2005, concurrency is enable using the Ravenscar profile \cite{Ravenscar:Online}. 
+
+There are two ways to access protected variable in task body:
+\begin{itemize}
+    \item It has to be protected object
+    \item It has to be atomic type
+\end{itemize}
+
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns Semantic Error 940 - Variable is a protected own variable. To preserve opportunity to use pre- and postconditions, atomic types has to be used.
+
+
+Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
+
+\cite{Ravenscar:Article}
+
+\section{Interface for Integrated Clinical Environment}
+\label{pcapump:implementation:ice}
+
+Describe communication with MDCF/ICE. PCA Pump ports for that etc.
+Put it to 

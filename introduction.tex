@@ -15,7 +15,7 @@
 
 The tale about software safety: why important, software everywhere, human life, etc. (info from 890).
 
-Software Engineering for Real-Time and Safety-Critical systems is very different than creating Desktop applications. In both types of software we want to ensure correctnes and security. In case of e.g. e-mail client software assurance is not crucial. When something happend, we just restart the app. However, in case of e.g. Airplane, software cannot just crash. If it crashes, then people dies. Behind these reasons, we need different properties of our programming language and its tools. For Web or Mobile apps our priority is Rapid Development. For Safety-Critical systems, security is crucial.
+Software Engineering for Real-Time and Safety-Critical systems is very different than creating Desktop applications. In both types of software we want to ensure correctnes and security. In case of e.g. e-mail client software assurance is not critical. When something happend, we just restart the app. However, in case of e.g. Airplane, software cannot just crash. If it crashes, then people die. Behind these reasons, we need different properties of programming language and its tools. For Web or Mobile apps our priority is Rapid Development. For Safety-Critical systems, the security and correctness is crucial.
 
 
 Most important in Safety-Critical Systems: Hazard analysis (avoid, recover)!
@@ -23,8 +23,8 @@ Hazard can cause:
 	* Incident
 	* Accident
 Accident - event, which cause loss (undesired)
-Incident - event, which not cause loss (but undesired)
-Hazard + Environmental Conditions => Accident (loss)
+Incident - event, which not cause loss (but undesired), and could lead to accident
+Hazard + Environmental Conditions = Accident (loss)
 Event - state change
 
 
@@ -37,7 +37,7 @@ Devices working under MDCF will need to satisfy some requirements. To make Devel
 Model Driven Development in this case means we will have some base models for medical devices development and developer will extend and customize them. The same like you do File > 'New Java project' in Eclipse, we want to be able to do the same in e.g. GNAT Programming Studio: File > 'New Medical device project'.
 Model as specification/requirements.
 
-PCA Pump is as an example of Medical Device, which ultimately will work under Medical Device Coordination Framework (MDCF) developed by SAnToS Lab at Kansas State University.
+PCA Pump is as an example of Medical Device, which ultimately will work under Medical Device Coordination Framework (MDCF), an open source framework under development by SAnToS Lab at Kansas State University and University of Pennsylvania.
 Summarizing, we want to be able to have MDCF, which coordinates Medical Devices. Additionally we want set of AADL/BLESS models, which can be automatically translated to SPARK Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
 Why AADL? Because it describes hardware and software. It allows to validate that the software will work on some device.
 Why SPARK? Because it contains set of verification tools. 
@@ -48,14 +48,14 @@ Techniques for Verification:
 	\item Correctness by construction: follow a well- defined methodology for constructing programs.
 	\item Model checking: enumerate all possible executions and states, and check each state for correctness.
 \end{itemize}
-SPARK is a subset of Ada language, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and corectness proving.
+SPARK is a subset of Ada language, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and correctness proving.
 
 
 \section{Goals}
 \label{introduction:goals}
 \begin{itemize}
 	\item learn about PCA Pump Infusion pumps properties
-	\item SPARK Ada crosscompilation for ARM-device (BeagleBoard-xM)
+	\item SPARK Ada cross-compilation for ARM-device (BeagleBoard-xM)
 	\item implement PCA Pump based on Brian's Requirement Document (using Ravenscar profile)
 	\item propose AADL/BLESS to SPARK Ada mapping
 	\item mock PCA Pump AADL/BLESS models in SPARK Ada
@@ -64,9 +64,9 @@ SPARK is a subset of Ada language, which is easy to deal with it. In the future,
 	\item Use SPARK toolset for software verification:
 		\begin{itemize}
 			\item SPARK Examiner
+			\item SPARK Simplifier??? %http://docs.adacore.com/sparkdocs-docs/Simplifier_UM.htm
 			\item GNATprove
 			\item Sireum Kiasan
-			\item Sireum Alir?
 		\end{itemize}
 \end{itemize}
 
@@ -75,7 +75,7 @@ SPARK is a subset of Ada language, which is easy to deal with it. In the future,
 
 \section{Contribution}
 \label{introduction:contribution}
-Put all piecies together (SPARK, AADL, BLESS?, ICE, PCA Pump) and analyze current state of target technologies.
+Put all pieces together (SPARK, AADL, BLESS?, ICE, PCA Pump) and analyze current state of target technologies.
 Review PCA Pump Requirements document
 Implement PCA Pump based on document, by resolving ambiguities and analyzing different implementation possibilities. Then the implementation is sort of proof that, this document might be base for future Infusion Pumps and/or Medical Devices implementations.
 Analyzed and extended PCA Pump AADL models, then based on available resource propose possible translation from AADL/BLESS to SPARK Ada.
@@ -86,10 +86,12 @@ Showed use of SPARK toolset.
 \section{Organization}
 \label{introduction:organization}
 The thesis is organized in \ref{future_work} chapters. 
-Chapter \ref{introduction} is the of the problem and summary of contribution which was made. 
+Chapter \ref{introduction} is the problem description and summary of contribution which was made. 
 Chapter \ref{background} is Background that gives details about Model Driven Development, SPARK Ada, AADL/BLESS, ICE and available tools for such environment. 
-Chapter \ref{pcapump} describes the implementation of PCA Pump Prototype. Faced issues and design decisions made.
+Chapter \ref{pcapump} describe patient-controlled analgesia (PCA) pump.
 Chapter \ref{codegen} is about code generation from the model. 
+Chapter \ref{pcapumpimpl} describes the implementation of PCA Pump Prototype. Faced issues and design decisions made.
+Chapter \ref{verification} describes verification of implemented PCA Pump Prototype. 
 Chapter \ref{summary} summarizes all work which has been done in this thesis. 
 Chapter \ref{future_work} is the future work that can be done on this topic.
 
