@@ -9,7 +9,7 @@
 \chapter{Introduction}
 \label{introduction}
 
-The tale about software safety: why important, software everywhere, human life, etc. (info from 890).
+The tale about software safety: why important, software everywhere, human life, etc. (info from 890 and Barnes' book).
 
 Software Engineering for Real-Time and Safety-Critical systems is very different than creating Desktop applications. In both types of software we want to ensure correctnes and security. In case of e.g. e-mail client software assurance is not critical. When something happend, we just restart the app. However, in case of e.g. Airplane, software cannot just crash. If it crashes, then people die. Behind these reasons, we need different properties of programming language and its tools. For Web or Mobile apps our priority is Rapid Development. For Safety-Critical systems, the security and correctness is crucial.
 
@@ -57,8 +57,8 @@ SPARK is a subset of Ada language, which is easy to deal with it. In the future,
 	\item SPARK Ada cross-compilation for ARM-device (BeagleBoard-xM)
 	\item implement PCA Pump based on Brian's Requirement Document (using Ravenscar profile)
 	\item propose AADL/BLESS to SPARK Ada mapping
-	\item mock PCA Pump AADL/BLESS models in SPARK Ada
-	\item implement not generated part
+	\item mock PCA Pump AADL/BLESS models in SPARK Ada (based on proposed mapping and implementation)
+	\item implement not generated part (based on implementation)
 	\item create AADL/BLESS to SPARK Ada translator
 	\item Use SPARK toolset for software verification:
 		\begin{itemize}

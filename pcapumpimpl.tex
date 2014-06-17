@@ -23,13 +23,19 @@ Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency 
 
 Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper}
 
-There are two ways to access protected variable in task body:
+There are two ways to access variable in task body:
 \begin{itemize}
     \item It has to be protected object
     \item It has to be atomic type
 \end{itemize}
 
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns \lstinline{Semantic Error 940 - Variable is a protected own variable}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns \lstinline{Semantic Error 940 - Variable is a protected own variable. Protected variables may not be used in proof contexts.}. Formal resaoning about interactions and especially temporal properties require other techniques such as model checking and lie outside the scope of SPARK \cite{Barnes:Book}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
+
+
+
+\section{Implementation based on Requirements Document}
+
+The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
 
 
 

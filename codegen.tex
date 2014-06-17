@@ -315,9 +315,9 @@ BOTH TABLES ARE INCOMPLETE!
 
 AADL package, which contains threads is split into child packages with convention: AADL\_Package\_Name -> AADL\_Package\_Name.Thread\_Name.
 
-In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{listing:nested_packages}. Equivalent child packages are shown in listing \ref{listing:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{listing:nested_packages} and \ref{listing:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{listing:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
+In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{lst:nested_packages}. Equivalent child packages are shown in listing \ref{lst:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{lst:nested_packages} and \ref{lst:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{lst:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={listing:nested_packages}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={lst:nested_packages}]
 	package P is
 	   D: Integer;
 
@@ -340,7 +340,7 @@ In SPARK Ada there are nested packages and child packages. Sample nested package
 	end P;
 \end{lstlisting}
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={listing:child_packages}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={lst:child_packages}]
 	package P is
 	   D: Integer;
 	   E: Integer;
@@ -421,22 +421,125 @@ This is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Producer
 \subsection{BLESS mapping}
 \label{codegen:mapping:bless}
 
-\begin{table}[!ht]
-	\caption{BLESS to SPARK contractsmapping.}
-	\centering
-  	\begin{tabular}{ | p{3in} | p{3in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
-
+\begin{center}
+	\begin{longtable}{| p{3in} | p{3in} |}
+		\caption{BLESS to SPARK contracts mapping.}
+		\label{table:bless2spark}
+		\\
 		\hline
 		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
 
 		\begin{lstlisting}[language=bless]
-			BLESS::Assertion=>"<<VP()>>"
+			BLESS::Assertion=>"<<COND1()>>"
 		\end{lstlisting} 
 		& 
 		\begin{lstlisting}
-			--# pre VP;
-			--# post VP; 
+			--# assert COND1();
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=bless]
+			thread Some_Thread
+			features
+				Some_Port : out event port
+				{BLESS:Assertion => "<<(Var1 < Var2 and COND2())>>";};
+			end Some_Thread;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			task body Some_Thread
+			is
+			begin
+				loop
+					--# assert (Var1 < Var2 and COND2());
+				end loop;
+			end Some_Thread;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=bless]
+			thread implementation Some_Thread.imp
+			annex BLESS 
+			{**
+				invariant <<(Some_Var < Other_Var)>>
+			**};
+			end Some_Thread.imp;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			task body Some_Thread
+			is
+			begin
+				loop
+					--# assert (Some_Var < Other_Var);
+				end loop;
+			end Some_Thread;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=bless]
+			thread implementation Some_Thread.imp
+			annex BLESS 
+			{**
+				assert
+				<<State1 : :COND1() or COND2()>>
+				<<Var : :=
+  								(State1()) -> 0,
+  								(State2()) -> -1,
+  								(State3()) -> 9
+				>>
+			**};
+			end Some_Thread.imp;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			task body Some_Thread
+			is
+			begin
+				loop
+					--# assert COND1() or COND2() 
+					--#          -> State1();
+					--# assert (Var = 0) -> State1() and
+					--#        (Var = -1) -> State2() and
+					--#        (Var = 9) -> State3();
+				end loop;
+			end Some_Thread;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=bless]
+			subprogram Some_Subprogram
+			features 
+				param : out parameter Base_Types::Integer;
+			annex subBless
+			{**
+				pre <<(param > 0)>>
+				post <<(param = 0)>>
+			**};
+			end Some_Subprogram;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			procedure Some_Subprogram(Param : in out Integer);
+		    --# pre Param > 0;
+		    --# post Param = 0;
 		\end{lstlisting} 
 
 		\\ \hline
@@ -452,17 +555,35 @@ This is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Producer
 		\end{lstlisting} 
 
 		\\ \hline
-	\end{tabular}
-\end{table}
+		
 
+		\begin{lstlisting}[language=bless]
+			<<Pre()>>Action()<<Post()>>
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			procedure Action;
+			--# pre Pre;
+			--# post Post;
+		\end{lstlisting} 
+
+		\\ \hline
+	\end{longtable}
+\end{center}
+
+Generated (translated) code will not be complete. It will still require Developer's effort to implement missing parts. E.g. when assertion is not defined, it is developer responsibility to implement it.
 
 
 \section{"DeusEx" translator}
 \label{codegen:translator}
-AADL/BLESS to SPARK Ada translator in Scala. Main idea.
-Maybe at least create base: AADL to AST conversion?
-Maybe create only types conversion?
-Maybe create only types thread2tasks?
-No conversion of entire programs.
-Talk to Sam.
+
+The ultimate goal is to perform, translation described in \ref{codegen:mapping} automatically. "DeusEx" translator will enable to perform translation of entire model and parts of the model. Initially, following functions will be supported:
+\begin{itemize}
+	\item types translation
+	\item threads to tasks translation
+	\item subprogram to procedure/function translation
+	\item single package translation
+\end{itemize}
+
+Translator will be created in Scala programming language.
 

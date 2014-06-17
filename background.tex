@@ -248,6 +248,17 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. The previ
 	end Odometer;
 \end{lstlisting} 
 
+Fundamental SPARK contracts:
+
+global
+derives
+pre
+post
+assert
+own
+initializes
+inherit
+
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some modules.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
@@ -272,10 +283,144 @@ The Ravenscar Profile is a subset of the tasking model, restricted to meet the r
 
 Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
 
+To create a task, the task type has to be declared and task variable of this type. Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}.  Listing \ref{lst:SampleTask} shows sample package with two tasks.
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
+	package Some_Pkg
+	--# own task t1 : Task1;
+	--#     task t2 : Task2;
+	is
+		task type Task1
+		is
+			pragma Priority(10);
+		end Task1;
+
+		task type Task2
+		is
+			pragma Priority(9);
+		end Task2;
+
+	end Some_Pkg;
+\end{lstlisting} 
+
+Declared tasks have to be implemented in the package body (listing \ref{lst:SampleTaskBody}).
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}, label={lst:SampleTaskBody}]
+	package body Some_Pkg
+	is
+		t1 : Task1;
+		t2 : Task2;
+
+		task body Task1
+		is
+		begin
+			loop
+				-- implementation;
+			end loop;
+		end Task1;
+
+		task body Task2
+		is
+		begin
+			loop
+				-- implementation;
+			end loop;
+		end Task2;
+
+	end Some_Pkg;
+\end{lstlisting} 
+
+To enable safe access to shared variable, protected type has to be used. Its declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it.
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}, label={lst:SampleTasksWithProtectedType}]
+	package Some_Pkg
+	--# own protected Shared_Var : Integer_Store (Priority => 11);
+	--#     task t1 : Task1;
+	--#     task t2 : Task2;
+	is
+	    protected type Integer_Store
+	    is
+	        pragma Priority (11);
+
+	        function Get return Integer;
+	        --# global in Integer_Store;
+
+	        procedure Put(X : in Integer);
+	        --# global out Integer_Store;
+	        --# derives Integer_Store from X;
+	    private
+	        TheStoredData : Integer := 0;
+	    end Integer_Store;
+
+	    task type Task1
+	      --# global out Shared_Var;
+	    is
+	        pragma Priority(10);
+	    end Task1;
+
+	    task type Task2
+	      --# global in Shared_Var;
+	    is
+	        pragma Priority(9);
+	    end Task2;
+
+	end Some_Pkg;
+
+\end{lstlisting}
+
+Protected type body also has to be defined in package body (listing \ref{lst:SampleTasksWithProtectedTypeBody}).
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}, label={lst:SampleTasksWithProtectedTypeBody}]
+	package body Some_Pkg
+	is
+	    Shared_Var : Integer_Store;
+	    t1 : Task1;
+	    t2 : Task2;
+
+	    protected body Integer_Store is
+	        function Get return Integer
+	        --# global in TheStoredData;
+	        is
+	        begin
+	            return TheStoredData;
+	        end Get;
+
+	        procedure Put(X : in Integer)
+	        --# global out TheStoredData;
+	        --# derives TheStoredData from X;
+	        is
+	        begin
+	            TheStoredData := X;
+	        end Put;
+	    end Integer_Store;
+
+	    task body Task1
+	    is
+	    begin
+	        loop
+	            Shared_Var.Put(5);
+	        end loop;
+	    end Task1;
+
+	    task body Task2
+	    is
+	        Local_Var : Integer;
+	    begin
+	        loop
+	            Local_Var := Shared_Var.Get;
+	        end loop;
+	    end Task2;
+
+	end Some_Pkg;
+
+\end{lstlisting} 
+
+\lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
+
 
 \subsection{AUnit}
 \label{background:spark:aunit}
-Overview
+AUnit is Unit Test Framework for Ada language. It can be also applied for verify SPARK Ada programs.
 AUnit tutorials \cite{AUnitTutorials:Online}
 AUnit Cookbook \cite{AUnitCookbook:Online}
 
@@ -286,6 +431,8 @@ Overview: symbolic execution, Pilar, Kiasan and Alir \cite{Hari:Thesis}.
 Sireum Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for finding possible paths in program.
 Plugin for GNAT Programming Studio (SPARK 2005 and 2014 under development).
 Plugin for Eclipse (only for SPARK 2005).
+No support for Ravenscar profile.
+Separated sequential parts can be verified (Odometer?). Sequential version of Max_Drug_Per_Hour_Watcher?
 
 
 \subsection{GNAT Prove}
