@@ -80,7 +80,6 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
 				-- Port_Name := Some_Pkg.Get_Port_Name;
-				null;
 			end Receive_Port_Name;
 		\end{lstlisting} 
 
@@ -122,7 +121,6 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 			is
 			begin
 				-- TODO: implement event handler
-				null;
 			end Put_Port_Name;
 		\end{lstlisting} 
 
@@ -145,7 +143,6 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
 				-- Some_Pkg.Put_Port_Name;
-				null;
 			end Send_Port_Name;
 		\end{lstlisting} 
 
@@ -193,22 +190,23 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
 				-- Some_Pkg.Put_Port_Name(Port_Name);
-				null;
 			end Send_Port_Name;
 		\end{lstlisting} 
 	\end{longtable}
 \end{center}
 
+There is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Producer is undeclared or not visible, or there is a circularity in the list of inherited packages.".
+
 
 \subsection{Thread to task mapping}
 \label{codegen:mapping:threads}
 
-Thread features are mapped into SPARK Ada tasks according to table \ref{table:threads2tasks}.
-There is another proposition: map threads to subprograms (table \ref{table:threads2subprograms}) in case of single threaded programs. 
+AADL Threads are mapped into SPARK Ada tasks according to table \ref{table:threads2tasks}.
+[remove this?] There is another proposition: map threads to subprograms (table \ref{table:threads2subprograms}) in case of single threaded programs. 
 BOTH TABLES ARE INCOMPLETE!
 
 \begin{table}[!ht]
-	\caption{AADL threads to SPARK Ada subprograms(procedures/functions) mapping.}
+	\caption{AADL package to SPARK Ada package mapping.}
 	\label{table:threads2subprograms}
 	\centering
   	\begin{tabular}{ | p{3.5in} | p{2.5in} |}
@@ -219,10 +217,7 @@ BOTH TABLES ARE INCOMPLETE!
 
 		\begin{lstlisting}[language=aadl]
 			package Some_Pkg
-				thread Some_Thread
-					features
-						Some_Port : out data port Port_Type;
-				end Some_Thread;
+				systems
 			end Some_Pkg;
 		\end{lstlisting} 
 		& 
@@ -304,7 +299,7 @@ BOTH TABLES ARE INCOMPLETE!
 				task body Some_Thread
 				is
 				begin
-					null;
+					--# implementation
 				end Some_Thread;
 			end Custom_Pkg;
 		\end{lstlisting} 
@@ -389,7 +384,7 @@ How I did it. Code examples.
 		\begin{lstlisting}
 			procedure sp(e : in T; s : out T) is 
 			begin
-				null;
+				--# implementation
 			end sp;
 		\end{lstlisting} 
 
@@ -413,9 +408,9 @@ How I did it. Code examples.
 \end{table}
 
 
-\subsection{Ports communication mapping}
+\subsection{AADL package to SPARK Ada package mapping}
 
-This is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Producer is undeclared or not visible, or there is a circularity in the list of inherited packages.".
+
 
 
 \subsection{BLESS mapping}

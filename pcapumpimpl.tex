@@ -21,15 +21,7 @@ The biggest challenge during PCA Pump development was the SPARK limitations. The
 
 Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency features are needed. In SPARK 2005, concurrency is enable with Ravenscar profile \cite{Ravenscar:Online}. For now, concurrency is not allowed in SPARK 2014.
 
-Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper}
 
-There are two ways to access variable in task body:
-\begin{itemize}
-    \item It has to be protected object
-    \item It has to be atomic type
-\end{itemize}
-
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns \lstinline{Semantic Error 940 - Variable is a protected own variable. Protected variables may not be used in proof contexts.}. Formal resaoning about interactions and especially temporal properties require other techniques such as model checking and lie outside the scope of SPARK \cite{Barnes:Book}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
 
 
 

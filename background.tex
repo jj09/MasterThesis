@@ -250,14 +250,125 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. The previ
 
 Fundamental SPARK contracts:
 
-global
-derives
-pre
-post
-assert
-own
-initializes
-inherit
+\begin{center}
+	\begin{longtable}{| p{1.5in} | p{1.5in} | p{3in} |}
+		\caption{Fundamental SPARK annotations}
+		\label{table:SparkAnnotations}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{SPARK 2005}} & \multicolumn{1}{|c|}{\textbf{SPARK 2014}} & \multicolumn{1}{|c|}{\textbf{Description}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{3}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{SPARK 2005}} & \multicolumn{1}{|c|}{\textbf{SPARK 2014}} & \multicolumn{1}{|c|}{\textbf{Description}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}
+			--# global
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Global
+		\end{lstlisting} 
+		& 
+		list of used global variables within subprogram 
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# derives
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Depends
+		\end{lstlisting} 
+		& 
+		describe dependencies between variables
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# own 
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Abstract_State
+		\end{lstlisting} 
+		& 
+		declare variables defined in package body
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# initializes
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			initializes
+		\end{lstlisting} 
+		& 
+		indicates variables, which are initialized
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# inherit
+		\end{lstlisting} 
+		& 
+		not needed
+		& 
+		allows to access entities of other packages
+
+		\\ \hline
+
+		\begin{lstlisting}
+			--# pre
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Pre
+		\end{lstlisting} 
+		& 
+		pre condition
+
+		\\ \hline
+		
+
+		\begin{lstlisting}
+			--# post
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Post
+		\end{lstlisting} 
+		& 
+		post condition
+
+		\\ \hline
+		
+
+		\begin{lstlisting}
+			--# assert
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}[language=ada2012]
+			Assert
+		\end{lstlisting} 
+		& 
+		assertion
+
+		\\ \hline
+	\end{longtable}
+\end{center}
+
 
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some modules.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
@@ -283,7 +394,7 @@ The Ravenscar Profile is a subset of the tasking model, restricted to meet the r
 
 Concurrent programs require the use of different specification and verification techniques from sequential programs. For this reason, tasks, protected units and objects, and synchronization features are currently excluded from SPARK 2014 \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}.
 
-To create a task, the task type has to be declared and task variable of this type. Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}.  Listing \ref{lst:SampleTask} shows sample package with two tasks.
+To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. [what is priorities range?] Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
 	package Some_Pkg
@@ -330,7 +441,15 @@ Declared tasks have to be implemented in the package body (listing \ref{lst:Samp
 	end Some_Pkg;
 \end{lstlisting} 
 
-To enable safe access to shared variable, protected type has to be used. Its declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it.
+
+There are two ways to access variable in different tasks:
+\begin{itemize}
+    \item It has to be protected object
+    \item It has to be atomic type
+\end{itemize}
+
+
+Protected object encapsulate variable, in such a way that it is accessible, only through protected subprograms. This mechanism use locking, to ensure atomicity. Protected type declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it. Otherwise, it will not be visible for them.
 
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}, label={lst:SampleTasksWithProtectedType}]
 	package Some_Pkg
@@ -417,6 +536,64 @@ Protected type body also has to be defined in package body (listing \ref{lst:Sam
 
 \lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
 
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns \lstinline{Semantic Error 940 - Variable is a protected own variable. Protected variables may not be used in proof contexts.}. Formal reasoning about interactions and especially temporal properties require other techniques such as model checking and lie outside the scope of SPARK \cite{Barnes:Book}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
+
+To declare atomic type, we have to use \lstinline{pragma Atomic}. However, there is restriction, that \lstinline{pragma Atomic} cannot be applied to predefined type such as Integer. Thus, we have to define our custom type (which can be just renamem of Integer) and apply \lstinline{pragma Atomic} on this type. Listing \ref{lst:SampleTasksWithAtomicType} presents previous example with atomic types instead of protected objects.
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}, label={lst:SampleTasksWithAtomicType}]
+	package Some_Pkg
+	--# own Shared_Var;
+	--#     task t1 : Task1;
+	--#     task t2 : Task2;
+	--# initializes Shared_Var;
+	is
+	    type Int32 is new Integer;
+	    
+	    task type Task1
+	      --# global out Shared_Var;
+	    is
+	        pragma Priority(10);
+	    end Task1;
+
+	    task type Task2
+	      --# global in Shared_Var;
+	    is
+	        pragma Priority(9);
+	    end Task2;
+
+	end Some_Pkg;
+
+	package body Some_Pkg
+	is    
+	    Shared_Var : Int32 := 0;
+	    t1 : Task1;
+	    t2 : Task2;
+
+	    task body Task1
+	    is
+	    begin
+	        loop
+	            Shared_Var := 5;
+	        end loop;
+	    end Task1;
+
+	    task body Task2
+	    is
+	        Local_Var : Integer;
+	    begin
+	        loop
+	            Local_Var := Integer(Shared_Var);
+	        end loop;
+	    end Task2;
+
+	end Some_Pkg;
+
+\end{lstlisting}
+
+Another important thing in tasking is Time library: \lstinline{Ada.Real_Time}. It allows to run task periodically, using \lstinline{delay until} statement, which suspends task until specified time. To use \lstinline{delay} in the task, it has to be declared in \lstinline{declare} annotation: \lstinline{--# declare delay;} \cite{Barnes:Book}.
+
+Details about tasking in SPARK are well described in Chapter 8 of Barnes' book \cite{Barnes:Book}. The "Guide for the use of the Ada Ravenscar profile in high integrity systems" \cite{Ravenscar:Article} and the official Ravenscar Profile documentation (which includes examples) \cite{Ravenscar:Online} might be useful as well. The limitations of Tasking in SPARK are reviewed in Audsley's and Welllings' paper \cite{IssuesWithRavenscar:Paper}.
+
 
 \subsection{AUnit}
 \label{background:spark:aunit}
@@ -432,7 +609,7 @@ Sireum Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for fi
 Plugin for GNAT Programming Studio (SPARK 2005 and 2014 under development).
 Plugin for Eclipse (only for SPARK 2005).
 No support for Ravenscar profile.
-Separated sequential parts can be verified (Odometer?). Sequential version of Max_Drug_Per_Hour_Watcher?
+Separated sequential parts can be verified (Odometer?). Sequential version of \lstinline{Max_Drug_Per_Hour_Watcher}?
 
 
 \subsection{GNAT Prove}
