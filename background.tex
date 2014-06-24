@@ -42,6 +42,7 @@ AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be repres
     \label{figure:patient_thermometer}
 \end{figure}
 
+\singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}, label={listing:patient_thermometer}]
 	package Thermometer
 	public
@@ -74,7 +75,7 @@ AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be repres
 		end thermometer_device.impl;
 	end Thermometer;
 \end{lstlisting} 
-
+\doublespacing
 %another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
 
 Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: STOOD \footnote{http://www.ellidiss.com/products/stood}, ADELE \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar \footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector \footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina \footnote{http://www.openaadl.org}.
@@ -106,6 +107,8 @@ How it fits into the picture. Why it was developed. Corectness prove in AADL + b
 \section{SPARK Ada}
 \label{background:spark}
 
+%http://www.cs.swan.ac.uk/~csetzer/lectures/critsys/09/critsysfinal2.pdf
+
 First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defence Requirements formalized in "Steelman" document \footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012) \footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing \footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
@@ -129,6 +132,7 @@ SPARK provides a significant degree of automation in proving exception freedom \
 
 First version of SPARK was based on Ada 83. The second version (SPARK 95) - on Ada 95. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 program, valid Ada 2005 program. Figure \ref{listing:Odometer2005} shows example SPARK 2005 package specification.
 
+\singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer \cite{Barnes:Book}}, label={listing:Odometer2005}]
 	package Odometer
 	--# own Trip, Total : Integer;
@@ -151,6 +155,7 @@ First version of SPARK was based on Ada 83. The second version (SPARK 95) - on A
 
 	end Odometer;
 \end{lstlisting} 
+\doublespacing
 
 SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}.
 
@@ -165,6 +170,7 @@ SPARK 2014 \footnote{http://www.spark-2014.org} is based on Ada 2012 programming
 
 Sample mapping from SPARK 2005 to 2014 is shown on table \ref{table:spark2005and2014mapping}. Complete mapping can be found in SPARK 2014 documentation \footnote{http://docs.adacore.com/spark2014-docs/html/lrm/mapping-spec.html} \cite{Spark2014refManual:Online}.
 
+\singlespacing
 \begin{table}[!ht]
 	\caption{Sample SPARK 2005 to 2014 mapping.}
 	\label{table:spark2005and2014mapping}
@@ -220,10 +226,12 @@ Sample mapping from SPARK 2005 to 2014 is shown on table \ref{table:spark2005and
 		\\ \hline
 	\end{tabular}
 \end{table}
+\doublespacing
 
 SPARK 2014 does not contains Examiner. Instead, proofs are made by gnatPROVE.
 The notion of executable contracts in Ada 2012, was inspired by SPARK. The previous Odometer example in SPARK 2014 is shown in figure \ref{listing:Odometer2014}.
 
+\singlespacing
 \begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={SPARK 2014 code: Odometer}, label={listing:Odometer2014}]
 	package Odometer
 	with SPARK_Mode
@@ -247,9 +255,11 @@ The notion of executable contracts in Ada 2012, was inspired by SPARK. The previ
 
 	end Odometer;
 \end{lstlisting} 
+\doublespacing
 
 Fundamental SPARK contracts:
 
+\singlespacing
 \begin{center}
 	\begin{longtable}{| p{1.5in} | p{1.5in} | p{3in} |}
 		\caption{Fundamental SPARK annotations}
@@ -368,7 +378,7 @@ Fundamental SPARK contracts:
 		\\ \hline
 	\end{longtable}
 \end{center}
-
+\doublespacing
 
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. Usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some modules.
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
@@ -396,6 +406,7 @@ Concurrent programs require the use of different specification and verification 
 
 To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. [what is priorities range?] Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
 	package Some_Pkg
 	--# own task t1 : Task1;
@@ -413,9 +424,11 @@ To create a task, the task type has to be declared and task variable of this typ
 
 	end Some_Pkg;
 \end{lstlisting} 
+\doublespacing
 
 Declared tasks have to be implemented in the package body (listing \ref{lst:SampleTaskBody}).
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}, label={lst:SampleTaskBody}]
 	package body Some_Pkg
 	is
@@ -440,7 +453,7 @@ Declared tasks have to be implemented in the package body (listing \ref{lst:Samp
 
 	end Some_Pkg;
 \end{lstlisting} 
-
+\doublespacing
 
 There are two ways to access variable in different tasks:
 \begin{itemize}
@@ -451,6 +464,7 @@ There are two ways to access variable in different tasks:
 
 Protected object encapsulate variable, in such a way that it is accessible, only through protected subprograms. This mechanism use locking, to ensure atomicity. Protected type declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it. Otherwise, it will not be visible for them.
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}, label={lst:SampleTasksWithProtectedType}]
 	package Some_Pkg
 	--# own protected Shared_Var : Integer_Store (Priority => 11);
@@ -484,11 +498,12 @@ Protected object encapsulate variable, in such a way that it is accessible, only
 	    end Task2;
 
 	end Some_Pkg;
-
 \end{lstlisting}
+\doublespacing
 
 Protected type body also has to be defined in package body (listing \ref{lst:SampleTasksWithProtectedTypeBody}).
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}, label={lst:SampleTasksWithProtectedTypeBody}]
 	package body Some_Pkg
 	is
@@ -531,8 +546,8 @@ Protected type body also has to be defined in package body (listing \ref{lst:Sam
 	    end Task2;
 
 	end Some_Pkg;
-
 \end{lstlisting} 
+\doublespacing
 
 \lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
 
@@ -540,6 +555,7 @@ Protected variables may not be used in proof contexts. Thus, if we try to use pr
 
 To declare atomic type, we have to use \lstinline{pragma Atomic}. However, there is restriction, that \lstinline{pragma Atomic} cannot be applied to predefined type such as Integer. Thus, we have to define our custom type (which can be just renamem of Integer) and apply \lstinline{pragma Atomic} on this type. Listing \ref{lst:SampleTasksWithAtomicType} presents previous example with atomic types instead of protected objects.
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}, label={lst:SampleTasksWithAtomicType}]
 	package Some_Pkg
 	--# own Shared_Var;
@@ -587,8 +603,8 @@ To declare atomic type, we have to use \lstinline{pragma Atomic}. However, there
 	    end Task2;
 
 	end Some_Pkg;
-
 \end{lstlisting}
+\doublespacing
 
 Another important thing in tasking is Time library: \lstinline{Ada.Real_Time}. It allows to run task periodically, using \lstinline{delay until} statement, which suspends task until specified time. To use \lstinline{delay} in the task, it has to be declared in \lstinline{declare} annotation: \lstinline{--# declare delay;} \cite{Barnes:Book}.
 

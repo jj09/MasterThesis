@@ -8,11 +8,13 @@
 \chapter{Verification}
 \label{verification}
 
-Verification
+Verification - what is that
+verification vs validation
 
 
 
 \section{SPARK Examiner}
+\label{verification:examiner}
 
 The main SPARK verification tool is Examiner. It supports several levels of analysis:
 \begin{itemize}
@@ -34,10 +36,11 @@ What is very important, Examiner can perform data and information analysis of Ra
 
 When some parts of the system are written in full Ada (with non-valid SPARK constructs), then Examiner returns error. Ada parts can be excluded from Examiner analysis using \lstinline{--# hide} annotation. The, only warning \lstinline{10 - The body of subprogram Main is hidden - hidden text is ignored by the Examiner.} is returned by Examiner.
 
-%To use Examiner in GNAT Programming Studio... [screenshot - take from 721 paper]
+Examiner use SPARK index file to locate files necessary for verification. \cite{Barnes:Book}
 
-To generate verification conditions (VCs), the \lstinline{-vcg} switch has to be used. It can be set in GNAT Programming Studio (Project / Edit project properties / Switches / Examiner / Generate VCs).
+Examiner can be used with \lstinline{spark} command and appropriate flags described in Examiner Manual \cite{Examiner:Online}.
 
+%[screenshot - take from 721 paper]
 To use Examiner in GNAT Programming Studio:
 \begin{itemize}
 	\item Run SPARK Make (right click on project / SPARK / SPARK Make)
@@ -47,22 +50,75 @@ To use Examiner in GNAT Programming Studio:
 	\item Choose mode: Sequential (for single tasking programs) or Ravenscar (for multitasking programs)
 \end{itemize}
 
+To generate verification conditions (VCs), the \lstinline{-vcg} switch has to be used. It can be set in GNAT Programming Studio (Project / Edit project properties / Switches / Examiner / Generate VCs).
+In addition to verification conditions, Examiner can check dead path conjectures. It checks, whether all of the program is useful. To generate dead path conjectures, the \lstinline{-dpc} switch has to be used. It can be also set in GNAT Programming Studio (Project / Edit project properties / Switches / Examiner / Generate DPCs).
 
-\subsection{SPARK Simplifier}
+
+\subsection{Flow analysis}
+\label{verification:examiner:flowanalysis}
+%http://www.cs.swan.ac.uk/~csetzer/lectures/critsys/09/critsysfinal2.pdf
+There are two types of flow analysis:
+\begin{itemize}
+	\item Data flow analysis:
+	\begin{itemize}
+		\item Checks input/output behavior of parameters and variables.
+		\item Checks initialization of variables.
+		\item Checks that changed and imported variables are used later (possibly as output variables).
+	\end{itemize}
+	\item Information flow analysis - verifies interdependencies between variables.
+\end{itemize}
+
+In data flow analysis, Examiner checks if input parameters are not modified, but used at least once (in at least one branch of program). In the same factor, output parameters cannot be read (before initialization) and has to be initialized (in all branches of program). Input/output parameters has to be both read and write (changed). In similar way, Examiner verify the global variables (specified in annotations). Functions can use only input parameters and can only read global variables. Therefore functions do not have side effects. 
+
+Global variables defined in package body (thus private) has to be declared by \lstinline{--# own} annotation in package specification. If variable is also initialized, \lstinline{--# initializes} annotation has to be used. In Ada, to use package in another package, \lstinline{with} clause has to be used. In SPARK Ada, additionally \lstinline{--# inherits} annotation has to be specified.
+
+In information flow analysis, dependencies between variables are analyzed. These dependencies are specified by \lstinline{--# derives} annotation.
+
+
+\subsection{Verification conditions}
+\label{verification:examiner:vc}
+
+To generate verification conditions, two kinds of annotations are relevant for Examiner:
+\begin{itemize}
+	\item pre-conditions: \lstinline{--# pre}
+	\item post-conditions: \lstinline{--# post}
+\end{itemize}
+
+Notion of pre- and post-conditions represents Hoare logic. More precisely, Hoare triple: 
+
+\begin{equation}
+	\{P\} C \{Q\}
+\end{equation}
+
+P and Q are assertions. C is a command (action) performed between them. P is pre-condition and Q is post-condition.
+
+Additionally, assertions (\lstinline{--# assert}) and checks (\lstinline{--# check}) can be specified in procedure body. Then additional verification conditions are generated.
+
+Functions does not have side effects (as stated in \ref{verification:examiner:flowanalysis}), thus only pre-condition can be applied. However, there is annotation \lstinline{--# return}, which specify function return value.
+
+Verification conditions are generated depended on number of paths in subprogram. Analysis are perform backwards, in other words: we start from post-conditions and consider what must holds before. Flow analysis is well described in chapter 11 of Barnes' book \cite{Barnes:Book}.
+
+
+
+\section{SPARK Simplifier}
+\label{verification:simplifier}
 
 Simplifier can discharge (prove correctness) of verification conditions (VCs) generated by Examiner, but not proved by Examiner. \cite{Simplifier:Online} 
 
 
-\subsection{Proof Obligation Summarizer (POGS)}
+\section{Proof Obligation Summarizer (POGS)}
+\label{verification:pogs}
 
 The Proof ObliGation Summarizer tool (POGS) reads and understands the structure of the verification condition files. It reports of the status of proofs and dead path analyses in a human-readable form. \cite{POGS:Online}
 
 
-\subsection{Example verification}
+\section{Example verification}
+\label{verification:example}
 
 On Odometer or RateController of PCA Pump?
 
-\subsection{Verification of PCA Pump}
+\section{Verification of PCA Pump}
+\label{verification:pcapump}
 
 Examine(F8) -> Simplifier --> POGS.
 
@@ -103,6 +159,7 @@ main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Clinician_
 
 
 \section{AUnit tests}
+\label{verification:aunit}
 - test incrementing array
 - test moving array (Pulse does not change dosed amount)
 - test prescription setters and getters
@@ -114,6 +171,7 @@ main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Clinician_
 
 
 \section{gnatPROVE?}
+\label{verification:gnatprove}
 
 There is a new tool set "gnatPROVE" for SPARK 2014. It was not used because PCA Pump was developed in SPARK 2005.
 I CAN TRANSLATE SOME SINGLE FUNCTIONS AND USE GNAT PROVE TO VERIFY?

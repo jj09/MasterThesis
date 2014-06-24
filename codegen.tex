@@ -39,6 +39,7 @@ During AADL/BLESS to SPARK Ada types mapping, SPARK Examiner was helpful. It det
 Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc}. Additionaly, the mapping contains SPARK 2005 contracts.
 
 % maybe split right column into 2 rows: spec and body?
+\singlespacing
 \begin{center}
 	\begin{longtable}{| p{2in} | p{4in} |}
 	
@@ -194,6 +195,7 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		\end{lstlisting} 
 	\end{longtable}
 \end{center}
+\doublespacing
 
 There is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Producer is undeclared or not visible, or there is a circularity in the list of inherited packages.".
 
@@ -202,57 +204,8 @@ There is a problem: "consumer.ads:1:13: Semantic Error 135 - The package Produce
 \label{codegen:mapping:threads}
 
 AADL Threads are mapped into SPARK Ada tasks according to table \ref{table:threads2tasks}.
-[remove this?] There is another proposition: map threads to subprograms (table \ref{table:threads2subprograms}) in case of single threaded programs. 
-BOTH TABLES ARE INCOMPLETE!
 
-\begin{table}[!ht]
-	\caption{AADL package to SPARK Ada package mapping.}
-	\label{table:threads2subprograms}
-	\centering
-  	\begin{tabular}{ | p{3.5in} | p{2.5in} |}
-	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
-
-		\hline
-		\multicolumn{1}{|c|}{\textbf{AADL/BLESS}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
-
-		\begin{lstlisting}[language=aadl]
-			package Some_Pkg
-				systems
-			end Some_Pkg;
-		\end{lstlisting} 
-		& 
-		\begin{lstlisting}
-			package Some_Pkg.Some_Thread
-			is
-				function Get_Some_Port return Port_Type;
-			end Some_Pkg.Some_Thread;
-		\end{lstlisting} 
-
-		\\ \hline
-
-		\begin{lstlisting}[language=aadl]
-			package Some_Pkg
-				thread Some_Thread
-					features
-						Some_Port : out data port Port_Type
-							{Compute_Entrypoint_Source_Text 
-								=> "Custom_Pkg.Custom_Subprogram";};
-				end Some_Thread;
-			end Some_Pkg;
-		\end{lstlisting} 
-		& 
-		\begin{lstlisting}
-			package Custom_Pkg
-			is
-				function Custom_Subprogram return Port_Type;
-			end Custom_Pkg;
-
-		\end{lstlisting} 
-
-		\\ \hline
-	\end{tabular}
-\end{table}
-
+\singlespacing
 \begin{table}[!ht]
 	\caption{AADL threads to SPARK Ada tasks mapping.}
 	\label{table:threads2tasks}
@@ -273,14 +226,14 @@ BOTH TABLES ARE INCOMPLETE!
 		\end{lstlisting} 
 		& 
 		\begin{lstlisting}
-			package Some_Pkg.Some_Thread
+			package Some_Pkg
 			is
 				task type Some_Thread
 				--# global out Some_Port;
 				is
 					pragma Priority(10);
 				end Some_Thread;
-			end Some_Pkg.Some_Thread;
+			end Some_Pkg;
 		\end{lstlisting} 
 
 		\\ \hline
@@ -293,13 +246,14 @@ BOTH TABLES ARE INCOMPLETE!
 		\end{lstlisting} 
 		& 
 		\begin{lstlisting}
-			st : Some_Thread;
 			package body Custom_Pkg
 			is
+				st : Some_Thread;
+
 				task body Some_Thread
 				is
 				begin
-					--# implementation
+					-- implementation
 				end Some_Thread;
 			end Custom_Pkg;
 		\end{lstlisting} 
@@ -307,62 +261,13 @@ BOTH TABLES ARE INCOMPLETE!
 		\\ \hline
 	\end{tabular}
 \end{table}
-
-AADL package, which contains threads is split into child packages with convention: AADL\_Package\_Name -> AADL\_Package\_Name.Thread\_Name.
-
-In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{lst:nested_packages}. Equivalent child packages are shown in listing \ref{lst:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{lst:nested_packages} and \ref{lst:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{lst:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
-
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={lst:nested_packages}]
-	package P is
-	   D: Integer;
-
-	   --  a nested package:
-	   package N is
-	      X: Integer;
-	   private
-	      Foo: Integer;
-	   end N;
-
-	   E: Integer;
-	private
-	   --  nested package in private section:
-	   package M is
-	      Y: Integer;
-	   private
-	      Bar: Integer;
-	   end M;
-
-	end P;
-\end{lstlisting}
-
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={lst:child_packages}]
-	package P is
-	   D: Integer;
-	   E: Integer;
-	end P;
-
-	--  a child package:
-	package P.N is
-      X: Integer;
-   	private
-      Foo: Integer;
-	end P.N;
-
-	--  a child private package:
-	private package M is
-	  Y: Integer;
-	private
-	  Bar: Integer;
-	end M;
-\end{lstlisting}
+\doublespacing
 
 
 \subsection{Subprograms mapping}
 \label{codegen:mapping:subprograms}
 
-I added Subprograms to existing PCA Pump AADL models (???) etc.
-How I did it. Code examples.
-
+\singlespacing
 \begin{table}[!ht]
 	\caption{AADL subprograms to SPARK Ada subprograms(procedures/functions) mapping.}
 	\label{table:subprograms_mapping}
@@ -386,29 +291,209 @@ How I did it. Code examples.
 			begin
 				--# implementation
 			end sp;
-		\end{lstlisting} 
-
-		\\ \hline
-
-		\begin{lstlisting}[language=aadl]
-			data Flow_Rate  --dose rate
-  				properties
-    				BLESS::Typed=>"integer";
-    				Data_Model::Base_Type => (classifier(Base_Types::Integer_16));
-    				Data_Model::Measurement_Unit => "ml/hr";
-			end Flow_Rate;
-		\end{lstlisting} 
-		& 
-		\begin{lstlisting}
-			subtype Flow_Rate is Integer range 0 .. Integer'Last;
-		\end{lstlisting} 
+		\end{lstlisting} 		
 
 		\\ \hline
 	\end{tabular}
 \end{table}
+\doublespacing
+
+
+\subsection{Feature groups mapping}
+\label{codegen:mapping:feature_groups}
+
+In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{lst:nested_packages}. Equivalent child packages are shown in listing \ref{lst:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) `.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{lst:nested_packages} and \ref{lst:child_packages}. However, there is a difference between nested packages and child packages. In nested package declarations become visible as they are introduced, in textual order. For example, in listing \ref{lst:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
+
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={lst:nested_packages}]
+	package P is
+	   D: Integer;
+
+	   --  a nested package:
+	   package N is
+	      X: Integer;
+	   private
+	      Foo: Integer;
+	   end N;
+
+	   E: Integer;
+	private
+	   --  nested package in private section:
+	   package M is
+	      Y: Integer;
+	   private
+	      Bar: Integer;
+	   end M;
+
+	end P;
+\end{lstlisting}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={lst:child_packages}]
+	package P is
+	   D: Integer;
+	   E: Integer;
+	end P;
+
+	--  a child package:
+	package P.N is
+      X: Integer;
+   	private
+      Foo: Integer;
+	end P.N;
+
+	--  a child private package:
+	private package M is
+	  Y: Integer;
+	private
+	  Bar: Integer;
+	end M;
+\end{lstlisting}
+\doublespacing
+
+There was an idea to create child package to encapsulate one feature group in it. However, SPARK Ada does not allow to access child packages private part from parent. That will require to expose feature group internal variable, which will have to be acceessible globaly. It is definitely not good solution. Thus, feature group is translated with prefix \lstinline{Feature_Group_Name_*}.
+
 
 
 \subsection{AADL package to SPARK Ada package mapping}
+\label{codegen:mapping:packages}
+
+On listing \ref{lst:aadl_sample}, there is shown sample AADL package with system. It contains all types of ports and feature group.
+
+\singlespacing
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Sample AADL package with system}, label={lst:aadl_sample}]
+	package Some_Pkg
+	public
+	with Base_Types;
+
+	feature group Some_Features
+	features
+	  Some_Out_Port: out data port Base_Types::Integer;
+	  Some_In_Port: in data port Base_Types::Integer;
+	end Some_Features;
+
+	system Some_System
+	features
+	  Some_Feature_Group : feature group Some_Features;
+	  
+	  In_Data_Port : in data port Base_Types::Integer;
+	  Out_Data_Port : out data port Base_Types::Integer;
+	  In_Event_Port : in event port;
+	  Out_Event_Port : out event port;
+	  In_Event_Data_Port : in event data port Base_Types::Integer;
+	  Out_Event_Data_Port : out event data port Base_Types::Integer;
+	end Some_System;
+
+	end Some_Pkg;
+\end{lstlisting}
+\doublespacing
+
+Based on ports mapping, presented in section \ref{codegen:mapping:ports}, translation to SPARK Ada package is shown in listing \ref{lst:package_mapping}. 
+
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Translation of sample AADL package from listing \ref{lst:aadl_sample}}, label={lst:package_mapping}]
+	package Some_Pkg
+	--# own Some_Features_Some_Out_Port : Integer;
+	--#     Some_Features_Some_In_Port : Integer;
+	--#     In_Data_Port : Integer;
+	--#     Out_Data_Port : Integer;
+	--#     In_Event_Data_Port : Integer;
+	--#     Out_Event_Data_Port : Integer;
+	--# initializes Some_Features_Some_Out_Port,
+	--#             Some_Features_Some_In_Port,
+	--#             In_Data_Port,
+	--#             Out_Data_Port,
+	--#             In_Event_Data_Port,
+	--#             Out_Event_Data_Port;
+	is
+
+	    function Some_Features_Get_Some_Out_Port return Integer;
+	    --# global in Some_Features_Some_Out_Port;
+
+	    procedure Some_Features_Receive_Some_In_Port;
+	    --# global out Some_Features_Some_In_Port;
+
+	    procedure Receive_In_Data_Port;
+	    --# global out In_Data_Port;
+
+	    function Get_Out_Data_Port return Integer;
+	    --# global in Out_Data_Port;
+
+	    procedure Put_In_Event_Port;
+
+	    procedure Send_Out_Event_Port;
+
+	    procedure Put_In_Event_Data_Port(In_Event_Data_Port_In : Integer);
+	    --# global out In_Event_Data_Port;
+	    --# derives In_Event_Data_Port from In_Event_Data_Port_In;
+
+	    procedure Send_Out_Event_Data_Port;
+	    --# global in Out_Event_Data_Port;
+
+	end Some_Pkg;
+
+	package body Some_Pkg
+	is
+	    Some_Features_Some_Out_Port : Integer := 0;
+	    Some_Features_Some_In_Port : Integer := 0;
+	    In_Data_Port : Integer := 0;
+	    Out_Data_Port : Integer := 0;
+	    In_Event_Data_Port : Integer := 0;
+	    Out_Event_Data_Port : Integer := 0;
+
+	    function Some_Features_Get_Some_Out_Port return Integer
+	    is
+	    begin
+	        return Some_Features_Some_Out_Port;
+	    end Some_Features_Get_Some_Out_Port;
+
+	    procedure Some_Features_Receive_Some_In_Port
+	    is
+	    begin
+	        -- implementation
+	    end Some_Features_Receive_Some_In_Port;
+
+	    procedure Receive_In_Data_Port
+	    is
+	    begin
+	        -- implementation
+	    end Receive_In_Data_Port;
+
+	    function Get_Out_Data_Port return Integer
+	    is
+	    begin
+	        return Out_Data_Port;
+	    end Get_Out_Data_Port;
+
+	    procedure Put_In_Event_Port
+	    is
+	    begin
+	        -- implementation
+	    end Put_In_Event_Port;
+
+	    procedure Send_Out_Event_Port
+	    is
+	    begin
+	        -- implementation
+	    end Send_Out_Event_Port;
+
+	    procedure Put_In_Event_Data_Port(In_Event_Data_Port_In : Integer)
+	    is
+	    begin
+	        In_Event_Data_Port := In_Event_Data_Port_In;
+	    end Put_In_Event_Data_Port;
+
+	    procedure Send_Out_Event_Data_Port
+	    is
+	    begin
+	        -- implementation
+	    end Send_Out_Event_Data_Port;
+
+	end Some_Pkg;
+\end{lstlisting}
+\doublespacing
+
 
 
 
@@ -416,6 +501,7 @@ How I did it. Code examples.
 \subsection{BLESS mapping}
 \label{codegen:mapping:bless}
 
+\singlespacing
 \begin{center}
 	\begin{longtable}{| p{3in} | p{3in} |}
 		\caption{BLESS to SPARK contracts mapping.}
@@ -565,6 +651,7 @@ How I did it. Code examples.
 		\\ \hline
 	\end{longtable}
 \end{center}
+\doublespacing
 
 Generated (translated) code will not be complete. It will still require Developer's effort to implement missing parts. E.g. when assertion is not defined, it is developer responsibility to implement it.
 
