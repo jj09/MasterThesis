@@ -25,9 +25,518 @@ Only high level mapping is done. No implementation (thread interactions) like Oc
 \subsection{Data types mapping}
 \label{codegen:mapping:data}
 
-[TABLE WITH TYPES MAPPING - when types mapping will be done]
+One of core AADL packages is \lstinline{Base_Types}. It defined fundamental datatypes for AADL. Its definition is shown on listing \ref{listing:aadl_base_types}.
 
-During AADL/BLESS to SPARK Ada types mapping, SPARK Examiner was helpful. It detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerators, which was a bug. \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
+\singlespacing
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL Base\_Types package}, label={listing:aadl_base_types}]
+	package Base_Types
+	public
+
+	  with Data_Model;
+
+	  data Boolean
+	  properties 
+	    Data_Model::Data_Representation => Boolean;
+	  end Boolean;
+
+	  data Integer
+	  properties
+	    Data_Model::Data_Representation => Integer;
+	  end Integer;
+
+	  -- Signed integer of various byte sizes
+
+	  data Integer_8 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Signed;
+	    Source_Data_Size => 1 Bytes;
+	  end Integer_8;
+
+	  data Integer_16 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Signed;
+	    Source_Data_Size => 2 Bytes;
+	  end Integer_16;
+
+	  data Integer_32 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Signed;
+	    Source_Data_Size => 4 Bytes;
+	  end Integer_32;
+
+	  data Integer_64 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Signed;
+	    Source_Data_Size => 8 Bytes;
+	  end Integer_64;
+
+	  -- Unsigned integer of various byte sizes
+
+	  data Unsigned_8 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Unsigned;
+	    Source_Data_Size => 1 Bytes;
+	  end Unsigned_8;
+
+	  data Unsigned_16 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Unsigned;
+	    Source_Data_Size => 2 Bytes;
+	  end Unsigned_16;
+
+	  data Unsigned_32 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Unsigned;
+	    Source_Data_Size => 4 Bytes;
+	  end Unsigned_32;
+
+	  data Unsigned_64 extends Integer
+	  properties
+	    Data_Model::Number_Representation => Unsigned;
+	    Source_Data_Size => 8 Bytes;
+	  end Unsigned_64;
+
+	  data Natural extends Integer
+	  properties 
+	    Data_Model::Integer_Range => 0 .. Max_Target_Integer;
+	  end Natural;
+
+	  data Float 
+	  properties
+	    Data_Model::Data_Representation => Float;
+	  end Float;
+
+	  data Float_32 extends Float 
+	  properties 
+	    Data_Model::IEEE754_Precision => Simple; 
+	    Source_Data_Size => 4 Bytes; 
+	  end Float_32; 
+
+	  data Float_64 extends Float 
+	  properties 
+	    Data_Model::IEEE754_Precision => Double; 
+	    Source_Data_Size => 8 Bytes; 
+	  end Float_64;
+
+	  data Character
+	  properties
+	    Data_Model::Data_Representation => Character;
+	  end Character;
+
+	  data String
+	  properties
+	    Data_Model::Data_Representation => String;
+	  end String;
+
+	end Base_Types;
+
+\end{lstlisting} 
+\doublespacing
+
+In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which allows for easy mapping of AADL \lstinline{Base_Types} package. Mapping proposed in Annex Document \cite{AnnexDoc} is presented on listing \ref{listing:aadl2spark2014_base_types_mapping}.
+
+\singlespacing
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Mapping of Base\_Types for SPARK 2014}, label={listing:aadl2spark2014_base_types_mapping}]
+	with Interfaces;
+
+	package Base_Types is
+		type AADL_Boolean is new Standard.Boolean;
+		type AADL_Integer is new Standard.Integer;
+	 	type Integer_8 is new Interfaces.Integer_8;
+	 	type Integer_16 is new Interfaces.Integer_16;
+		type Integer_32 is new Interfaces.Integer_32;
+		type Integer_64 is new Interfaces.Integer_64;
+		type Unsigned_8 is new Interfaces.Unsigned_8;
+		type Unsigned_16 is new Interfaces.Unsigned_16;
+		type Unsigned_32 is new Interfaces.Unsigned_32;
+		type Unsigned_64 is new Interfaces.Unsigned_64;
+		type AADL_Natural is new Standard.Integer; -- XXX incomplete range? 
+		type AADL_Float is new Standard.Float;
+		type Float_32 is new Interfaces.IEEE_Float_32;
+		type Float_64 is new Interfaces.IEEE_Float_64;
+	  	type AADL_Character is new Standard.Character;
+	end Base_Types;
+
+\end{lstlisting} 
+\doublespacing
+
+Mapping for SPARK 2005: Integer, Natural, Boolean already defined in SPARK. Types Float, Character and String are not part of this thesis, because of verification tools limitation. Thus, in this thesis only Integer, Enumeration, Boolean and Record types are analyzed.
+
+Each type is translated into simple type definition and protected type. Then it can be used in multitask programs with Ravescar Profile. For every protected type only setter (\lstinline{Put}) and getter (\lstinline{Get}) subprograms are defined. It can be extended by developer during development phase.
+
+Types: Integer, Boolean and Natural are already defined in SPARK Ada, thus only protected objects are generated for them.
+
+Sample AADL \lstinline{Base_Types} mapping to SPARK Ada is presented in table \ref{table:aadl2spark_types_simple}.
+
+\singlespacing
+\begin{center}
+	\begin{longtable}{| p{2in} | p{4in} |}
+	
+		\caption{Base AADL types to SPARK mapping.}
+		\label{table:aadl2spark_types_simple}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			data Integer
+			properties
+				Data_Model::Data_Representation => Integer;
+			end Integer;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			protected type Integer_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get return Integer;
+		        --# global in Integer_Store;
+
+		        procedure Put(X : in Integer);
+		        --# global out Integer_Store;
+		        --# derives Integer_Store from X;
+		    private
+		        TheStoredData : Integer := 0;
+		    end Integer_Store;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			data Integer_16 extends Integer
+			properties
+				Data_Model::Number_Representation => Signed;
+				Source_Data_Size => 2 Bytes;
+			end Integer_16;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Integer_16 is new Integer range -2**(2*8-1) .. 2**(2*8-1-1);
+
+			protected type Integer_16_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get return Integer_16;
+		        --# global in Integer_16_Store;
+
+		        procedure Put(X : in Integer_16);
+		        --# global out Integer_16_Store;
+		        --# derives Integer_16_Store from X;
+		    private
+		        TheStoredData : Integer_16 := 0;
+		    end Integer_16_Store;
+
+		    protected body Integer_16_Store is
+		        function Get return Integer_16
+		        --# global in TheStoredData;
+		        is
+		        begin
+		            return TheStoredData;
+		        end Get;
+
+		        procedure Put(X : in Integer_16)
+		          --# global out TheStoredData;
+		          --# derives TheStoredData from X;
+		        is
+		        begin
+		            TheStoredData := X;
+		        end Put;
+		    end Integer_16_Store;
+		\end{lstlisting} 
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			data Unsigned_16 extends Integer
+			properties
+				Data_Model::Number_Representation => Unsigned;
+				Source_Data_Size => 2 Bytes;
+			end Unsigned_16;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Unsigned_16 is new Integer range 0 .. 2**(2*8-1);
+    
+		    protected type Unsigned_16_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get return Unsigned_16;
+		        --# global in Unsigned_16_Store;
+
+		        procedure Put(X : in Unsigned_16);
+		        --# global out Unsigned_16_Store;
+		        --# derives Unsigned_16_Store from X;
+		    private
+		        TheStoredData : Unsigned_16 := 0;
+		    end Unsigned_16_Store;
+
+		    protected body Unsigned_16_Store is
+		        function Get return Unsigned_16
+		        --# global in TheStoredData;
+		        is
+		        begin
+		            return TheStoredData;
+		        end Get;
+
+		        procedure Put(X : in Unsigned_16)
+		          --# global out TheStoredData;
+		          --# derives TheStoredData from X;
+		        is
+		        begin
+		            TheStoredData := X;
+		        end Put;
+		    end Unsigned_16_Store;
+
+		\end{lstlisting} 		
+	\end{longtable}
+\end{center}
+\doublespacing
+
+Type range is defined using AADL properties: \lstinline{Data_Model::Number_Representation} and \lstinline{Source_Data_Size}. In case of \lstinline{Integer} representation range starts from negative value, for \lstinline{Unsigned}: from 0. Maximum value for \lstinline{Integer} is calculated using following formula presented on equation \ref{eq:integer_max_formula}. The minimum value formula for Integer (\ref{eq:integer_min_formula}) and maxiumum value for \lstinline{Unsigned} (\ref{eq:unsigned_max_formula}) use similar strategy.
+
+\begin{equation} \label{eq:integer_max_formula}
+	Integer\_[Number\_Of\_Bytes*8]\_Max = 2^{\text{Number\_Of\_Bytes} * 8 - 1} - 1
+\end{equation}
+
+\begin{equation} \label{eq:integer_min_formula}
+	Integer\_[Number\_Of\_Bytes*8]\_Min = -2^{\text{Number\_Of\_Bytes} * 8 - 1}
+\end{equation}
+
+\begin{equation} \label{eq:unsigned_max_formula}
+	Unsigned\_[Number\_Of\_Bytes*8]\_Max = 2^{\text{Number\_Of\_Bytes} * 8} - 1
+\end{equation}
+
+Mapping for enumeration types is presented on table \ref{table:aadl2spark_types_enums}. BLESS properties are ignored in translation.
+
+\singlespacing
+\begin{center}
+	\begin{longtable}{| p{3in} | p{3in} |}
+	
+		\caption{AADL/BLESS enumeration types to SPARK mapping.}
+		\label{table:aadl2spark_types_enums}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			data Enum_Type
+				properties	
+					BLESS::Typed=>"enumeration (Enumerator1, Enumerator2, Enumerator3)";
+					Data_Model::Data_Representation => Enum;
+					Data_Model::Enumerators => ("Enumerator1", "Enumerator2", "Enumerator3");
+			end Enum_Type; 
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Enum_Type is (Enumerator1, Enumerator2, Enumerator3);
+
+			protected type Enum_Type_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get return Enum_Type;
+		        --# global in Enum_Type_Store;
+
+		        procedure Put(X : in Enum_Type);
+		        --# global out Enum_Type_Store;
+		        --# derives Enum_Type_Store from X;
+		    private
+		        TheStoredData : Enum_Type := Enum_Type'First;
+		    end Enum_Type_Store;
+
+		    protected body Enum_Type_Store is
+		        function Get return Enum_Type
+		        --# global in TheStoredData;
+		        is
+		        begin
+		            return TheStoredData;
+		        end Get;
+
+		        procedure Put(X : in Enum_Type)
+		          --# global out TheStoredData;
+		          --# derives TheStoredData from X;
+		        is
+		        begin
+		            TheStoredData := X;
+		        end Put;
+		    end Enum_Type_Store;
+		\end{lstlisting} 
+			
+	\end{longtable}
+\end{center}
+\doublespacing
+
+Sometimes it is pragmatic to define a type, which has exactly the same range like some already existing type. Especially when it is used for some specific calculations. E.g. measuring the speed. Let's say, that \lstinline{Unsigned_16} was used. Then, during development of new car model, it is not enough. In case when e.g. \lstinline{Speed_Type} is not defined, there are two options. First: change definition (range) of \lstinline{Unsigned_16}. That is bad choice, especially because its name specify the range. Another reason: it might be used not only for measuring the Speed, but maybe also for fuel level, which range is still fine. Second option is to change \lstinline{Unsigned_16} to e.g. \lstinline{Unsigned_32} everywhere in Speed Control Module (and maybe also in some external modules). When \lstinline{Speed_Type} is defined and used everywhere for speed units, then only definition of \lstinline{Speed_Type} has to be changed. To define type, using exising type in AADL \lstinline{Data_Model::Base_Type} property is used. Translation to SPARK Ada is shown in \ref{table:aadl2spark_types_subtypes}. 
+
+\singlespacing
+\begin{center}
+	\begin{longtable}{| p{3in} | p{3in} |}
+	
+		\caption{AADL types to SPARK mapping: Subtypes.}
+		\label{table:aadl2spark_types_subtypes}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			data Speed_Type
+			 	properties
+			 		BLESS::Typed=>"integer";
+				    Data_Model::Base_Type => (classifier(Base_Types::Unsigned_16));
+			end Speed_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			subtype Speed_Type is Base_Types.Unsigned_16;
+		\end{lstlisting} 
+			
+	\end{longtable}
+\end{center}
+\doublespacing
+
+Using property \lstinline{Data_Model::Data_Representation} array type in AADL can be defined. In addition to that, size fo array has to be specified by \lstinline{Data_Model::Dimension} property. Sample mapping of array of 10 integers is shown in table \ref{table:aadl2spark_types_arrays}.
+
+\singlespacing
+\begin{center}
+	\begin{longtable}{| p{3in} | p{3in} |}
+	
+		\caption{AADL arrays to SPARK mapping.}
+		\label{table:aadl2spark_types_arrays}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			data Some_Array
+			  	properties
+			  		BLESS::Typed => "array [10] of Base_Types::Integer_32";
+				    Data_Model::Data_Representation => Array;
+				    Data_Model::Base_Type => (classifier(Base_Types::Integer_32));
+				    Data_Model::Dimension => (10);
+			end Some_Array;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			subtype Some_Array_Index is Integer range 1 .. 10;
+    		type Some_Array is array (Some_Array_Index) of Base_Types.Integer_32;
+		\end{lstlisting} 
+			
+	\end{longtable}
+\end{center}
+\doublespacing
+
+AADL v2 allows to create struct data types, using \lstinline{Data_Model::Data_Representation => Struct}. AADL Struct is mapped to SPARK Ada record type. The mapping is presented in table \ref{table:aadl2spark_types_records}.
+
+\singlespacing
+\begin{center}
+	\begin{longtable}{| p{3in} | p{3in} |}
+	
+		\caption{AADL structs to SPARK Ada records mapping.}
+		\label{table:aadl2spark_types_records}
+		\\
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endfirsthead
+
+		\multicolumn{2}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline 
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+		\endhead
+
+		\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+
+		\hline %\hline
+		\endlastfoot
+
+		\begin{lstlisting}[language=aadl]
+			data Some_Record_Type
+				properties
+					BLESS::Typed => "record (
+						Field1 : Base_Types::Integer_32;  
+						Field2 : Base_Types::Boolean;  
+						Field3 : Base_Types::Unsigned_32;  
+						);
+					Data_Model::Data_Representation => Struct;
+					Data_Model::Element_Names => ("Field1", "Field2", "Field3");
+					Data_Model::Base_Type => 
+					( 
+						classifier(Base_Types::Integer_32), 			    
+						classifier(Base_Types::Boolean),
+						classifier(Base_Types::Unsigned_32)
+					);      
+			end Some_Record_Type;  
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Some_Record_Type is record
+		        Field1 : Integer_32;
+		        Field2 : Boolean;
+		        Field3 : Unsigned_32;
+		    end record;
+		\end{lstlisting} 
+			
+	\end{longtable}
+\end{center}
+\doublespacing
+
+During AADL/BLESS to SPARK Ada types mapping, SPARK Examiner was helpful. Eg. it detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerators, which was a bug. \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
 
 
 \subsection{AADL ports mapping}
@@ -90,16 +599,17 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
-			function Get_Port_Name return Port_Type;
+			procedure Get_Port_Name(Port_Name_Out : Port_Type);
 			--# global in Port_Name;
+			--# derives Port_Name_Out from Port_Name;
 
 			-- body (.adb):
 			Port_Name : Port_Type;
 
-			function Get_Port_Name return Port_Type 
+			procedure Get_Port_Name(Port_Name_Out : Port_Type)
 			is
 			begin
-				return Port_Name;
+				Port_Name_Out := Port_Name;
 			end Get_Port_Name;
 		\end{lstlisting} 
 

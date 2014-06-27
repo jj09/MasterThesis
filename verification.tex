@@ -97,7 +97,7 @@ To generate verification conditions, two kinds of annotations are relevant for E
 
 Notion of pre- and post-conditions represents Hoare logic. More precisely, Hoare triple: 
 
-\begin{equation}
+\begin{equation} \label{eq:hoare_triple}
 	\{P\} C \{Q\}
 \end{equation}
 
@@ -136,11 +136,11 @@ Integrated with SPARKSimp (by -victor flag) and POGS.
 \label{verification:proofchecker}
 
 % Barnes' book: 12.12
-
+Only mention. It is hardcore.
 
 \section{SPARKSimp Utility}
 \label{verification:sparksimp}
-SPARKSimp is a simple "make" style tool for the SPARK analysis tools. Currently, it supports the Simplifier, ZombieScope and ViCToR. It applies the Simplifier (and ViCToR, if requested, please see the Victor_Wrapper user manual [1] for more information) to all .vcg files and ZombieScope to all .dpc files it finds in a directory tree. \cite{SPARKSimp:Online} 
+SPARKSimp is a simple "make" style tool for the SPARK analysis tools. Currently, it supports the Simplifier, ZombieScope and ViCToR. It applies the Simplifier (and ViCToR, if requested, please see the Victor\_Wrapper user manual \cite{Victor:Online} for more information) to all .vcg files and ZombieScope to all .dpc files it finds in a directory tree. \cite{SPARKSimp:Online} 
 
 
 
