@@ -303,12 +303,59 @@ Sample AADL \lstinline{Base_Types} mapping to SPARK Ada is presented in table \r
 		        end Put;
 		    end Unsigned_16_Store;
 
-		\end{lstlisting} 		
+		\end{lstlisting}
+
+		\\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			data Type_With_Range
+				properties
+					Data_Model::Data_Representation => Integer;
+					Data_Model::Base_Type => (classifier (Base_Types::Unsigned_16));
+					Data_Model::Integer_Range => 0 .. 1000;
+			end Type_With_Range;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Type_With_Range is new Integer range 0 .. 1000;
+    
+		    protected type Type_With_Range_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get return Type_With_Range;
+		        --# global in Type_With_Range_Store;
+
+		        procedure Put(X : in Type_With_Range);
+		        --# global out Type_With_Range_Store;
+		        --# derives Type_With_Range_Store from X;
+		    private
+		        TheStoredData : Type_With_Range := 0;
+		    end Unsigned_16_Store;
+
+		    protected body Type_With_Range_Store is
+		        function Get return Type_With_Range
+		        --# global in TheStoredData;
+		        is
+		        begin
+		            return TheStoredData;
+		        end Get;
+
+		        procedure Put(X : in Type_With_Range)
+		          --# global out TheStoredData;
+		          --# derives TheStoredData from X;
+		        is
+		        begin
+		            TheStoredData := X;
+		        end Put;
+		    end Type_With_Range_Store;
+
+		\end{lstlisting}
 	\end{longtable}
 \end{center}
 \doublespacing
 
-Type range is defined using AADL properties: \lstinline{Data_Model::Number_Representation} and \lstinline{Source_Data_Size}. In case of \lstinline{Integer} representation range starts from negative value, for \lstinline{Unsigned}: from 0. Maximum value for \lstinline{Integer} is calculated using following formula presented on equation \ref{eq:integer_max_formula}. The minimum value formula for Integer (\ref{eq:integer_min_formula}) and maxiumum value for \lstinline{Unsigned} (\ref{eq:unsigned_max_formula}) use similar strategy.
+Type range is defined using AADL properties: \lstinline{Data_Model::Number_Representation}, \lstinline{Source_Data_Size} and \lstinline{Data_Model::Integer_Range}. When \lstinline{Data_Model::Integer_Range} property is not specified, then range is calculated. In case of \lstinline{Integer} representation range starts from negative value, for \lstinline{Unsigned}: from 0. Maximum value for \lstinline{Integer} is calculated using following formula presented on equation \ref{eq:integer_max_formula}. The minimum value formula for Integer (\ref{eq:integer_min_formula}) and maxiumum value for \lstinline{Unsigned} (\ref{eq:unsigned_max_formula}) use similar strategy.
 
 \begin{equation} \label{eq:integer_max_formula}
 	Integer\_[Number\_Of\_Bytes*8]\_Max = 2^{\text{Number\_Of\_Bytes} * 8 - 1} - 1
@@ -431,6 +478,18 @@ Sometimes it is pragmatic to define a type, which has exactly the same range lik
 		\begin{lstlisting}[language=ada]
 			subtype Speed_Type is Base_Types.Unsigned_16;
 		\end{lstlisting} 
+
+		\\
+		\hline
+
+		\begin{lstlisting}[language=aadl]
+			data Speed_Type extends Base_Types::Integer
+			end Speed_Type;
+		\end{lstlisting} 
+		&
+		\begin{lstlisting}[language=ada]
+			type Speed_Type is new Base_Types.Integer;
+		\end{lstlisting} 
 			
 	\end{longtable}
 \end{center}
@@ -474,6 +533,38 @@ Using property \lstinline{Data_Model::Data_Representation} array type in AADL ca
 		\begin{lstlisting}[language=ada]
 			subtype Some_Array_Index is Integer range 1 .. 10;
     		type Some_Array is array (Some_Array_Index) of Base_Types.Integer_32;
+
+    		protected type Some_Array_Store
+		    is
+		        pragma Priority (10);
+
+		        function Get(Ind : in Integer) return Base_Types.Integer_32;
+		        --# global in Some_Array_Store;
+
+		        procedure Put(Ind : in Integer; Val : in Base_Types.Integer_32);
+		        --# global in out Some_Array_Store;
+		        --# derives Some_Array_Store from Some_Array_Store, Ind, Val;
+		    private
+		        TheStoredData : Some_Array := Some_Array'(others => 0);
+		    end Some_Array_Store;
+
+		    protected body Some_Array_Store
+		    is
+		        function Get(Ind : in Integer) return Base_Types.Integer_32
+		        --# global in TheStoredData;
+		        is
+		        begin
+		            return TheStoredData(Ind);
+		        end Get;
+
+		        procedure Put(Ind : in Integer; Val : in Base_Types.Integer_32)
+		          --# global in out TheStoredData;
+		          --# derives TheStoredData from TheStoredData, Ind, Val;
+		        is
+		        begin
+		            TheStoredData(Ind) := Val;
+		        end Put;
+		    end Some_Array_Store;
 		\end{lstlisting} 
 			
 	\end{longtable}
