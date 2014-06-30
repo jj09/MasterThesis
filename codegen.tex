@@ -1094,6 +1094,50 @@ Based on ports mapping, presented in section \ref{codegen:mapping:ports}, transl
 
 
 
+\subsection{AADL property set to SPARK Ada package mapping}
+\label{codegen:mapping:propertyset}
+
+There is no equivalent construct for AADL property set in SPARK Ada. In this thesis only properties of type \lstinline{aadlinteger} are considered. 
+
+Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK Ada package.
+
+\singlespacing
+\begin{table}[!ht]
+	\caption{AADL property set to SPARK Ada package mapping.}
+	\label{table:propertyset_mapping}
+	\centering
+  	\begin{tabular}{ | p{3in} | p{3in} |}
+
+		\hline
+		\multicolumn{1}{|c|}{\textbf{AADL}} & \multicolumn{1}{|c|}{\textbf{SPARK Ada}} \\ \hline
+
+		\begin{lstlisting}[language=aadl]
+			property set Some_Properties is
+				Some_Property1 : constant aadlinteger => 10;
+				Some_Property2 : aadlinteger => 27 applies to (all);
+				Some_Property3 : aadlinteger => Some_Properties::Some_Property1 applies to (all);
+			end Some_Properties;
+		\end{lstlisting} 
+		& 
+		\begin{lstlisting}
+			package Some_Properties
+			--# own Some_Property2 : Integer;
+			--#     Some_Property3 : Integer;
+			--# initializes Some_Property2,
+			--#             Some_Property3;
+			is
+				Some_Property1 : constant := 10;
+				Some_Property2 : Integer := 27;
+				Some_Property3 : Integer := Some_Property1;
+			end Some_Properties;
+		\end{lstlisting} 		
+
+		\\ \hline
+	\end{tabular}
+\end{table}
+\doublespacing
+
+In AADL, all declarations must have an \lstinline{applies to} clause. It is ignored in above translation scheme.
 
 
 \subsection{BLESS mapping}
