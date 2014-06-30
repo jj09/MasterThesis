@@ -162,7 +162,9 @@ In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which
 
 Mapping for SPARK 2005: Integer, Natural, Boolean already defined in SPARK. Types Float, Character and String are not part of this thesis, because of verification tools limitation. Thus, in this thesis only Integer, Enumeration, Boolean and Record types are analyzed.
 
-Each type is translated into simple type definition and protected type. Then it can be used in multitask programs with Ravescar Profile. For every protected type only setter (\lstinline{Put}) and getter (\lstinline{Get}) subprograms are defined. It can be extended by developer during development phase.
+Each type is translated into simple type definition and protected type. Then it can be used in multitask programs with Ravescar Profile. For every protected type only setter (\lstinline{Put}) and getter (\lstinline{Get}) subprograms are defined. It can be extended by developer during development phase. 
+
+The default value for priority for each generated type is 10. It can be changed during development phase.
 
 Types: Integer, Boolean and Natural are already defined in SPARK Ada, thus only protected objects are generated for them.
 
@@ -851,7 +853,9 @@ AADL Threads are mapped into SPARK Ada tasks according to table \ref{table:threa
 				task body Some_Thread
 				is
 				begin
-					-- implementation
+					loop
+						-- implementation
+					end loop;
 				end Some_Thread;
 			end Custom_Pkg;
 		\end{lstlisting} 
@@ -1296,6 +1300,22 @@ In AADL, all declarations must have an \lstinline{applies to} clause. It is igno
 \doublespacing
 
 Generated (translated) code will not be complete. It will still require Developer's effort to implement missing parts. E.g. when assertion is not defined, it is developer responsibility to implement it.
+
+
+
+\section{Port communication}
+
+System has process(es), process has threads. For sample ports mapping, ports are exposed using \lstinline{system}. Communication between two systems has to be described by another system. Figure \ref{figure:port_communication} presents communication between two systems: panel and pump. [DESCRIBE]
+
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=2.5in]{figures/port-communication.png}
+    	\caption{Example of port communication}
+    \end{center}
+    \label{figure:port_communication}
+\end{figure}
+
+[Port\_Communication code]
 
 
 \section{"DeusEx" translator}
