@@ -635,7 +635,7 @@ During AADL/BLESS to SPARK Ada types mapping, SPARK Examiner was helpful. Eg. it
 \subsection{AADL ports mapping}
 \label{codegen:mapping:ports}
 
-Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc}. Additionaly, the mapping contains SPARK 2005 contracts.
+Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc}. Additionaly, the mapping contains SPARK 2005 contracts. Data types used by ports has to be defined earlier. Moreover, for port communication, protected types are used. To enable concurrency.
 
 % maybe split right column into 2 rows: spec and body?
 \singlespacing
@@ -668,18 +668,20 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads):
+			--# own protected Port_Name : Port_Type_Store(Priority => 10)
+
 			procedure Receive_Port_Name;
 			--# global out Port_Name;
 
 			-- body (.adb):
-			Port_Name : Port_Type;
+			Port_Name : Port_Type_Store;
 
 			procedure Receive_Port_Name 
 			is
 			begin
 				-- TODO: implement receiving Port_Name value
 				-- e.g.:
-				-- Port_Name := Some_Pkg.Get_Port_Name;
+				-- Port_Name.Put(Some_Pkg.Get_Port_Name);
 			end Receive_Port_Name;
 		\end{lstlisting} 
 
@@ -692,17 +694,19 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
-			procedure Get_Port_Name(Port_Name_Out : Port_Type);
+			--# own protected Port_Name : Port_Type_Store(Priority => 10)
+			
+			procedure Get_Port_Name(Port_Name_Out : out Port_Type);
 			--# global in Port_Name;
 			--# derives Port_Name_Out from Port_Name;
 
 			-- body (.adb):
-			Port_Name : Port_Type;
+			Port_Name : Port_Type_Store;
 
-			procedure Get_Port_Name(Port_Name_Out : Port_Type)
+			procedure Get_Port_Name(Port_Name_Out : out Port_Type)
 			is
 			begin
-				Port_Name_Out := Port_Name;
+				Port_Name_Out := Port_Name.Get;
 			end Get_Port_Name;
 		\end{lstlisting} 
 
@@ -756,17 +760,19 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
+			--# own protected Port_Name : Port_Type_Store(Priority => 10);
+
 			procedure Put_Port_Name(Port_Name_In : Port_Type);
 			--# global out Port_Name;
 			--# derives Port_Name from Port_Name_In;
 
 			-- body (.adb):
-			Port_Name : Port_Type;
+			Port_Name : Port_Type_Store;
 
 			procedure Put_Port_Name (Port_Name_In : Port_Type) 
 			is
 			begin
-				Port_Name := Port_Name_In;
+				Port_Name.Put(Port_Name_In);
 			end Put_Port_Name;
 		\end{lstlisting} 
 
@@ -779,11 +785,13 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 		&
 		\begin{lstlisting}[language=ada]
 			-- spec (.ads)
+			--# own protected Port_Name : Port_Type_Store(Priority => 10);
+			
 			procedure Send_Port_Name;
     		--# global in Port_Name;
 
 			-- body (.adb):
-			Port_Name : Port_Type;
+			Port_Name : Port_Type_Store;
 
 			procedure Send_Port_Name 
 			is
@@ -1101,7 +1109,7 @@ Based on ports mapping, presented in section \ref{codegen:mapping:ports}, transl
 \subsection{AADL property set to SPARK Ada package mapping}
 \label{codegen:mapping:propertyset}
 
-There is no equivalent construct for AADL property set in SPARK Ada. In this thesis only properties of type \lstinline{aadlinteger} are considered. 
+There is no equivalent construct for AADL property set in SPARK Ada. In this thesis only properties of type \lstinline{constant aadlinteger} are considered. There are issues with using non-constant in SPARK Ada (e.g. in type definition).
 
 Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK Ada package.
 
@@ -1118,21 +1126,17 @@ Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK
 		\begin{lstlisting}[language=aadl]
 			property set Some_Properties is
 				Some_Property1 : constant aadlinteger => 10;
-				Some_Property2 : aadlinteger => 27 applies to (all);
-				Some_Property3 : aadlinteger => Some_Properties::Some_Property1 applies to (all);
+				Some_Property2 : constant aadlinteger => 27 applies to (all);
+				Some_Property3 : constant aadlinteger => Some_Properties::Some_Property1 applies to (all);
 			end Some_Properties;
 		\end{lstlisting} 
 		& 
 		\begin{lstlisting}
 			package Some_Properties
-			--# own Some_Property2 : Integer;
-			--#     Some_Property3 : Integer;
-			--# initializes Some_Property2,
-			--#             Some_Property3;
 			is
 				Some_Property1 : constant := 10;
-				Some_Property2 : Integer := 27;
-				Some_Property3 : Integer := Some_Property1;
+				Some_Property2 : constant := 27;
+				Some_Property3 : constant := Some_Property1;
 			end Some_Properties;
 		\end{lstlisting} 		
 
@@ -1174,7 +1178,7 @@ In AADL, all declarations must have an \lstinline{applies to} clause. It is igno
 		\end{lstlisting} 
 		& 
 		\begin{lstlisting}
-			--# assert COND1();
+			--# assert COND1;
 		\end{lstlisting} 
 
 		\\ \hline
@@ -1192,7 +1196,7 @@ In AADL, all declarations must have an \lstinline{applies to} clause. It is igno
 			is
 			begin
 				loop
-					--# assert (Var1 < Var2 and COND2());
+					--# assert (Var1 < Var2 and COND2);
 				end loop;
 			end Some_Thread;
 		\end{lstlisting} 
@@ -1240,11 +1244,11 @@ In AADL, all declarations must have an \lstinline{applies to} clause. It is igno
 			is
 			begin
 				loop
-					--# assert COND1() or COND2() 
+					--# assert (COND1 or COND2)
 					--#          -> State1();
-					--# assert (Var = 0) -> State1() and
-					--#        (Var = -1) -> State2() and
-					--#        (Var = 9) -> State3();
+					--# assert (Var = 0) -> State1 and
+					--#        (Var = -1) -> State2 and
+					--#        (Var = 9) -> State3;
 				end loop;
 			end Some_Thread;
 		\end{lstlisting} 

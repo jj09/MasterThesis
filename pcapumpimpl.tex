@@ -24,13 +24,15 @@ Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency 
 
 \section{Implementation based on Requirements Document}
 
-The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
+The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
 
 
 
 \section{Code generation from AADL models}
 
 PCA Pump prototype was mocked using translations schemas from chapter \ref{codegen}.
+
+The original models were simplified and truncated for the purpose of this thesis. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation.
 
 [code listings of aadl model]
 
