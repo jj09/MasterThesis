@@ -7,21 +7,18 @@
 %\vspace{1cm}
 \setlength{\baselineskip}{0.8cm}
 
-%\indent
+\indent
 
 % +--------------------------------------------------------------------+
 % | Enter the text of your abstract below, maximum of 350 words.
 % +--------------------------------------------------------------------+
 
+The future of Medical Devices is their interoperability. Nowadays, medical devices works rather independently, which cause accidents we could avoid if different devices would be able to communicate. Dr. Julian Goldman developed idea of "Integrated Clinical Environment" (ICE). It is series of standards, which describes medical device interoperability. SAnToS lab created Medical Device Coordination Framework (MDCF), which is implementation of ICE idea.
 
-Ada programming language is targeted at embedded and real-time systems.
+Ada is one of the most popular (along with C/C++) programming language targeted at embedded and real-time systems. SPARK Ada is subset of Ada, designed for the development of safety and security critical systems. It contains properties, which allows to prove correctness of program and its entities.
 
-SPARK Ada is designed for the development of safety and security critical systems. It contains properties, which allows to prove corectness of program and its entities.
+AADL (Architecture Analysis \& Design Language) is modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems. AADL allows for the description of both software and hardware parts of a system. It is used to describe architecture, but AADL it allows behavioral extensions through annex languages. BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sub language defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
 
-AADL (Architecture Analysis \& Design Language) is modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems.
+Nowadays, there is a trend to generate code from models. The ultimate goal of research, which this thesis if part of, is to create AADL/BLESS to SPARK Ada translator. Ultimately there will be standardized AADL/BLESS models, from which SPARK Ada code base will be generated. It will be starting point for developers, who will implement and extend it.
 
-BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sublanguage defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
-
-Nowadays, we have trend to generate code from models. The ultimate goal of research, which this thesis if part of, is to create AADL/BLESS to SPARK Ada traslator. Ultimatelly there will be standardized AADL/BLESS models, which will be generating code base for developers extensions (like skeleton code for some Web Framework).
-
-This thesis propose mapping from AADL/BLESS to SPARK Ada. As an example of Medical Device, PCA Pump (Patient Controlled Analgesia) is used. The foundation for this work is System Requirements for "Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump System Requirements" (DRAFT 0.10.1) \cite{PcaReq} and AADL Models with BLESS annexes created by Brian Larson. Additionally, there was a contribution made in clarifying the requirements document and extending AADL models.
+This thesis propose mapping from AADL/BLESS to SPARK Ada. As an example of Medical Device, PCA (Patient Controlled Analgesia) Pump is used. The foundation for this work is System Requirements for "Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump System Requirements" (DRAFT 0.10.1) \cite{PcaReq} and AADL Models with BLESS annexes created by Brian Larson. Additionally PCA Pump prototype was created. As a platform for prototyping, BeagleBoard-xM device was used.

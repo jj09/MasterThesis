@@ -5,60 +5,35 @@
 \chapter{Verification}
 \label{verification}
 
-\section{Verification of implemented prototype}
-\label{verification:prototype}
-
-Examine(F8) -> Simplifier --> POGS.
-
-4 warnings:
-Warning 402 - Default assertion planted to cut loop.
-
-solution:
-\lstinline{--# assert I > 1 -> TheStoredData(I-1) = TheStoredData(I);}
-\lstinline{--# assert I > 1 -> Result >= TheStoredData(I-1);}
-\lstinline{--# assert true; // add BLESS assertions? then resolve warning 402?}
-\lstinline{--# assert true; // add BLESS assertions? then resolve warning 402?}
-
-
-Verification of main.adb
-
-\begin{lstlisting}
-main.adb:4:10: Warning 391 - If the identifier Text_IO represents a package which contains a task or an interrupt handler then the partition-level analysis performed by the Examiner will be incomplete.  Such packages must be inherited as well as withed.
-main.adb:6:10: Warning 391 - If the identifier Float_Text_IO represents a package which contains a task or an interrupt handler then the partition-level analysis performed by the Examiner will be incomplete.  Such packages must be inherited as well as withed.
-main.adb:102:5: Warning  10 - The body of subprogram Main is hidden - hidden text is ignored by the Examiner.
-main.adb:14:49: Flow Error 602 - The undefined initial value of Pca_Pump.Operate may be used in the derivation of Pca_Pump.State.
-main.adb:14:49: Flow Error 602 - The undefined initial value of Pca_Pump.Fluid_Pulses may be used in the derivation of Pca_Pump.State.
-main.adb:14:49: Flow Error 602 - The undefined initial value of Pca_Pump.Prescription may be used in the derivation of Pca_Pump.State.
-main.adb:14:49: Flow Error 602 - The undefined initial value of Pca_Pump.Clinician_Bolus_Paused may be used in the derivation of Pca_Pump.State.
-main.adb:14:49: Flow Error 602 - The undefined initial value of Pca_Pump.Clinician_Bolus_Duration may be used in the derivation of Pca_Pump.State.
-main.adb:14:49: Flow Error  37 - The updating of variable Pca_Pump.Operate by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  37 - The updating of variable Pca_Pump.Fluid_Pulses by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  37 - The updating of variable Pca_Pump.Clinician_Bolus_Paused by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Operate by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Fluid_Pulses by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Prescription by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Clinician_Bolus_Paused by a task or interrupt handler has been omitted from the partition annotation.
-main.adb:14:49: Flow Error  36 - The referencing of variable Pca_Pump.Clinician_Bolus_Duration by a task or interrupt handler has been omitted from the partition annotation.
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/pca_ravenscar/main.adb:1:1: Warning - VC generation requested but no bodies presented. No VCs generated.
-\end{lstlisting}
-
-
-
-\section{Verification of generated code}
-\label{verification:generated}
+The strategy for Software Verification using SPARK tools is as follows. First, Examiner is run. It generates and discharge some Verification Conditions (VCs). Next, SPARKSimp. It runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. Along with Simplifier, ZombieScope runs to find dead paths. SPARKSimp can also run Victor (and it is in this case) to discharge VCs not discharged by Examiner nor Simplifier. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness.
 
 An overview of verification contracts and annotations can be found in chapter 12 of Barnes' book \cite{Barnes:Book}.
 
+\section{Verification of implemented prototype}
+\label{verification:prototype}
 
-\subsection{Adding implementation to generated code}
-\label{verification:generated:implementation}
+During PCA Pump prototype implementation, syntax was regularly check with SPARK Examiner.
+
+First run
+\begin{lstlisting}[frame=single, gobble=0, caption={POGS report for PCA Pump prototype}, label={listing:pcapump_prototype_pogs}]
+----- BEGIN PROOF SUMMARY -----
+VCs discharged:        556
+VCs false:               2
+VCs undischarged:       37
+Warnings: No
+Errors:   YES
+----- END PROOF SUMMARY ----- 
+\end{lstlisting}
+
+Two false VCs applies to \lstinline{Status_Store} protected type's subprograms: \lstinline{Put} and \lstinline{Get}.
+Error? The same implementation like for other enumeration types.
+
+POGS report is not included here, because it has almost 3000 lines.
+
+There is 37 undischarged VCs. As mentioned in chapter \ref{background:spark:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate module was created. Verification process of this module is described in section \ref{verification:pcapump:monitoring}.
 
 
-\section{Verification of PCA Pump}
-\label{verification:pcapump}
-
-
-\subsection{Monitoring dosed amount}
+\section{Monitoring dosed amount}
 \label{verification:pcapump:monitoring}
 
 Verification of module responsible for tracking dosed amount of drug.
@@ -67,7 +42,7 @@ Sequential.
 
 Code:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Dose monitor module specification}, label={listing:pcapump_dosemonitor_spec}]
 package Pca_Pump
 --# own Dosed;
 --#     Dose_Volume;
@@ -93,7 +68,7 @@ end Pca_Pump;
 \end{lstlisting}
 
 
-\begin{lstlisting}
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Dose monitor module body}, label={listing:pcapump_dosemonitor_body}]
 package body Pca_Pump
 is
     Dosed : Integer_Array := Integer_Array'(others => 0);
@@ -131,13 +106,14 @@ end Pca_Pump;
 \end{lstlisting}
 
 
-Verification with Examiner, Simplifier, Victor, POGS and then Bakar Kiasan.
+Verification with Examiner, Simplifier, ZombieScope, Victor, POGS and then Bakar Kiasan.
+SPARKSimp run Simplifier and Victor with command \lstinline{sparksimp -victor}.
 
 Examiner:
 No errors or warnings
 
-SPARKSimp:
-\begin{lstlisting}
+[REMOVE] SPARKSimp:
+\begin{lstlisting}[frame=single, gobble=0, caption={SPARKSimp output}, label={listing:pcapump_dosemonitor_sparksimp}]
 gnatspark sparksimp -P/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_verification.gpr
 sparksimp -victor
 SPARKSimp GPL 2012
@@ -180,9 +156,9 @@ Total elapsed time:    0: 0: 1.39
 [2014-07-01 14:45:00] process terminated successfully (elapsed time: 01.53s)
 \end{lstlisting}
 
-POGS Report:
+[truncate?]POGS Report:
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=single, gobble=0, caption={POGS report}, label={listing:pcapump_dosemonitor_pogs}]
 -------------------------------------------------------------------------------
                           Semantic Analysis Summary                            
                                 POGS GPL 2012                                  
@@ -387,26 +363,467 @@ Result: no lower overflow in \lstinline{Increase_Dosed}. Only upper overflow lef
 
 pca-pump-verification-step3.png
 
-Add contract to \lstinline{Increase_Dosed} --# pre Read_Dosed(Dosed) <= Drug_Volume'Last - Dose_Volume;
-Examiner Error: Semantic Error   1 - The identifier Read_Dosed is either undeclared or not visible at this point.
+Add contract to \lstinline{Increase_Dosed} \lstinline{--# pre Read_Dosed(Dosed) <= Drug_Volume'Last - Dose_Volume;}
+Examiner Error: \lstinline{Semantic Error   1 - The identifier Read_Dosed is either undeclared or not visible at this point.}
 
 
 Moved \lstinline{Read_Dosed} to be before \lstinline{Increase_Dosed}.
-Examiner Error: pca_pump.ads:19:51: Semantic Error  35 - Binary operator is not declared for types Drug_Volume and Dose_Volume__type.
+Examiner Error: \lstinline{pca_pump.ads:19:51: Semantic Error  35 - Binary operator is not declared for types Drug_Volume and Dose_Volume__type.}
 
-Declared \lstinline{Dose_Volume} type in \lstinline{--# own}: --#     Dose_Volume : Drug_Volume;
+Declared \lstinline{Dose_Volume} type in \lstinline{--# own}: \lstinline{--# Dose_Volume : Drug_Volume;}
+
+Rerun Examiner and SPARKSimp:
+[truncate?]
+\begin{lstlisting}[frame=single, gobble=0, caption={Second POGS report}, label={listing:pcapump_dosemonitor_pogs2}]
+-------------------------------------------------------------------------------
+                          Semantic Analysis Summary                            
+                                POGS GPL 2012                                  
+            Copyright (C) 2012 Altran Praxis Limited, Bath, U.K.               
+-------------------------------------------------------------------------------
+
+Summary of:
+
+Verification Condition files (.vcg)
+Simplified Verification Condition files (.siv)
+Victor result files (.vct)
+Riposte result files (.rsm)
+Proof Logs (.plg)
+Dead Path Conjecture files (.dpc)
+Summary Dead Path files (.sdp)
+
+"status" column keys:
+    1st character:
+        '-' - No VC
+        'S' - No SIV
+        'U' - Undischarged
+        'E' - Proved by Examiner
+        'I' - Proved by Simplifier by Inference
+        'X' - Proved by Simplifier by Contradiction
+        'P' - Proved by Simplifier using User Defined Proof Rules
+        'V' - Proved by Victor
+        'O' - Proved by Riposte
+        'C' - Proved by Checker
+        'R' - Proved by Review
+        'F' - VC is False
+    2nd character:
+        '-' - No DPC
+        'S' - No SDP
+        'U' - Unchecked
+        'D' - Dead path
+        'L' - Live path
+
+in the directory:
+/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification
+
+Summary produced: 02-JUL-2014 13:09:29.38
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
+procedure Pca_Pump.Increase_Dosed
+
+VCs generated 02-JUL-2014 13:08:10
+
+VCs simplified 02-JUL-2014 13:08:20
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.dpc
+DPCs generated 02-JUL-2014 13:08:10
+
+DPC ZombieScoped 02-JUL-2014  13:08:2
+
+VCs for procedure_increase_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 9       | Undischarged       | Unchecked |   UU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.vcg
+procedure Pca_Pump.Move_Dosed
+
+VCs generated 02-JUL-2014 13:08:10
+
+VCs simplified 02-JUL-2014 13:08:20
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.dpc
+DPCs generated 02-JUL-2014 13:08:10
+
+DPC ZombieScoped 02-JUL-2014  13:08:2
+
+VCs for procedure_move_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 26      | Inference          | Unchecked |   IU   |
+| 2   | start | rtc check @ 26      | Inference          | Unchecked |   IU   |
+| 3   | start |    assert @ 27      | Inference          | Live      |   IL   |
+| 4   | 27    |    assert @ 27      | Inference          | Live      |   IL   |
+| 5   | 27    | rtc check @ 28      | Inference          | Unchecked |   IU   |
+| 6   | start | rtc check @ 30      | Inference          | Unchecked |   IU   |
+| 7   | 27    | rtc check @ 30      | Inference          | Unchecked |   IU   |
+| 8   | start |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 9   | 27    |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
+function Pca_Pump.Read_Dosed
+
+VCs generated 02-JUL-2014 13:08:10
+
+VCs simplified 02-JUL-2014 13:08:21
+
+File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.dpc
+DPCs generated 02-JUL-2014 13:08:10
+
+DPC ZombieScoped 02-JUL-2014  13:08:2
+
+VCs for function_read_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ 17      | Inference          | Live      |   IL   |
+| 2   | 17    |    assert @ 17      | Inference          | Live      |   IL   |
+| 3   | 17    | rtc check @ 18      | Undischarged       | Unchecked |   UU   |
+| 4   | 17    |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+===============================================================================
+Summary:
+
+The following subprograms have undischarged VCs (excluding those proved false):
+
+   1  /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
+   1  /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
+
+Proof strategies used by subprograms
+-------------------------------------------------------------------------
+Total subprograms with at least one VC proved by examiner:              2
+Total subprograms with at least one VC proved by simplifier:            2
+Total subprograms with at least one VC proved by contradiction:         0
+Total subprograms with at least one VC proved with user proof rule:     0
+Total subprograms with at least one VC proved by Victor:                0
+Total subprograms with at least one VC proved by Riposte:               0
+Total subprograms with at least one VC proved using checker:            0
+Total subprograms with at least one VC discharged by review:            0
+
+Maximum extent of strategies used for fully proved subprograms:
+-------------------------------------------------------------------------
+Total subprograms with proof completed by examiner:                     0
+Total subprograms with proof completed by simplifier:                   1
+Total subprograms with proof completed with user defined rules:         0
+Total subprograms with proof completed by Victor:                       0
+Total subprograms with proof completed by Riposte:                      0
+Total subprograms with proof completed by checker:                      0
+Total subprograms with VCs discharged by review:                        0
+
+Overall subprogram summary:
+-------------------------------------------------------------------------
+Total subprograms fully proved:                                         1
+Total subprograms with at least one undischarged VC:                    2  <<<
+Total subprograms with at least one false VC:                           0
+                                                                    -----
+Total subprograms for which VCs have been generated:                    3
+
+
+ZombieScope Summary:
+-------------------------------------------------------------------------
+Total subprograms for which DPCs have been generated:                   3
+Total number subprograms with dead paths found:                         1
+Total number of dead paths found:                                       1
+
+
+VC summary:
+-------------------------------------------------------------------------
+Note: (User) denotes where the Simplifier has proved VCs using one or
+      more user-defined proof rules.
+
+Total VCs by type:
+------------------
+                    Total   Examiner Simplifier    Undisc.
+Assert/Post             8          3          5          0
+Precondition            0          0          0          0
+Check stmnt.            0          0          0          0
+Runtime check           7          0          5          2
+Refinem. VCs            0          0          0          0
+Inherit. VCs            0          0          0          0
+==========================================================
+Totals:                15          3         10          2 <<<
+%Totals:                         20%        67%        13%
+
+===================== End of Semantic Analysis Summary ========================
+\end{lstlisting}
+
+Now, we can see progress. Only 2 VCs (13\%) are undischarged in comparison to 3 (20\%) previously.
+
+Then rerun Kiasan.
+
+pca-pump-verification-step4
+
+\lstinline{Move_Dosed} and \lstinline{Increase_Dosed} are fine: no Exception cases.
+
+\lstinline{Read_Dosed} ConstraintError: the value being assigned to Result is too small. After look at the pre and post state it seems weird. After investigation and talk with Kiasan Developer, it was determined that there is a bug in Kiasan v1(for SPARK 2005). More precisely: checking overflows. For the purpose of verification \lstinline{Drug_Volume} type range was changed to $0 - (2^{15} - 1)$. Negative values in this case are unnecessary. It will give range up to around 1000000. Which is sufficient even if calculations are made in micro liters (as it is in case of PCA Pump implementation). 1000000 micro liters is 1000 ml, which is 1 liter. Which is extreme amount of drug in case of PCA Pump, according to Requirement Document \cite{OpenSourcePCAPump:Paper}. The bug with type ranges is fixed in Kiasan v2 (for SPARK 2014).
+
+Another problem is size of Dosed array (3600 elements). First of all, Kiasan array bound and loop bound has to be increased (from default 10). Another thing is computational complexity. The state space grow exponentially and it takes a lot of time to analyze array of 3600 elements. Thus for verification purposes array size was change to 60 elements. Along with increasing array bounds and loop bounds for Kiasan also to 60.
+
+After rerun Kiasan, there is valid test case for \lstinline{Read_Dose}, but there are also 59 Exception cases: Range violation (UPPER), which means there is possible overflow.
+One way to fix it is to add \lstinline{--# assume} annotation to loop in function body, but Kiasan v1 does not support it. Another way is to add pre-condition, which assure, that sum of elements is lower than \lstinline{Drug_Volume'Last}. SPARK does not provide simple library for summing array (like Contracts for Java provide). Thus, this function has to be implemented. However, its implementation is the same like \lstinline{Read_Dosed}. It sum all elements of array. Sum function specification and body is presented on listing \ref{listing:sum_function}.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sum function for summing all elements of array}, label={listing:sum_function}]
+function Sum(Arr : Doses_Array) return Drug_Volume;
+
+function Sum(Arr : Doses_Array) return Drug_Volume
+is
+    Result : Drug_Volume := 0;
+begin
+    for I in Doses_Array_Index loop
+        --# assert true;
+        Result := Result + Arr(I);
+    end loop;
+    return Result;
+end Sum;
+
+\end{lstlisting}
+
+
+After rerun Kiasan, there is only valid test case.
+
+pca-pump-verification-step5
+
+The last thing which can be improved by code contracts is checking if \lstinline{Move_Dosed} procedure works as expected. In that purpose three postconditions were added (listing \ref{listing:postconditions_added_to_move_dosed}). First checks if the last element is equal to 0. Second and third checks two possible scenarios: 
+\begin{itemize}
+    \item before running procedure, the first element is equal to 0: amount of dosed drug in last hour will not change after Dosed procedure execution
+    \item the first element is greater than 0: after Dosed procedure execution, the amount of drug dosed in last hour will decrease, because first element value will no longer be in last hour range
+\end{itemize}
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Postconditions added to Move\_Dosed procedure}, label={listing:postconditions_added_to_move_dosed}]
+--# post Dosed(Doses_Array_Index'Last) = 0 
+--#      and (Dosed~(Doses_Array_Index'First)=0 -> Read_Dosed(Dosed~) = Read_Dosed(Dosed))
+--#      and (Dosed~(Doses_Array_Index'First)>0 -> Read_Dosed(Dosed~) > Read_Dosed(Dosed));
+\end{lstlisting}
+
+After adding these postconditions Kiasan generates 2 test cases to check both mentioned scenarios. There is no error cases, which means that procedure works as expected.
+
+Better way to validate such requirements is Unit testing. In section \ref{verification:aunit}, there is overview of unit tests created to test behavior described above.
+
+Running Examiner and SPARKSimp after all changes (truncated result):
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Third POGS report}, label={listing:pcapump_dosemonitor_pogs3}]
+VCs for procedure_increase_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 20      | Undischarged       | Unchecked |   UU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+VCs for procedure_move_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 37      | Inference          | Unchecked |   IU   |
+| 2   | start | rtc check @ 37      | Inference          | Unchecked |   IU   |
+| 3   | start |    assert @ 38      | Inference          | Live      |   IL   |
+| 4   | 38    |    assert @ 38      | Inference          | Live      |   IL   |
+| 5   | 38    | rtc check @ 39      | Inference          | Unchecked |   IU   |
+| 6   | start | rtc check @ 41      | Inference          | Unchecked |   IU   |
+| 7   | 38    | rtc check @ 41      | Inference          | Unchecked |   IU   |
+| 8   | start |    assert @ finish  | Inference          | Dead      |   ID   |
+| 9   | 38    |    assert @ finish  | Undischarged       | Live      |   UL   |
+ -----------------------------------------------------------------------------
+
+VCs for function_read_dosed :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ 28      | Inference          | Live      |   IL   |
+| 2   | 28    |    assert @ 28      | Inference          | Live      |   IL   |
+| 3   | 28    | rtc check @ 29      | Undischarged       | Unchecked |   UU   |
+| 4   | 28    |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+VCs for function_sum :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ 11      | Inference          | Live      |   IL   |
+| 2   | 11    |    assert @ 11      | Inference          | Live      |   IL   |
+| 3   | 11    | rtc check @ 12      | Undischarged       | Unchecked |   UU   |
+| 4   | 11    |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+Total VCs by type:
+------------------
+                    Total   Examiner Simplifier    Undisc.
+Assert/Post            11          1          9          1
+Precondition            0          0          0          0
+Check stmnt.            0          0          0          0
+Runtime check           8          0          5          3
+Refinem. VCs            0          0          0          0
+Inherit. VCs            0          0          0          0
+==========================================================
+Totals:                19          1         14          4 <<<
+%Totals:                          5%        74%        21%
+\end{lstlisting}
+
+Now, there is 4 undischarged VCs, but total number of generated VCs is 19. In previous runs there was only 15. Thus there is 4 new VCs and 2 of them are undischarged. The reason is introduction of \lstinline{Sum} function of all subprograms which are using it. To confirm this, look at all undischarged VCs. Which is: 1st VC in \lstinline{increase_dosed.siv} file (listing \ref{listing:pcapump_undischarged_vc_increase_dosed}, 9th VC in \lstinline{move_dosed.siv} file (listing \ref{listing:pcapump_undischarged_vc_move_dosed}, 3rd VC in \lstinline{read_dosed.vcg} file (listing \ref{listing:pcapump_undischarged_vc_read_dosed}) and 3rd VC in \lstinline{sum.vcg} file (listing \ref{listing:pcapump_undischarged_vc_sum}). They conform to subprograms: \lstinline{Increase_Dosed}, \lstinline{Move_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} respectively.
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from increase\_dosed.siv file}, label={listing:pcapump_undischarged_vc_increase_dosed}]
+procedure_increase_dosed_1.
+H1:    read_dosed(dosed) <= 32767 - dose_volume .
+H2:    for_all(i___1 : integer, 1 <= i___1 and i___1 <= 60 -> 0 <= element(
+          dosed, [i___1]) and element(dosed, [i___1]) <= 32767) .
+H3:    dose_volume >= 0 .
+H4:    dose_volume <= 32767 .
+H5:    integer__size >= 0 .
+H6:    drug_volume__size >= 0 .
+H7:    drug_volume__base__first <= drug_volume__base__last .
+H8:    doses_array_index__size >= 0 .
+H9:    drug_volume__base__first <= 0 .
+H10:   drug_volume__base__last >= 32767 .
+       ->
+C1:    element(dosed, [60]) + dose_volume <= 32767 .
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from move\_dosed.siv file}, label={listing:pcapump_undischarged_vc_move_dosed}]
+procedure_move_dosed_9.
+H1:    element(dosed, [58]) = element(dosed, [59]) .
+H2:    for_all(i___1 : integer, 1 <= i___1 and i___1 <= 60 -> 0 <= element(
+          dosed, [i___1]) and element(dosed, [i___1]) <= 32767) .
+H3:    element(dosed, [60]) >= 0 .
+H4:    element(dosed, [60]) <= 32767 .
+H5:    integer__size >= 0 .
+H6:    drug_volume__size >= 0 .
+H7:    drug_volume__base__first <= drug_volume__base__last .
+H8:    doses_array_index__size >= 0 .
+H9:    drug_volume__base__first <= 0 .
+H10:   drug_volume__base__last >= 32767 .
+       ->
+C1:    element(dosed~, [1]) = 0 -> read_dosed(dosed~) = read_dosed(update(
+          update(dosed, [59], element(dosed, [60])), [60], 0)) .
+C2:    element(dosed~, [1]) > 0 -> read_dosed(dosed~) > read_dosed(update(
+          update(dosed, [59], element(dosed, [60])), [60], 0)) .
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from read\_dosed.siv file}, label={listing:pcapump_undischarged_vc_read_dosed}]
+function_read_dosed_3.
+H1:    loop__1__i > 1 -> result >= element(dosed, [loop__1__i - 1]) .
+H2:    for_all(i___1 : integer, 1 <= i___1 and i___1 <= 60 -> 0 <= element(
+          dosed, [i___1]) and element(dosed, [i___1]) <= 32767) .
+H3:    sum(dosed) <= 32767 .
+H4:    loop__1__i >= 1 .
+H5:    loop__1__i <= 60 .
+H6:    result >= 0 .
+H7:    result <= 32767 .
+H8:    integer__size >= 0 .
+H9:    drug_volume__size >= 0 .
+H10:   drug_volume__base__first <= drug_volume__base__last .
+H11:   doses_array_index__size >= 0 .
+H12:   drug_volume__base__first <= 0 .
+H13:   drug_volume__base__last >= 32767 .
+       ->
+C1:    result + element(dosed, [loop__1__i]) <= 32767 .
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from sum.siv file}, label={listing:pcapump_undischarged_vc_sum}]
+function_sum_3.
+H1:    for_all(i___1 : integer, 1 <= i___1 and i___1 <= 60 -> 0 <= element(arr, 
+          [i___1]) and element(arr, [i___1]) <= 32767) .
+H2:    loop__1__i >= 1 .
+H3:    loop__1__i <= 60 .
+H4:    result >= 0 .
+H5:    result <= 32767 .
+H6:    integer__size >= 0 .
+H7:    drug_volume__size >= 0 .
+H8:    drug_volume__base__first <= drug_volume__base__last .
+H9:    doses_array_index__size >= 0 .
+H10:   drug_volume__base__first <= 0 .
+H11:   drug_volume__base__last >= 32767 .
+       ->
+C1:    result + element(arr, [loop__1__i]) <= 32767 .
+\end{lstlisting}
+
+In \lstinline{Move_Dosed} procedure, tools cannot prove implications in post conditions. Fortunately, it is already proved by Bakar Kiasan. The problem in \lstinline{Increase_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} is the same. Tools cannot verify, that adding \lstinline{Result} and some element of \lstinline{Dosed} array will not cause overflow. Bakar Kiasan can prove correctness of \lstinline{Increase_Dosed} and \lstinline{Read_Dosed}. However only, with assumption that \lstinline{Sum} is correct. \lstinline{Sum} cannot be proved by Bakar Kiasan. Four exception cases indicating possible overflow are generated. Thus, the only way to prove correctness of this module is to assume, that helper function \lstinline{Sum} is correct.
+
+Complete code of module for dose monitoring can be found in \ref{Appendix:pcapump:dose_monitor_module}.
+
+Unfortunately, introduced changes (pre- and postconditions) cannot be applied to PCA Pump prototype implementation, because - as mentioned in chapter \ref{background:sparkverification} - protected objects cannot be used in proof annotations (pre- and postconditions).
+
+
+\section{Verification of generated code}
+\label{verification:generated}
+
+Raw, generated code cannot be verified, because Examiner return syntax errors. The reason is that some parts of code are not implemented. Especially, BLESS assertions, which are not even defined. In order to verify generated code, it has to be at least partially implemented.
+
+
+\subsection{Adding implementation to generated code}
+\label{verification:generated:implementation}
+
 
 
 \section{AUnit tests}
 \label{verification:aunit}
-- test incrementing array
-- test moving array (Pulse does not change dosed amount)
-- test prescription setters and getters
-- test state machine
-	* change to bolus mode
-	* change to KVO rate
-	* etc.
 
+Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module is to create AUnit test. GNAT Programming Studio generate skeleton for all subprograms. To generate it: Tools -> GNATtest -> Generate unit test setup. This generator creates new project with AUnit tests. In order to run tests, the test project has to be opened in GNAT Programming Studio. The project is created in \lstinline{[project_dir]/gnattest/harness/test_[proj_name].gpr}. It generates empty (not implemented) test for each subprogram in project. To add/edit/remove tests or rename names, three files has to be edited:
+
+\begin{itemize}
+    \item \lstinline{[some_package]-test_data-tests.ads}
+    \item \lstinline{[some_package]-test_data-tests.adb}
+    \item \lstinline{[some_package]-test_data-tests-suite.adb}
+\end{itemize}
+
+Test has to be declared in \lstinline{[some_package]-test_data-tests.ads} and implemented in \lstinline{[some_package]-test_data-tests.adb}. Then it has to be added to test suite in \lstinline{[some_package]-test_data-tests-suite.adb} file.
+
+To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
+\begin{itemize}
+    \item \lstinline{Test_Move_Dosed_First_Element_Zero} - first element is 0, then after execution of the procedure dosed amount of drug should be not changed
+    \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
+\end{itemize}
+
+Both test cases are presented on listing \ref{listing:pca_pump_move_dosed_unit_tests}.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={AUnit tests for Move\_Dosed procedure}, label={listing:pca_pump_move_dosed_unit_tests}]
+procedure Test_Move_Dosed_First_Element_Zero (Gnattest_T : in out Test) is
+  pragma Unreferenced (Gnattest_T);
+  Pre_Sum : Pca_Pump.Drug_Volume := 0;
+  Post_Sum : Pca_Pump.Drug_Volume := 0;
+begin
+  -- Arrange
+  Pre_Sum := Pca_Pump.Read_Dosed;
+
+  -- Act
+  Pca_Pump.Move_Dosed;
+  Post_Sum := Pca_Pump.Read_Dosed;
+
+  -- Assert
+  AUnit.Assertions.Assert
+    (Post_Sum = Pre_Sum,
+     "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " /= " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
+end Test_Move_Dosed_First_Element_Zero;
+
+procedure Test_Move_Dosed_First_Element_Not_Zero (Gnattest_T : in out Test) is
+  pragma Unreferenced (Gnattest_T);
+  Pre_Sum : Pca_Pump.Drug_Volume := 0;
+  Post_Sum : Pca_Pump.Drug_Volume := 0;
+begin
+  -- Arrange
+  Pca_Pump.Increase_Dosed;
+  for I in Pca_Pump.Doses_Array_Index range 1 .. Pca_Pump.Doses_Array_Index'Last-1 loop
+     Pca_Pump.Move_Dosed;
+  end loop;
+  Pre_Sum := Pca_Pump.Read_Dosed;
+
+  -- Act
+  Pca_Pump.Move_Dosed;
+  Post_Sum := Pca_Pump.Read_Dosed;
+
+  -- Assert
+  AUnit.Assertions.Assert
+    (Post_Sum < Pre_Sum,
+     "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " should be greater than " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
+end Test_Move_Dosed_First_Element_Not_Zero;
+\end{lstlisting}
 
 
 \section{gnatPROVE?}

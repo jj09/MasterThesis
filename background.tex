@@ -83,6 +83,17 @@ Recently AADL becomes a new market standard. There are lots of tools for AADL mo
 
 What is important, AADL is for architectural description. It should not be compared with UML suites, which allows to link with source code.
 
+[poprawic]
+%http://en.wikipedia.org/wiki/Architecture_Analysis_%26_Design_Language
+The language can be extended with the following methods:
+
+user-defined properties: user can extend the set of applicable properties and add their own to specify their own requirements
+language annexes: the core language is enhanced by annex languages that enrich the architecture description. For now, the following annexes have been defined.
+Behavior annex: add components behavior with state machines
+Error-model annex: specifies fault and propagation concerns
+ARINC653 annex: defines modelling patterns for modelling avionics system
+Data-Model annex: describes the modelling of specific data constraint with AADL
+
 
 \subsection{OSATE}
 \label{background:aadl:osate}
@@ -622,8 +633,13 @@ Details about tasking in SPARK are well described in Chapter 8 of Barnes' book \
 
 %http://docs.adacore.com/sparkdocs-docs/
 
-Verification - what is that
-verification vs validation
+Testing vs Verification (form 721 slides): Testing starts with a set of possible test cases, simulates the system on each input, and observes the behavior. In general, testing does not cover all possible executions. On the other hand, verification establishes correctness for all possible execution sequences.
+Techniques for Verification:
+\begin{itemize}
+	\item Formal verification: prove mathematically that the program is correct – this can be difficult for large programs.
+	\item Correctness by construction: follow a well- defined methodology for constructing programs.
+	\item Model checking: enumerate all possible executions and states, and check each state for correctness.
+\end{itemize}
 
 SPARK tools
 FDL is the modelling language of the SPARK proof tools. 
@@ -774,11 +790,32 @@ AUnit Cookbook \cite{AUnitCookbook:Online}
 \subsection{Sireum Bakar}
 \label{background:spark:sireum}
 Overview: symbolic execution, Pilar, Kiasan and Alir \cite{Hari:Thesis}.
-Sireum Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for finding possible paths in program.
-Plugin for GNAT Programming Studio (SPARK 2005 and 2014 under development).
-Plugin for Eclipse (only for SPARK 2005).
+
+
+\subsubsection{Bakar Kiasan}
+
+Bakar Kiasan \cite{Kiasan:Paper} is a tool, which use symbolic execution for finding possible paths in program.
+Plug-in for GNAT Programming Studio (SPARK 2005 and 2014 under development).
+Plug-in for Eclipse (only for SPARK 2005).
 No support for Ravenscar profile.
 Separated sequential parts can be verified (Odometer?). Sequential version of \lstinline{Max_Drug_Per_Hour_Watcher}?
+
+
+
+[image: Kiasan report in GPS5 + code highlighted in editor]
+Describe Kiasan Report (GUI developed by me in Python PyGTK).
+T\# - Test cases (expected behavior)
+E\# - Exception cases (unexpected behavior)
+coverage
+time
+etc.
+
+combo to select case
+pre- and post state
+code highlighting
+
+\subsubsection{Bakar Kiasan}
+Quick overview \cite{Hari:Thesis}.
 
 
 \subsection{GNAT Prove}

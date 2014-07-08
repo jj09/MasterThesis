@@ -1109,7 +1109,7 @@ Based on ports mapping, presented in section \ref{codegen:mapping:ports}, transl
 \subsection{AADL property set to SPARK Ada package mapping}
 \label{codegen:mapping:propertyset}
 
-There is no equivalent construct for AADL property set in SPARK Ada. In this thesis only properties of type \lstinline{constant aadlinteger} are considered. There are issues with using non-constant in SPARK Ada (e.g. in type definition).
+There is no equivalent construct for AADL property set in SPARK Ada. In this thesis only properties of type \lstinline{constant aadlinteger} are considered. There are issues with using non-constant in SPARK Ada package (e.g. when using them in some type definition).
 
 Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK Ada package.
 
@@ -1134,9 +1134,9 @@ Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK
 		\begin{lstlisting}
 			package Some_Properties
 			is
-				Some_Property1 : constant := 10;
-				Some_Property2 : constant := 27;
-				Some_Property3 : constant := Some_Property1;
+				Some_Property1 : constant Integer := 10;
+				Some_Property2 : constant Integer := 27;
+				Some_Property3 : constant Integer := Some_Property1;
 			end Some_Properties;
 		\end{lstlisting} 		
 
