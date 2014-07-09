@@ -6,34 +6,100 @@
 \chapter{Background}
 \label{background}
 
-This chapter is brief introduction of all technologies and tools used in this thesis. There are: SPARK Ada programming language and its tools (GNAT Programming Studio, Sireum Bakar, GNATprove), AADL modeling language, BLESS (AADL annex language). There is also overview of the context in which this work has been made: Integrated Clinical Environment standard (ICE) and PCA Pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
+This chapter is a brief introduction of all technologies and tools used in this thesis. There are: AADL modeling language, BLESS (AADL annex language), SPARK Ada programming language and its verification tools. There is also overview of the context in which this work has been made: Integrated Clinical Environment standard (ICE) and PCA Pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
 
 
 
 \section{Integrated Clinical Environment}
 \label{background:ice}
-Medical devices are safety-critical systems.
 %http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
+
+Idea of "Integrated Clinical Environment" (ICE) was initiated by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create environment of different medical devices working together. It allows clinician and software system to make decisions based not only on output from one device, but from all of them together. ICE purpose is to solve current issues with medical devices usually operate independently. It requires more human attention and control through checking output of every device manually and then making decision. ICE will make it easier, by introducing alarms, which can not only indicate problem but also interact with other devices. E.g. when PCA Pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA Pump shutdown. PCA Pump, more precisely: drug which is being dosed by it, might be the cause of low oxygen level. In worst case scenario it may cause patient's death.
+
+Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. Figure \ref{figure:ice} presents high overview of ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system. All of them are monitored and controlled. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Informations in EMR comprises drug library, patient's medical records, monitoring logs etc. It enable ICE to make decisions such as PCA Pump shutdown.
+
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=3.5in]{figures/ice.png}
+    	\caption{ICE Closed Loop Control}    	
+    \end{center}
+    \label{figure:ice}
+\end{figure}
+
+[ADD MORE INFORMATION?]
+
+
+\section{Medical Device Coordination Framework}
+\label{background:mdcf}
 %http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
-%Shiwei's paper
-Medical Devices Coordination Framework is an open, experimental ICE-compliant platform to bring together academic researchers, industry vendors, and government regulators.
-Medical Devices, which are ICE compliant can be connected to MDCF. It enables Medical Devices cooperation.
-[add some pictures etc.]
+
+Medical Device Coordination Framework (MDCF), jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. Project is response to request from Food and Drug Administration (FDA) to build a prototype of ICE. Medical Devices, which are ICE compliant can be connected to MDCF. MDCF enables Medical Devices interoperability. MDCF is designed to illustrate by example the issues related to functional concepts, safety, security, verification and certification. 
+
+The goals of MDCF project comprises:
+\begin{itemize}
+	\item Open source infrastructure
+	\item Meet performance requirements of realistic clinical scenarios
+	\item Provide middleware with reliability, real-time, security
+	\item Provide an effective app programming model and development environment with integrated verification/validation support and construction of regulatory artifacts
+	\item Support evaluation of device interfacing concepts
+	\item Illustrate how to support real and mock devices
+	\item Illustrate envisioned regulatory oversight and 3rd party certification
+\end{itemize}
+
+In this thesis, part of penultimate point will be illustrated. For now, MDCF use only mock devices, which are Java desktop applications. PCA Pump Prototype aim to be first real-device.
+
+MDCF uses publish-subscribe architecture for communication between components: apps and devices. Figure \ref{figure:mdcf} presents MDCF structure. Devices, like PCA Pump, are clients. MDCF Server is integration layer which comprises Core and applications working in top of it. \cite{MDCF:Paper}.
+
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[height=3in]{figures/mdcf.png}
+    	\caption{MDCF architecture and example app virtual machine (lower right)}    	
+    \end{center}
+    \label{figure:mdcf}
+\end{figure}
+
+[ADD MORE INFORMATION?]
 
 
 
 \section{AADL}
 \label{background:aadl}
 
-AADL stands for Architecture Analysis \& Design Language. The aim of the AADL is to allow the description of Distributed Real-Time Embedded (DRE) systems by assembling separately developed blocks. Thus it focuses on the definition of clear block interfaces, and separates the implementations from those interfaces. AADL allows for the description of both software and hardware parts of a system \footnote{http://penelope.enst.fr/aadl}. 
+AADL stands for Architecture Analysis \& Design Language. It is used to model embedded and real-time systems. AADL allows for the description of both software and hardware parts of a system. It can be used not only for design phase of software development process, but also for analysis, verification or code generation.
 
-AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler \footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
+AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
 
-AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools (like Osate \ref{background:aadl:osate}), which transforms textual representation into graphical. There is also possiblity to represent AADL in XML (using 3rd party tools). 
+AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools (like Osate, see section \ref{background:aadl:osate}), which transforms textual representation into graphical. There is also possibility to represent AADL in XML (using 3rd party tools). 
 
-%https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf PAGE 24
+\begin{wrapfigure}{r}{0.3\textwidth}
+  \begin{center}
+    \includegraphics[width=0.2\textwidth]{figures/aadl-app-components.png}
+  \end{center}
+  \caption{AADL Application Software Components}
+  \label{figure:aadl_app_software_components}
+\end{wrapfigure}
 
-An example AADL model called Thermometer is shown in graphical representation in figure \ref{figure:patient_thermometer} and in textual representation in listing \ref{listing:patient_thermometer}.
+Execution Platform Components and Devices:
+\begin{itemize}
+	\item Processor / Virtual Processor - Provides thread scheduling and execution services
+	\item Memory - provides storage for data and source code
+	\item Bus / Virtual Bus - provides physical/logical connectivity between execution platform components
+	\item Device - interface to external environment
+\end{itemize}
+
+Application Software Components of AADL:
+\begin{itemize}
+	\item System - hierarchical organization of components
+	\item Process - protected address space
+	\item Thread group - logical organization of threads
+	\item Thread - a schedulable unit of concurrent execution
+	\item Data - potentially sharable data
+	\item Subprogram - callable unit of sequential code
+\end{itemize}
+
+Graphical representation of Application Software Components is depicted on figure \ref{figure:aadl_app_software_components}.
+
+An example AADL model Thermometer is shown in graphical representation, in figure \ref{figure:patient_thermometer} and in textual representation, in listing \ref{listing:patient_thermometer}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -79,25 +145,34 @@ An example AADL model called Thermometer is shown in graphical representation in
 \doublespacing
 %another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
 
-Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: STOOD \footnote{http://www.ellidiss.com/products/stood}, ADELE \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar \footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector \footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina \footnote{http://www.openaadl.org}.
+Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: STOOD\footnote{http://www.ellidiss.com/products/stood}, ADELE\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar\footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector\footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina\footnote{http://www.openaadl.org}.
 
 What is important, AADL is for architectural description. It should not be compared with UML suites, which allows to link with source code.
 
-[poprawic]
-%http://en.wikipedia.org/wiki/Architecture_Analysis_%26_Design_Language
-The language can be extended with the following methods:
+AADL can be extended with the following methods:
+\begin{itemize}
+	\item user-defined properties: user can extend the set of applicable properties and add their own to specify their own requirements
+	\item {language annexes (the core language is enhanced by annex languages that enrich the architecture description. For now, the following annexes have been defined):
+		\begin{itemize}
+			\item Behavior annex: add components behavior with state machines
+			\item Error-model annex: specifies fault and propagation concerns
+			\item ARINC653 annex: defines modelling patterns for modelling avionics system
+			\item Data-Model annex: describes the modelling of specific data constraint with AADL
+		\end{itemize}
+		}
+\end{itemize}
 
-user-defined properties: user can extend the set of applicable properties and add their own to specify their own requirements
-language annexes: the core language is enhanced by annex languages that enrich the architecture description. For now, the following annexes have been defined.
-Behavior annex: add components behavior with state machines
-Error-model annex: specifies fault and propagation concerns
-ARINC653 annex: defines modelling patterns for modelling avionics system
-Data-Model annex: describes the modelling of specific data constraint with AADL
+BLESS (described in section \ref{background:bless}) is AADL behavior annex language.
+
+More details about AADL can be found in Peter Feiler's book "Model-Based Engineering with AADL" \cite{AadlBook}.
 
 
 \subsection{OSATE}
 \label{background:aadl:osate}
-Open Source AADL Tool Environment (OSATE) is a set of plug-ins on top of the open-source Eclipse platform. It provides a toolset for front-end processing of AADL models. OSATE is developed mainly by SEI (Software Engineering Institute - CMU) \footnote{http://www.aadl.info/aadl/currentsite/tool/osate.html}. Latest available version of OSATE in the time when this work was published is OSATE2 \footnote{https://wiki.sei.cmu.edu/aadl/index.php/Osate\_2}.
+
+Open Source AADL Tool Environment (OSATE) is a set of plug-ins on top of the open-source Eclipse platform. It provides a tool set for front-end processing of AADL models. OSATE is developed mainly by SEI (Software Engineering Institute - CMU)\footnote{http://www.aadl.info/aadl/currentsite/tool/osate.html}. Latest available version of OSATE in the time when this work was published is OSATE2\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Osate\_2}. 
+
+OSATE relies on EMF, UML2 and XText. It comprises e.g. AADL project wizard, AADL Navigator or AADL syntax. OSATE enables conversion of AADL in textual representation into graphical. There are also plug-ins for OSATE, like BLESS\footnote{http://bless.santoslab.org/node/5} or OCARINA\footnote{http://libre.adacore.com/tools/ocarina/}.
 
 
 
@@ -112,7 +187,11 @@ BLESS contains three AADL annex sublanguages:
 	\item BLESS - it can be attached to AADL thread, device or system components; it contains states, transitions, timeouts, actions, events and Assertions with time expressions...
 \end{itemize}
 
-How it fits into the picture. Why it was developed. Corectness prove in AADL + behavior \cite{Bless:Paper}, from which we can generate SPARK Ada code.
+BLESS annex subclauses can be added to AADL models transparently to other uses of the system architecture. It includes a verification-condition (VC) generation framework and an accompanying proof tool that enables engineers to prove VCs via proof scripts build from system axioms and rules from a user-customizable rule library. \cite{Bless:Paper}
+
+The BLESS tool framework is implemented as a publicly available open source plug-in to the Eclipse-based OSATE environment for AADL, and includes and editor for BLESS specifications and an environment operating the BLESS proof engine. \cite{Bless:Paper}
+
+Some BLESS constructs can be translated into SPARK contracts, which is part of this thesis. Additionally, BLESS allows to model behavior of components, which is not done in this thesis.
 
 
 
