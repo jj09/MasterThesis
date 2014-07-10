@@ -765,17 +765,7 @@ Raw, generated code cannot be verified, because Examiner return syntax errors. T
 \section{AUnit tests}
 \label{verification:aunit}
 
-Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module is to create AUnit test. GNAT Programming Studio generate skeleton for all subprograms. To generate it: Tools -> GNATtest -> Generate unit test setup. This generator creates new project with AUnit tests. In order to run tests, the test project has to be opened in GNAT Programming Studio. The project is created in \lstinline{[project_dir]/gnattest/harness/test_[proj_name].gpr}. It generates empty (not implemented) test for each subprogram in project. To add/edit/remove tests or rename names, three files has to be edited:
-
-\begin{itemize}
-    \item \lstinline{[some_package]-test_data-tests.ads}
-    \item \lstinline{[some_package]-test_data-tests.adb}
-    \item \lstinline{[some_package]-test_data-tests-suite.adb}
-\end{itemize}
-
-Test has to be declared in \lstinline{[some_package]-test_data-tests.ads} and implemented in \lstinline{[some_package]-test_data-tests.adb}. Then it has to be added to test suite in \lstinline{[some_package]-test_data-tests-suite.adb} file.
-
-To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
+Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module is to create AUnit test. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
 \begin{itemize}
     \item \lstinline{Test_Move_Dosed_First_Element_Zero} - first element is 0, then after execution of the procedure dosed amount of drug should be not changed
     \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
@@ -824,6 +814,8 @@ begin
      "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " should be greater than " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
 end Test_Move_Dosed_First_Element_Not_Zero;
 \end{lstlisting}
+
+[add other test cases?]
 
 
 \section{gnatPROVE?}
