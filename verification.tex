@@ -5,7 +5,11 @@
 \chapter{Verification}
 \label{verification}
 
+% meeting with Hatcliff: check for runtime exceptions, flow analysis based on derives, see photo/whiteboard
+
 The strategy for Software Verification using SPARK tools is as follows. First, Examiner is run. It generates and discharge some Verification Conditions (VCs). Next, SPARKSimp. It runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. Along with Simplifier, ZombieScope runs to find dead paths. SPARKSimp can also run Victor (and it is in this case) to discharge VCs not discharged by Examiner nor Simplifier. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness.
+
+% verification tool chain diagram
 
 An overview of verification contracts and annotations can be found in chapter 12 of Barnes' book \cite{Barnes:Book}.
 

@@ -20,9 +20,9 @@ Moreover, ICE comprises components that may be implemented by different vendors.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=3.5in]{figures/ice.png}
-    	\caption{ICE Closed Loop Control}    	
+    	\includegraphics[height=3.5in]{figures/ice.png}   	
     \end{center}
+    \caption{ICE Closed Loop Control}
     \label{figure:ice}
 \end{figure}
 
@@ -52,9 +52,9 @@ MDCF uses publish-subscribe architecture for communication between components: a
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=3in]{figures/mdcf.png}
-    	\caption{MDCF architecture and example app virtual machine (lower right)}    	
+    	\includegraphics[height=3in]{figures/mdcf.png}    	
     \end{center}
+    \caption{MDCF architecture and example app virtual machine (lower right)}
     \label{figure:mdcf}
 \end{figure}
 
@@ -67,13 +67,13 @@ MDCF uses publish-subscribe architecture for communication between components: a
 
 AADL stands for Architecture Analysis \& Design Language. It is used to model embedded and real-time systems. AADL allows for the description of both software and hardware parts of a system. It can be used not only for design phase of software development process, but also for analysis, verification or code generation.
 
-AADL has its roots in DARPA \footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
+AADL has its roots in DARPA\footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
 
 AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools (like Osate, see section \ref{background:aadl:osate}), which transforms textual representation into graphical. There is also possibility to represent AADL in XML (using 3rd party tools). 
 
 \begin{wrapfigure}{r}{0.3\textwidth}
   \begin{center}
-    \includegraphics[width=0.2\textwidth]{figures/aadl-app-components.png}
+    \includegraphics[width=0.25\textwidth]{figures/aadl-app-components.png}
   \end{center}
   \caption{AADL Application Software Components}
   \label{figure:aadl_app_software_components}
@@ -103,9 +103,9 @@ An example AADL model Thermometer is shown in graphical representation, in figur
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=1.5in]{figures/patient_thermometer.png}
-    	\caption{AADL model of simple thermometer}
+    	\includegraphics[height=1.5in]{figures/patient_thermometer.png}    	
     \end{center}
+    \caption{AADL model of simple thermometer}
     \label{figure:patient_thermometer}
 \end{figure}
 
@@ -202,13 +202,16 @@ Some BLESS constructs can be translated into SPARK contracts, which is part of t
 
 %http://www.cs.swan.ac.uk/~csetzer/lectures/critsys/09/critsysfinal2.pdf
 
-First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defense Requirements formalized in "Steelman" document\footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012)\footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing\footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety.
+First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defense Requirements formalized in "Steelman" document\footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012)\footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing\footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety. Because of its requirements, Ada minimize developer responsibility in comparison to other programming languages in such a way, that language capabilities and tools assure correctness. 
+
+[SHOULD I REFER TO FIGURE \ref{figure:developer-responsibility-in-ada}? ALL FIGURES HAVE TO BE REFERENCED IN TEXT?]
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=3.5in]{figures/developer_responsibility_in_ada.png}
-    	\caption{Developer responsibility in Ada\protect\footnotemark. }    	
+    	\includegraphics[height=3.5in]{figures/developer_responsibility_in_ada.png}    	
     \end{center}
+    \caption{Developer responsibility in Ada\protect\footnotemark. }
+    \label{figure:developer-responsibility-in-ada}
 \end{figure}
 \footnotetext{http://www.slideshare.net/AdaCore/ada-2012}
 
@@ -488,7 +491,7 @@ The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and A
 
 Ravenscar profile is available in SPARK 2005, but not yet in SPARK 2014\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}. Default profile (sequential) does not enable tasking. In other words, SPARK tools cannot analyze and reason about concurrent programs if Ravenscar profile flag is not provided.
 
-To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. [what is priorities range?] Listing \ref{lst:SampleTask} shows sample package with two tasks.
+To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allow dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
 \singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
@@ -724,9 +727,9 @@ Techniques for Static Verification:
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=0.6\textheight]{figures/spark-tools.png}
-    	\caption{Relationship of the Examiner and Proof Tools\protect\footnotemark.}
+    	\includegraphics[height=0.6\textheight]{figures/spark-tools.png}    	
     \end{center}
+    \caption{Relationship of the Examiner and Proof Tools\protect\footnotemark.}
     \label{figure:spark-tools}
 \end{figure}
 \footnotetext{http://docs.adacore.com/sparkdocs\-docs/Examiner\_UM.htm}
@@ -784,17 +787,17 @@ To use Examiner in GNAT Programming Studio:
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3in]{figures/SPARKMake.png}
-    	\caption{Run SPARK Make}
+    	\includegraphics[width=3in]{figures/SPARKMake.png}    	
     \end{center}
+    \caption{Run SPARK Make}
     \label{figure:sparkmake}
 \end{figure}
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3in]{figures/Properties-Switches-Examiner.png}
-    	\caption{Examiner Properties}
+    	\includegraphics[width=3in]{figures/Properties-Switches-Examiner.png}    	
     \end{center}
+    \caption{Examiner Properties}
     \label{figure:examinerproperties}
 \end{figure}
 
@@ -924,6 +927,8 @@ Sireum Bakar currently includes:
 	\item Kiasan
 \end{itemize}
 
+Sireum distribution is available for Windows (32-bit, 64-bit), Linux (32-bit, 64-bit) and MacOS (64-bit). It can be downloaded from \lstinline{http://www.sireum.org/}.
+
 
 \subsubsection{Bakar Kiasan}
 
@@ -944,9 +949,9 @@ After double click on some unit, code which is executed during execution of this
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=1\textwidth]{figures/kiasan-sample.png}
-    	\caption{Bakar Kiasan report}
+    	\includegraphics[width=1\textwidth]{figures/kiasan-sample.png}    	
     \end{center}
+    \caption{Bakar Kiasan report}
     \label{figure:kiasan-sample}
 \end{figure}
 
@@ -960,32 +965,43 @@ Alir is an information flow analysis tool for reasoning about SPARK's derive cla
 
 \subsection{GNAT Prove}
 \label{background:spark:gnatprove}
-GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It interprets SPARK Ada annotations exactly like they are interpreted at run time during tests.
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
-% only for SPARK 2014
+% https://github.com/openETCS/model-evaluation/wiki/Gnatprove-description
+
+GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It is based on the GNAT compiler. GNATprove interprets SPARK Ada annotations exactly like they are interpreted at run time during tests. It can prove that subprograms respect their contracts, expressed as preconditions and postconditions in the syntax of Ada 2012. The tool automatically discovers the subset of subprograms which can be formally analyzed. GNATprove is currently available for x86 linux, x86 windows and x86-64 linux.
+
+[Add more details? Some example like in Kiasan section?]
+
 
 
 \section{AADL/BLESS to SPARK Ada code generation}
 \label{background:codegen}
-The ultimate goal of long term research, this thesis is part of, is AADL (with BLESS) to SPARK Ada translation.
+
+The ultimate goal of long term research, this thesis is part of, is AADL (with BLESS) to SPARK Ada translation. There are already existing tools, which performs code generation based on AADL:
+\begin{itemize}
+	\item Ocarina
+	\item Ramses
+\end{itemize}
 
 
 \subsection{Ocarina}
 \label{background:codegen:ocarina}
-Ocarina \cite{Ocarina:Paper,Ocarina:Paper} generates code from an AADL architecture model to an Ada application running on top of PolyORB framework. In this context, PolyORB acts as both the distribution middleware and execution runtime on all targets supported by PolyORB.
-It generate Ada 2005 and C code.
+
+
+Ocarina \cite{Ocarina:Paper} is a tool suite, which contains plug-ins for code generation, model checking and analysis. The code generation plug-in generates code from an AADL architecture model to an Ada or C application running on top of PolyORB framework. In this context, PolyORB acts as both the distribution middleware and execution runtime on all targets supported by PolyORB. Ocarina is written in Ada.
+
+There is plug-in for OSATE (see section \ref{background:aadl:osate}), which enables code generation. Example AADL models, suitable for being an input of Ocarina are available on github repository: \lstinline{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2}.
+
 Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{Ocarina:About:Online}.
 
-examples on github
+[Include some examples and generated code? E.g. prod-cons example?]
 
-run:
-ocarina -x scenario.aadl
-
-
-
-\subsection{Ramses}
+\subsection{RAMSES}
 \label{background:codegen:ramses}
-% very shortly
-RAMSES is a model transformation framework dedicated to the refinement of AADL models. It contains code generation plug-in.
+% http://penelope.enst.fr/aadl/wiki/Projects
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
-% https://wiki.sei.cmu.edu/aadl/index.php/OSATE_2_on_the_command-line
+
+RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) is a model transformation and code generation tool. It is written in Java. RAMSES produces C code, but does not generate Ada. It simplify AADL models, in order to generate C code. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
+
+[I didn't find much about RAMSES online...]
+

@@ -25,11 +25,28 @@ Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency 
 
 Running programs on BB (ch.3 from 721 paper)
 
+To run SPARK Ada programs on BeagleBoard-xM GNAT cross-compiler was used. It compiles and links SPARK Ada 2005 single and multitasking programs without any problems. In case of SPARK Ada 2014 only single tasking programs are allowed. Tasking features are not yet in SPARK 2014, which is under development. After successful compilation and linking, there was no issues with running programs on BeagleBoard-xM. Moreover, their behaviour on Intel processor (PC or MacBook) is the same like on ARM device.
+
 
 \section{Implementation based on Requirements Document}
 
+In this thesis, only the operation module is implemented.
+
 The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
 
+Pump internal implementation based on \cite{CADD-PrizmAmbulatoryInfusionPump:Online}.
+- basal dose deliver in increments - easier to track delivered amount (page 14)
+
+The pump has three tasks in total:
+\begin{itemize}
+    \item main task (requesting boluses, displaying volume infused etc.)
+    \item rate controller - to control the speed of infusion rate
+    \item max drug per hour watcher - to control overinfusion
+\end{itemize}
+
+The main PCA Pump Package can be verified using SPARK tools. The Pump engine (motor) is separated entity. It has an interface allowing request infusion of 0.1 ml of drug.
+
+PCA Pump prototype was developed based on Requirements Documentation created by Brian Larson, John Hatcliff and Partice Chalin \cite{PcaReq}.
 
 
 \section{Code generation from AADL models}
