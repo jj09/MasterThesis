@@ -6,6 +6,7 @@
 \chapter{PCA Pump Prototype Implementation}
 \label{pcapumpimpl}
 
+
 Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. For SPARK 2005, GNAT compiler provides Ravenscar Profile \cite{Ravenscar:Online}. It provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs.
 
 In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation.
@@ -23,6 +24,18 @@ Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency 
 \section{BeagleBoard-XM}
 \label{pcapumpimpl:beagleboard}
 
+
+Expansion port 14(PWM) and 28(GND?)
+GPIO158
+Java Program to Run the pump for 10 seconds
+
+Include source of simple program?
+GNAT cross-compiler only for Linux Platform (cross-compilation has to be done on Linux).
+
+compilation+linking command: \lstinline{arm-linux-gnueabi-gnatmake -d -Ppca_ravenscar.gpr}.
+
+%describe how to run the program: compile cmd with arm-gnuaebi... then copy to the board etc.
+
 Running programs on BB (ch.3 from 721 paper)
 
 To run SPARK Ada programs on BeagleBoard-xM GNAT cross-compiler was used. It compiles and links SPARK Ada 2005 single and multitasking programs without any problems. In case of SPARK Ada 2014 only single tasking programs are allowed. Tasking features are not yet in SPARK 2014, which is under development. After successful compilation and linking, there was no issues with running programs on BeagleBoard-xM. Moreover, their behaviour on Intel processor (PC or MacBook) is the same like on ARM device.
@@ -30,7 +43,7 @@ To run SPARK Ada programs on BeagleBoard-xM GNAT cross-compiler was used. It com
 
 \section{Implementation based on Requirements Document}
 
-In this thesis, only the operation module is implemented.
+In this thesis, only the operation module is implemented. Req doc don't specified all implementation details, like how basal rate should be infused.
 
 The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
 
