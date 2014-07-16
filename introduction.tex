@@ -6,36 +6,29 @@
 \chapter{Introduction}
 \label{introduction}
 
-Software is present in all aspects of our life. From the simple program in alarm clock to IPad, through cars, refrigerators and computers. Moreover, our lives are getting more and more depended on Software. Usually when we think about Software, we think about Applications for PC or Smart Phone. E.g. Calculator, Word processor or Stock Market application. In this case, rapid development and smooth operation is a key. However, there is also another, very important class of Software: Safety Critical Systems. It comprises software for Airplanes, Medical Devices, Satellites or Rockets.
+Software is present in all aspects of our life. From the simple program in alarm clock to iPad, through cars, refrigerators and computers. Moreover, our lives are getting more and more depended on Software. Usually when we think about Software, we think about Applications for PC or Smart Phone. E.g. Calculator, Word processor or Stock Market application. In this case, rapid development and smooth operation is a key. However, there is also another, very important class of Software: Safety Critical Systems. It comprises software for Airplanes, Medical Devices, Satellites or Rockets.
 
-Software Engineering for Real-Time and Safety-Critical Systems is very different than creating Business applications. In both types of software we want to ensure correctness and security. However, in each of them, to different extent. In case of mentioned Word processor, software assurance is not critical. When it crashes, it can be restarted. In worst case some part of work is lost. Airplane software crash may put human life in danger or even cause the death. Thus for Safety-Critical systems, the security and correctness is crucial. Behind these reasons, different Software Design methodology and different properties of programming language and its tools are needed.
+Software Engineering for Real-Time and Safety-Critical Systems is very different than creating Business applications. In both types of software we want to ensure correctness and security. However, in each of them, to different extent. In case of mentioned Word processor, software assurance is not critical. When it crashes, it can be restarted. In worst case scenario, some part of work might be lost. Airplane software crash may put human life in danger or even cause the death. Thus for Safety-Critical systems, the security and correctness are crucial. Behind these reasons, different Software Design methodology and different properties of programming language and its tools are needed.
 
-The most important part of Safety-Critical Systems Design is hazard analysis. How to avoid unintentional states and how to recover from them. Hazard can cause: incident or accident. Former is an event, which not cause loss (but undesired), and could lead to accident. Latter cause the loss (undesired). Hazard analysis can be done manually by human or automatically by software tools. Both AADL and SPARK Ada contains variety of them.
+The most important part of Safety-Critical Systems Design is hazard analysis. How to avoid unintentional states and how to recover from them. Hazard can cause incident or accident. Former is an event, which not cause a loss (but undesired), and could lead to accident. Latter cause the loss (and it is also undesired). Hazard analysis can be done manually by human or automatically by software tools. AADL, BLESS and SPARK Ada contains variety of them.
 
 
 \section{Motivation}
 \label{introduction:motivation}
-There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between different Medical Devices. Drug dosed by PCA Pump may affect patient's level of oxygen and carbon dioxide. Thus adequate monitoring of patient's levels of oxygen and carbon dioxide is required. Moreover, integrated system, which will take adequate action in case of hazard is needed. The solution for such a problem is to create "Integrated Clinical Environment" (ICE). SAnToS Lab at Kansas State University, in cooperation with University of Pennsylvania are working on Medical Device Coordination Framework (MDCF) \cite{MedicalApplicationPlatforms:Paper}, which is prototype implementation of ICE. It is an open source framework for coordinating multiple medical devices to work together.
+There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between them. Drug dosed by PCA Pump may affect patient's level of oxygen and carbon dioxide level. Thus adequate monitoring of patient's levels of oxygen and carbon dioxide is required. Moreover, integrated system, which will take adequate action in case of hazard is needed. The solution for such a problem is "Integrated Clinical Environment" (ICE). SAnToS Lab at Kansas State University, in cooperation with University of Pennsylvania are working on Medical Device Coordination Framework (MDCF) \cite{MedicalApplicationPlatforms:Paper}, which is prototype implementation of ICE. It is an open source framework for coordinating multiple medical devices to work together.
 
-Devices working under MDCF have to satisfy some requirements. To make Developer's life easier, the requirements will be not only in documentation, but also in code. The code will be generated from models.
-Model Driven Development in this case means that there will be some base models (in AADL) for medical devices development. Developer will extend and customize them according to his needs. In the same fashion like File > 'New Java project' in Eclipse, File > 'New Medical device project' will work in GNAT Programming Studio. AADL/BLESS Model will be specification and requirements. In addition to MDCF, which coordinates Medical Devices, we want set of AADL/BLESS models, which can be automatically translated to SPARK Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
+Devices working under MDCF have to satisfy some requirements. To make Developer's life easier, the requirements will be not only in documentation, but also in AADL/BLESS models. Model Driven Development in this case means that there from base models (in AADL/BLESS) for medical devices development, skeleton code (in SPARK Ada) will be generated. Then developer will extend and customize them according to his needs. In the same fashion like File > 'New Java project' in Eclipse, File > 'New Medical device project' will work in GNAT Programming Studio. AADL/BLESS Model will be specification and requirements. The ultimate goal is to create set of AADL/BLESS models for different medical devices, which can be automatically translated to SPARK Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
 
-[remove below?]
-PCA Pump is as an example of Medical Device, which ultimately will work under MDCF.
-
-Why AADL? Because it describes hardware and software. It allows to validate that the software will work on some device.
-Why SPARK? Because it contains set of verification tools. 
-
-SPARK is a subset of Ada language, which is easy to deal with it. In the future, when everything will be done (in case of proving perspective) in SPARK, it will (probably) be extended. Maybe finally, there will be no SPARK, but only Ada. Thus for now, SPARK is temporary subset of Ada for reasoning and correctness proving.
+PCA pump prototype created in this thesis is as an example of Medical Device, which ultimately will work under MDCF.
 
 
 \section{Goals}
 \label{introduction:goals}
 The initial goals, which most of them is accomplished are as follows:
 \begin{itemize}
-	\item learn about PCA Pump and Infusion pumps properties
+	\item identify PCA Pump and Infusion pumps properties and internals required for implementation
 	\item SPARK Ada cross-compilation for ARM-device (BeagleBoard-xM)
-	\item implement PCA Pump based on Brian Larson's Requirement Document \cite{OpenSourcePCAPump:Paper} (using Ravenscar profile)
+	\item implement PCA Pump based on Brian Larson's Requirement Document \cite{OpenSourcePCAPump:Paper}
 	\item develop AADL/BLESS to SPARK Ada mapping
 	\item mock PCA Pump AADL/BLESS models in SPARK Ada (based on created mapping and implementation)
 	\item implement not generated part (based on implementation) [NOT ACCOMPLISHED - REMOVE?]
@@ -45,7 +38,7 @@ The initial goals, which most of them is accomplished are as follows:
 			\item SPARK Examiner
 			\item SPARK Simplifier
 			\item Proof Obligation Summarizer (POGS)
-			\item Sireum Kiasan
+			\item Bakar Kiasan
 			\item GNATprove
 		\end{itemize}
 \end{itemize}
@@ -60,8 +53,8 @@ This thesis demonstrates how AADL/BLESS models can be mapped to SPARK Ada. Addit
 	\item Review of PCA Pump Requirements document \cite{OpenSourcePCAPump:Paper}
 	\item Cross-compilation and testing of SPARK Ada 2005 and 2014 code on BeagleBoard-xM platform
 	\item Implementation of PCA Pump based on Requirements document \cite{OpenSourcePCAPump:Paper} and AADL/BLESS models, which validates them
-	\item Creation of 
-	\item Analysis of different implementation possibilities
+	\item Creation of PCA pump prototype
+	\item Analysis of different PCA pump implementation possibilities
 	\item AADL/BLESS to SPARK Ada translation schemes
 	\item Practical demonstration of SPARK 2005 verification tools: its capabilities and limitations
 \end{itemize}
@@ -72,13 +65,13 @@ This thesis demonstrates how AADL/BLESS models can be mapped to SPARK Ada. Addit
 The thesis is organized in \ref{future_work} [fix this: how to count all chapters?] chapters:
 \begin{itemize}
 	\item Chapter \ref{introduction} is the problem description and summary of contribution which has been made. 
-	\item Chapter \ref{background} is Background that gives details about ICE, MDCF, Model Driven Development, SPARK Ada, AADL/BLESS and available tools for such environment. 
-	\item Chapter \ref{pcapump} describe Patient-Controlled Analgesia (PCA) pump.
-	\item Chapter \ref{codegen} is about code generation from the model. 
+	\item Chapter \ref{background} is Background that gives details about ICE, MDCF, Model Driven Development, AADL/BLESS, SPARK Ada and available tools for such environment. 
+	\item Chapter \ref{pcapump} describes Patient-Controlled Analgesia (PCA) pump.
+	\item Chapter \ref{codegen} presents mappings from AADL/BLESS to SPARK Ada. 
 	\item Chapter \ref{pcapumpimpl} describes the implementation of PCA Pump Prototype. Faced issues and design decisions made.
 	\item Chapter \ref{verification} describes verification of implemented PCA Pump Prototype. 
 	\item Chapter \ref{summary} summarizes all work which has been done in this thesis. 
-	\item Chapter \ref{future_work} is the future work that can be done on this topic. In other words: how to continue work started in this thesis.
+	\item Chapter \ref{future_work} is the future work that can be done on this topic.
 \end{itemize}
 
 

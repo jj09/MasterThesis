@@ -35,8 +35,8 @@
 \citation{OpenSourcePCAPump:Paper}
 \@writefile{toc}{\contentsline {section}{\numberline {1.3}Contribution}{4}{section.1.3}}
 \newlabel{introduction:contribution}{{1.3}{4}{Contribution\relax }{section.1.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {1.4}Organization}{5}{section.1.4}}
-\newlabel{introduction:organization}{{1.4}{5}{Organization\relax }{section.1.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}Organization}{4}{section.1.4}}
+\newlabel{introduction:organization}{{1.4}{4}{Organization\relax }{section.1.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {1.5}Terms and Acronyms}{5}{section.1.5}}
 \newlabel{introduction:terms}{{1.5}{5}{Terms and Acronyms\relax }{section.1.5}{}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {2}Background}{7}{chapter.2}}
@@ -297,95 +297,106 @@
     {5}{228.81pt}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.10}{BLESS to SPARK contracts mapping.}}{75}{table.4.10}}
 \newlabel{table:bless2spark}{{4.10}{75}{BLESS to SPARK contracts mapping}{table.4.10}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Port communication}{76}{section.4.2}}
-\newlabel{codegen:port_communication}{{4.2}{76}{Port communication\relax }{section.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Example of port communication}}{76}{figure.4.1}}
-\newlabel{figure:port_communication}{{4.2}{76}{Port communication\relax }{figure.4.1}{}}
-\newlabel{listing:port_communication}{{4.7}{76}{AADL model of port communication\relax }{lstlisting.4.7}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.7}AADL model of port communication}{76}{lstlisting.4.7}}
-\newlabel{listing:port_communication_spark}{{4.8}{78}{Port communication translated to SPARK Ada\relax }{lstlisting.4.8}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.8}Port communication translated to SPARK Ada}{78}{lstlisting.4.8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Example of two way port communication}}{80}{figure.4.2}}
-\newlabel{figure:port_communication_two_way}{{4.2}{80}{Port communication\relax }{figure.4.2}{}}
-\newlabel{listing:port_communication_two_way}{{4.9}{80}{AADL model of two way port communication\relax }{lstlisting.4.9}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.9}AADL model of two way port communication}{80}{lstlisting.4.9}}
-\newlabel{listing:port_communication_two_way_spark}{{4.10}{82}{Two way port communication translated to SPARK Ada\relax }{lstlisting.4.10}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.10}Two way port communication translated to SPARK Ada}{82}{lstlisting.4.10}}
-\newlabel{listing:port_communication_two_way_pump_package_fix}{{4.11}{84}{Modified \lstinline {Pump} package, which passes Examiner syntax check\relax }{lstlisting.4.11}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.11}Modified \lstinline {Pump} package, which passes Examiner syntax check}{84}{lstlisting.4.11}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Automatic translator}{85}{section.4.3}}
-\newlabel{codegen:translator}{{4.3}{85}{Automatic translator\relax }{section.4.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Port-based communication}{76}{section.4.2}}
+\newlabel{codegen:port_communication}{{4.2}{76}{Port-based communication\relax }{section.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Threads communication}{76}{subsection.4.2.1}}
+\newlabel{codegen:port_communication:thread}{{4.2.1}{76}{Threads communication\relax }{subsection.4.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Example of port communication between threads}}{76}{figure.4.1}}
+\newlabel{figure:port_communication_thread}{{4.2.1}{76}{Threads communication\relax }{figure.4.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.11}{\ignorespaces AADL threads communication to SPARK Ada tasks communication translation}}{77}{table.4.11}}
+\newlabel{table:port_communication_thread}{{4.11}{77}{AADL threads communication to SPARK Ada tasks communication translation\relax }{table.4.11}{}}
+\gdef \LT@ix {\LT@entry 
+    {5}{156.54pt}\LT@entry 
+    {5}{301.07999pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.12}{AADL threads communication to SPARK Ada tasks communication translation (multiple packages)}}{78}{table.4.12}}
+\newlabel{table:port_communication_thread_different_pkg}{{4.12}{78}{AADL threads communication to SPARK Ada tasks communication translation (multiple packages)\relax }{table.4.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Example of two way port communication between threads in different packages}}{80}{figure.4.2}}
+\newlabel{figure:port_communication_thread_two_way}{{4.2.1}{80}{Threads communication\relax }{figure.4.2}{}}
+\newlabel{listing:port_communication_thread_two_way}{{4.7}{80}{AADL model of two way port communication threads in different packages\relax }{lstlisting.4.7}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.7}AADL model of two way port communication threads in different packages}{80}{lstlisting.4.7}}
+\newlabel{listing:port_communication_thread_two_way_spark}{{4.8}{81}{Two way port communication translated to SPARK Ada\relax }{lstlisting.4.8}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.8}Two way port communication translated to SPARK Ada}{81}{lstlisting.4.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Systems communication}{83}{subsection.4.2.2}}
+\newlabel{codegen:port_communication:system}{{4.2.2}{83}{Systems communication\relax }{subsection.4.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Example of port communication between systems}}{83}{figure.4.3}}
+\newlabel{figure:port_communication}{{4.2.2}{83}{Systems communication\relax }{figure.4.3}{}}
+\newlabel{listing:port_communication}{{4.9}{83}{AADL model of port communication between systems\relax }{lstlisting.4.9}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.9}AADL model of port communication between systems}{83}{lstlisting.4.9}}
+\newlabel{listing:port_communication_spark}{{4.10}{85}{Port communication translated to SPARK Ada\relax }{lstlisting.4.10}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.10}Port communication translated to SPARK Ada}{85}{lstlisting.4.10}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Automatic translator}{87}{section.4.3}}
+\newlabel{codegen:translator}{{4.3}{87}{Automatic translator\relax }{section.4.3}{}}
 \citation{Spark2014refManual:Online}
 \citation{Ravenscar:Online}
 \citation{Ravenscar:Online}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}PCA Pump Prototype Implementation}{87}{chapter.5}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}PCA Pump Prototype Implementation}{89}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{pcapumpimpl}{{5}{87}{PCA Pump Prototype Implementation\relax }{chapter.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Concurrency in SPARK Ada}{87}{section.5.1}}
-\newlabel{pcapump:implementation:concurrency}{{5.1}{87}{Concurrency in SPARK Ada\relax }{section.5.1}{}}
+\newlabel{pcapumpimpl}{{5}{89}{PCA Pump Prototype Implementation\relax }{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Concurrency in SPARK Ada}{89}{section.5.1}}
+\newlabel{pcapump:implementation:concurrency}{{5.1}{89}{Concurrency in SPARK Ada\relax }{section.5.1}{}}
 \citation{CADD-PrizmAmbulatoryInfusionPump:Online}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}BeagleBoard-XM}{88}{section.5.2}}
-\newlabel{pcapumpimpl:beagleboard}{{5.2}{88}{BeagleBoard-XM\relax }{section.5.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Implementation based on Requirements Document}{88}{section.5.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}BeagleBoard-XM}{90}{section.5.2}}
+\newlabel{pcapumpimpl:beagleboard}{{5.2}{90}{BeagleBoard-XM\relax }{section.5.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Implementation based on Requirements Document}{90}{section.5.3}}
 \citation{PcaReq}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}Code generation from AADL models}{89}{section.5.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}Implementation for generated code}{89}{section.5.5}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Code generation from AADL models}{91}{section.5.4}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Implementation for generated code}{91}{section.5.5}}
 \citation{Examiner:Online}
 \citation{Barnes:Book}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Verification}{91}{chapter.6}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Verification}{93}{chapter.6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{verification}{{6}{91}{Verification\relax }{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Verification of implemented prototype}{91}{section.6.1}}
-\newlabel{verification:prototype}{{6.1}{91}{Verification of implemented prototype\relax }{section.6.1}{}}
-\newlabel{listing:pcapump_prototype_pogs}{{6.1}{92}{POGS report for PCA Pump prototype\relax }{lstlisting.6.1}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}POGS report for PCA Pump prototype}{92}{lstlisting.6.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Monitoring dosed amount}{92}{section.6.2}}
-\newlabel{verification:pcapump:monitoring}{{6.2}{92}{Monitoring dosed amount\relax }{section.6.2}{}}
-\newlabel{listing:pcapump_dosemonitor_spec}{{6.2}{92}{Dose monitor module specification\relax }{lstlisting.6.2}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.2}Dose monitor module specification}{92}{lstlisting.6.2}}
-\newlabel{listing:pcapump_dosemonitor_body}{{6.3}{93}{Dose monitor module body\relax }{lstlisting.6.3}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.3}Dose monitor module body}{93}{lstlisting.6.3}}
-\newlabel{listing:pcapump_dosemonitor_sparksimp}{{6.4}{94}{SPARKSimp output\relax }{lstlisting.6.4}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.4}SPARKSimp output}{94}{lstlisting.6.4}}
-\newlabel{listing:pcapump_dosemonitor_pogs}{{6.5}{95}{POGS report\relax }{lstlisting.6.5}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.5}POGS report}{95}{lstlisting.6.5}}
-\newlabel{listing:pcapump_dosemonitor_pogs2}{{6.6}{101}{Second POGS report\relax }{lstlisting.6.6}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.6}Second POGS report}{101}{lstlisting.6.6}}
+\newlabel{verification}{{6}{93}{Verification\relax }{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Verification of implemented prototype}{93}{section.6.1}}
+\newlabel{verification:prototype}{{6.1}{93}{Verification of implemented prototype\relax }{section.6.1}{}}
+\newlabel{listing:pcapump_prototype_pogs}{{6.1}{94}{POGS report for PCA Pump prototype\relax }{lstlisting.6.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}POGS report for PCA Pump prototype}{94}{lstlisting.6.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Monitoring dosed amount}{94}{section.6.2}}
+\newlabel{verification:pcapump:monitoring}{{6.2}{94}{Monitoring dosed amount\relax }{section.6.2}{}}
+\newlabel{listing:pcapump_dosemonitor_spec}{{6.2}{94}{Dose monitor module specification\relax }{lstlisting.6.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.2}Dose monitor module specification}{94}{lstlisting.6.2}}
+\newlabel{listing:pcapump_dosemonitor_body}{{6.3}{95}{Dose monitor module body\relax }{lstlisting.6.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.3}Dose monitor module body}{95}{lstlisting.6.3}}
+\newlabel{listing:pcapump_dosemonitor_sparksimp}{{6.4}{96}{SPARKSimp output\relax }{lstlisting.6.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.4}SPARKSimp output}{96}{lstlisting.6.4}}
+\newlabel{listing:pcapump_dosemonitor_pogs}{{6.5}{97}{POGS report\relax }{lstlisting.6.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.5}POGS report}{97}{lstlisting.6.5}}
+\newlabel{listing:pcapump_dosemonitor_pogs2}{{6.6}{103}{Second POGS report\relax }{lstlisting.6.6}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.6}Second POGS report}{103}{lstlisting.6.6}}
 \citation{OpenSourcePCAPump:Paper}
-\newlabel{listing:sum_function}{{6.7}{107}{Sum function for summing all elements of array\relax }{lstlisting.6.7}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.7}Sum function for summing all elements of array}{107}{lstlisting.6.7}}
-\newlabel{listing:postconditions_added_to_move_dosed}{{6.8}{107}{Postconditions added to Move\_Dosed procedure\relax }{lstlisting.6.8}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.8}Postconditions added to Move\_Dosed procedure}{107}{lstlisting.6.8}}
-\newlabel{listing:pcapump_dosemonitor_pogs3}{{6.9}{108}{Third POGS report\relax }{lstlisting.6.9}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.9}Third POGS report}{108}{lstlisting.6.9}}
-\newlabel{listing:pcapump_undischarged_vc_increase_dosed}{{6.10}{110}{Undischarged Verification Condition from increase\_dosed.siv file\relax }{lstlisting.6.10}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.10}Undischarged Verification Condition from increase\_dosed.siv file}{110}{lstlisting.6.10}}
-\newlabel{listing:pcapump_undischarged_vc_move_dosed}{{6.11}{110}{Undischarged Verification Condition from move\_dosed.siv file\relax }{lstlisting.6.11}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.11}Undischarged Verification Condition from move\_dosed.siv file}{110}{lstlisting.6.11}}
-\newlabel{listing:pcapump_undischarged_vc_read_dosed}{{6.12}{110}{Undischarged Verification Condition from read\_dosed.siv file\relax }{lstlisting.6.12}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.12}Undischarged Verification Condition from read\_dosed.siv file}{110}{lstlisting.6.12}}
-\newlabel{listing:pcapump_undischarged_vc_sum}{{6.13}{111}{Undischarged Verification Condition from sum.siv file\relax }{lstlisting.6.13}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.13}Undischarged Verification Condition from sum.siv file}{111}{lstlisting.6.13}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Verification of generated code}{112}{section.6.3}}
-\newlabel{verification:generated}{{6.3}{112}{Verification of generated code\relax }{section.6.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Adding implementation to generated code}{112}{subsection.6.3.1}}
-\newlabel{verification:generated:implementation}{{6.3.1}{112}{Adding implementation to generated code\relax }{subsection.6.3.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}AUnit tests}{112}{section.6.4}}
-\newlabel{verification:aunit}{{6.4}{112}{AUnit tests\relax }{section.6.4}{}}
-\newlabel{listing:pca_pump_move_dosed_unit_tests}{{6.14}{113}{AUnit tests for Move\_Dosed procedure\relax }{lstlisting.6.14}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.14}AUnit tests for Move\_Dosed procedure}{113}{lstlisting.6.14}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.5}gnatPROVE?}{114}{section.6.5}}
-\newlabel{verification:gnatprove}{{6.5}{114}{gnatPROVE?\relax }{section.6.5}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Summary}{115}{chapter.7}}
+\newlabel{listing:sum_function}{{6.7}{109}{Sum function for summing all elements of array\relax }{lstlisting.6.7}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.7}Sum function for summing all elements of array}{109}{lstlisting.6.7}}
+\newlabel{listing:postconditions_added_to_move_dosed}{{6.8}{109}{Postconditions added to Move\_Dosed procedure\relax }{lstlisting.6.8}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.8}Postconditions added to Move\_Dosed procedure}{109}{lstlisting.6.8}}
+\newlabel{listing:pcapump_dosemonitor_pogs3}{{6.9}{110}{Third POGS report\relax }{lstlisting.6.9}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.9}Third POGS report}{110}{lstlisting.6.9}}
+\newlabel{listing:pcapump_undischarged_vc_increase_dosed}{{6.10}{112}{Undischarged Verification Condition from increase\_dosed.siv file\relax }{lstlisting.6.10}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.10}Undischarged Verification Condition from increase\_dosed.siv file}{112}{lstlisting.6.10}}
+\newlabel{listing:pcapump_undischarged_vc_move_dosed}{{6.11}{112}{Undischarged Verification Condition from move\_dosed.siv file\relax }{lstlisting.6.11}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.11}Undischarged Verification Condition from move\_dosed.siv file}{112}{lstlisting.6.11}}
+\newlabel{listing:pcapump_undischarged_vc_read_dosed}{{6.12}{112}{Undischarged Verification Condition from read\_dosed.siv file\relax }{lstlisting.6.12}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.12}Undischarged Verification Condition from read\_dosed.siv file}{112}{lstlisting.6.12}}
+\newlabel{listing:pcapump_undischarged_vc_sum}{{6.13}{113}{Undischarged Verification Condition from sum.siv file\relax }{lstlisting.6.13}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.13}Undischarged Verification Condition from sum.siv file}{113}{lstlisting.6.13}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Verification of generated code}{114}{section.6.3}}
+\newlabel{verification:generated}{{6.3}{114}{Verification of generated code\relax }{section.6.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Adding implementation to generated code}{114}{subsection.6.3.1}}
+\newlabel{verification:generated:implementation}{{6.3.1}{114}{Adding implementation to generated code\relax }{subsection.6.3.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}AUnit tests}{114}{section.6.4}}
+\newlabel{verification:aunit}{{6.4}{114}{AUnit tests\relax }{section.6.4}{}}
+\newlabel{listing:pca_pump_move_dosed_unit_tests}{{6.14}{115}{AUnit tests for Move\_Dosed procedure\relax }{lstlisting.6.14}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.14}AUnit tests for Move\_Dosed procedure}{115}{lstlisting.6.14}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}gnatPROVE?}{116}{section.6.5}}
+\newlabel{verification:gnatprove}{{6.5}{116}{gnatPROVE?\relax }{section.6.5}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Summary}{117}{chapter.7}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{summary}{{7}{115}{Summary\relax }{chapter.7}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Future work}{116}{chapter.8}}
+\newlabel{summary}{{7}{117}{Summary\relax }{chapter.7}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Future work}{118}{chapter.8}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{future_work}{{8}{116}{Future work\relax }{chapter.8}{}}
+\newlabel{future_work}{{8}{118}{Future work\relax }{chapter.8}{}}
 \bibdata{references}
 \bibcite{Ravenscar:Article}{{AB04}{}{{}}{{}}}
 \bibcite{AUnitCookbook:Online}{{Ada14}{}{{}}{{}}}
@@ -394,7 +405,7 @@
 \bibcite{Barnes:Book}{{Bar13}{}{{}}{{}}}
 \bibcite{Kiasan:Paper}{{BHR{$^{+}$}11}{}{{}}{{}}}
 \bibcite{PrototypyingAadl:Paper}{{CB09}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{117}{section*.12}}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{120}{section*.12}}
 \bibcite{Spark:IndustrialExp}{{Cha00}{}{{}}{{}}}
 \bibcite{Spark2014:Paper}{{DEL{$^{+}$}14}{}{{}}{{}}}
 \bibcite{AUnitTutorials:Online}{{Fal14}{}{{}}{{}}}
@@ -419,20 +430,20 @@
 \bibcite{Simplifier:Online}{{Tea11c}{}{{}}{{}}}
 \bibcite{Ravenscar:Online}{{Tea12}{}{{}}{{}}}
 \bibcite{Hari:Thesis}{{Thi11}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Simplified PCA Pump AADL/BLESS models}{121}{appendix.A}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Simplified PCA Pump AADL/BLESS models}{124}{appendix.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{Appendix:AADL}{{A}{121}{Simplified PCA Pump AADL/BLESS models\relax }{appendix.A}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}PCA Pump Prototype - simple, working example}{122}{appendix.B}}
+\newlabel{Appendix:AADL}{{A}{124}{Simplified PCA Pump AADL/BLESS models\relax }{appendix.A}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}PCA Pump Prototype - simple, working example}{125}{appendix.B}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{Appendix:PPP_Simple}{{B}{122}{PCA Pump Prototype - simple, working example\relax }{appendix.B}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {C}PCA Pump Prototype - translated from AADL/BLESS}{123}{appendix.C}}
+\newlabel{Appendix:PPP_Simple}{{B}{125}{PCA Pump Prototype - simple, working example\relax }{appendix.B}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}PCA Pump Prototype - translated from AADL/BLESS}{126}{appendix.C}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{Appendix:PPP_Trahslated}{{C}{123}{PCA Pump Prototype - translated from AADL/BLESS\relax }{appendix.C}{}}
+\newlabel{Appendix:PPP_Trahslated}{{C}{126}{PCA Pump Prototype - translated from AADL/BLESS\relax }{appendix.C}{}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {chapter}{\numberline {D}PCA Pump - dose monitor module}{124}{appendix.D}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {D}PCA Pump - dose monitor module}{127}{appendix.D}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{Appendix:pcapump:dose_monitor_module}{{D}{124}{PCA Pump - dose monitor module\relax }{appendix.D}{}}
+\newlabel{Appendix:pcapump:dose_monitor_module}{{D}{127}{PCA Pump - dose monitor module\relax }{appendix.D}{}}
