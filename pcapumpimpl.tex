@@ -3,50 +3,67 @@
 \cleardoublepage
 
 
-\chapter{PCA Pump Prototype Implementation}
+\chapter{PCA pump prototype implementation and code generation}
 \label{pcapumpimpl}
 
-First step was to create mock (based on doc, aadl models and implemented PCA Pump).
-
-Currently SPARK 2014 does not support tasking \cite{Spark2014refManual:Online}. For SPARK 2005, GNAT compiler provides Ravenscar Profile \cite{Ravenscar:Online}. It provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs.
-
-In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation.
-
-The biggest challenge during PCA Pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it required to isolate some functionalities or implement them in different way. An example might be reading and writing numbers to standard input.
+This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})), code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}) and overview of not generated parts, which has to be implemented by developer (\ref{pcapumpimpl:codegenimpl}).
 
 
-\section{Concurrency in SPARK Ada}
-\label{pcapump:implementation:concurrency}
-
-Based on AADL models, PCA Pump has to be multitasking device. Thus, concurrency features are needed. In SPARK 2005, concurrency is enable with Ravenscar profile \cite{Ravenscar:Online}. For now, concurrency is not allowed in SPARK 2014.
-
-
-
-\section{BeagleBoard-XM}
+\section{Running SPARK Ada programs on BeagleBoard-xM}
 \label{pcapumpimpl:beagleboard}
 
+To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file with procedure Main printing "Hello, World!" in standard output was added. The code is presented in listing \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
 
-Expansion port 14(PWM) and 28(GND?)
-GPIO158
-Java Program to Run the pump for 10 seconds
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={"Hello World" in Ada}, label={listing:HelloWorld}]
+with Ada.Text_IO;
 
-Include source of simple program?
-GNAT cross-compiler only for Linux Platform (cross-compilation has to be done on Linux).
+procedure Main
+is
+begin
+    Ada.Text_IO.Put_Line("Hello, World!");    
+end Main;
+\end{lstlisting} 
 
-compilation+linking command: \lstinline{arm-linux-gnueabi-gnatmake -d -Ppca_ravenscar.gpr}.
+To run it locally, the main file has to be added to the list of 'main files' in Project/Edit Project Properties (figure \ref{figure:editprojectproperties}), tab: Main files (figure \ref{figure:mainfiles}). Then it can be run in GPS, using 'Build All' and 'Run Main' by clicking appropriate toolbar buttons. The main file has to be always specified in order to compile and link application, which is runnable.
 
-%describe how to run the program: compile cmd with arm-gnuaebi... then copy to the board etc.
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[width=3.2in]{figures/EditProjectProperties.png}
+    	\caption{Edit Project Properties}
+    \end{center}
+    \label{figure:editprojectproperties}
+\end{figure}
 
-Running programs on BB (ch.3 from 721 paper)
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+    	\includegraphics[width=3.2in]{figures/Properties-MainFiles.png}
+    	\caption{Project Main files}
+    \end{center}
+    \label{figure:mainfiles}
+\end{figure}
 
-To run SPARK Ada programs on BeagleBoard-xM GNAT cross-compiler was used. It compiles and links SPARK Ada 2005 single and multitasking programs without any problems. In case of SPARK Ada 2014 only single tasking programs are allowed. Tasking features are not yet in SPARK 2014, which is under development. After successful compilation and linking, there was no issues with running programs on BeagleBoard-xM. Moreover, their behaviour on Intel processor (PC or MacBook) is the same like on ARM device.
+To run it on BeagleBoard-xM we have to use cross-compiler and issue following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (helloworld.gpr is GNAT Programming Studio project file). We can specify additional flags in command line or directly in project file (manually or through GNAT Programming Studio Interface).
 
 
-\section{Implementation based on Requirements Document}
+\subsection{Multitasking applications}
+\label{pcapumpimpl:beagleboard:multitasking}
+
+In Ada World, concurrency is referred as tasking and the task is the same construct as the thread in other programming languages. 
+
+
+\subsection{Controlling PCA pump motor}
+\label{pcapumpimpl:beagleboard:pcapumpmotor}
+
+
+
+
+
+\section{Implementation based on Requirements Document and AADL models}
+\label{pcapumpimpl:manual}
 
 In this thesis, only the operation module is implemented. Req doc don't specified all implementation details, like how basal rate should be infused.
 
-The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}.
+The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version.
 
 Pump internal implementation based on \cite{CADD-PrizmAmbulatoryInfusionPump:Online}.
 - basal dose deliver in increments - easier to track delivered amount (page 14)
@@ -63,7 +80,8 @@ The main PCA Pump Package can be verified using SPARK tools. The Pump engine (mo
 PCA Pump prototype was developed based on Requirements Documentation created by Brian Larson, John Hatcliff and Partice Chalin \cite{PcaReq}.
 
 
-\section{Code generation from AADL models}
+\section{Code generation from AADL/BLESS models}
+\label{pcapumpimpl:codegen}
 
 PCA Pump prototype was mocked using translations schemas from chapter \ref{codegen}.
 
@@ -79,6 +97,7 @@ Show generated code.
 
 
 \section{Implementation for generated code}
+\label{pcapumpimpl:codegenimpl}
 
 Mocked code was extended (e.g. to Prescription\_Store Set/Get methods for record fields were added).
 
