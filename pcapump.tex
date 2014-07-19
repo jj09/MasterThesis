@@ -124,7 +124,7 @@ In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson create
 AADL model captures structure of device. BLESS - its behavior. Listing \ref{listing:rate_controller} shows \lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation. The thread declaration contains input and output ports. In addition to some of them, BLESS assertions are present. Assertions are defined in BLESS annex in thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered. [TRUNCATE CODE LISTING?]
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={\lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions}, label={listing:rate_controller}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={\lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions}]
   thread Rate_Controller
   features
       Infusion_Flow_Rate: out data port PCA_Types::Flow_Rate
@@ -313,6 +313,7 @@ AADL model captures structure of device. BLESS - its behavior. Listing \ref{list
   **};
   end Rate_Controller.imp;
 \end{lstlisting} 
+\label{listing:rate_controller}
 \doublespacing
 
 \section{BeagleBoard-XM}

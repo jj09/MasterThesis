@@ -110,7 +110,7 @@ An example AADL model is shown in graphical representation, in the figure \ref{f
 \end{figure}
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}, label={listing:patient_thermometer}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}]
 	package Thermometer
 	public
 	with Base_Types;
@@ -142,6 +142,7 @@ An example AADL model is shown in graphical representation, in the figure \ref{f
 		end thermometer_device.impl;
 	end Thermometer;
 \end{lstlisting} 
+\label{listing:patient_thermometer}
 \doublespacing
 %another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
 
@@ -230,12 +231,13 @@ First version of SPARK was based on Ada 83. The second version (SPARK 95) - on A
 
 Listing \ref{listing:SPARK2005Contracts} presents simple procedure with code contracts. It increments variable given as parameter by 1. The \lstinline{derives} clause specify variable dependency. It future value depends on its current value. There is precondition saying that the value has to be lower than maximum value of \lstinline{Integer} type. There is also post condition, which states that the value of variable (given as parameter) after the procedure execution has to be equal to its previous value incremented by 1 ('\lstinline{~}' attached to variable means value of this variable, before procedure execution).
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sample SPARK procedure with code contracts}, label={listing:SPARK2005Contracts}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sample SPARK procedure with code contracts}]
 procedure Increment (X : in out Integer);
 --# derives X from X;
 --# pre X < Integer'Last;
 --# post X = X~ + 1;
 \end{lstlisting} 
+\label{listing:SPARK2005Contracts}
 
 SPARK 2014\footnote{http://www.spark-2014.org} (based on Ada 2012) is under development. There is partial tool support (in GNAT Programming Studio), but some language features are still not supported. It is worth to mention, that Ada 2012 contains code contracts (which was inspired by previous versions of SPARK). Thus SPARK 2014 is just a subset of Ada 2012. \cite{Spark2014:Paper} It contains all features of Ada 2012 except:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
@@ -433,12 +435,13 @@ Sample mapping from SPARK 2005 to 2014 is shown in the table \ref{table:spark200
 The previous example (listing \ref{listing:SPARK2005Contracts}) translated to SPARK 2014 is shown in figure \ref{listing:SPARK2014Contracts}.
 
 \singlespacing
-\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sample SPARK 2014 procedure and Code Contracts}, label={listing:SPARK2014Contracts}]
+\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sample SPARK 2014 procedure and Code Contracts}]
 	procedure Increment (X : in out Integer)
 	with Depends => (X => X),
 		Pre => (X < Integer'Last),
 		Post => (X = X'Old + 1);
 \end{lstlisting} 
+\label{listing:SPARK2014Contracts}
 \doublespacing
 
 It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. As mentioned before, usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some not safety-critical modules. SPARK 2014 does not contains Examiner like SPARK 2005. Instead, proofs are made by gnatPROVE (see section \ref{verification:gnatprove}).
@@ -476,7 +479,7 @@ Ravenscar profile is available in SPARK 2005, but not yet in SPARK 2014\footnote
 To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allows dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}]
 	package Some_Pkg
 	--# own task t1 : Task1;
 	--#     task t2 : Task2;
@@ -494,11 +497,12 @@ To create a task, the task type has to be declared and task variable of this typ
 	end Some_Pkg;
 \end{lstlisting} 
 \doublespacing
+\label{lst:SampleTask}
 
 Declared tasks have to be implemented in the package body (listing \ref{lst:SampleTaskBody}).
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}, label={lst:SampleTaskBody}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}]
 	package body Some_Pkg
 	is
 		t1 : Task1;
@@ -522,6 +526,7 @@ Declared tasks have to be implemented in the package body (listing \ref{lst:Samp
 
 	end Some_Pkg;
 \end{lstlisting} 
+\label{lst:SampleTaskBody}
 \doublespacing
 
 There are two ways to access variable in different tasks:
@@ -533,7 +538,7 @@ There are two ways to access variable in different tasks:
 Protected object encapsulate variable, in such a way that it is accessible, only through protected subprograms. This mechanism use locking, to ensure atomicity. Protected type declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it. Otherwise, it will be not visible for them.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}, label={lst:SampleTasksWithProtectedType}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}]
 	package Some_Pkg
 	--# own protected Shared_Var : Integer_Store (Priority => 11);
 	--#     task t1 : Task1;
@@ -567,12 +572,13 @@ Protected object encapsulate variable, in such a way that it is accessible, only
 
 	end Some_Pkg;
 \end{lstlisting}
+\label{lst:SampleTasksWithProtectedType}
 \doublespacing
 
 Protected type body also has to be defined in package body (listing \ref{lst:SampleTasksWithProtectedTypeBody}).
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}, label={lst:SampleTasksWithProtectedTypeBody}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}]
 	package body Some_Pkg
 	is
 	    Shared_Var : Integer_Store;
@@ -615,6 +621,7 @@ Protected type body also has to be defined in package body (listing \ref{lst:Sam
 
 	end Some_Pkg;
 \end{lstlisting} 
+\label{lst:SampleTasksWithProtectedTypeBody}
 \doublespacing
 
 \lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
@@ -624,7 +631,7 @@ Protected variables may not be used in proof contexts. Thus, if we try to use pr
 To declare atomic type, \lstinline{pragma Atomic} has to be used. However, there is restriction, that \lstinline{pragma Atomic} cannot be applied to predefined type such as Integer. Thus, custom type has to be defined. It can be just rename of Integer. Then \lstinline{pragma Atomic} can be applied on this type. Listing \ref{lst:SampleTasksWithAtomicType} presents previous example with atomic types instead of protected objects.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}, label={lst:SampleTasksWithAtomicType}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}]
 	package Some_Pkg
 	--# own Shared_Var;
 	--#     task t1 : Task1;
@@ -672,6 +679,7 @@ To declare atomic type, \lstinline{pragma Atomic} has to be used. However, there
 
 	end Some_Pkg;
 \end{lstlisting}
+\label{lst:SampleTasksWithAtomicType}
 \doublespacing
 
 It is important to mention, that \lstinline{pragma Atomic} does not guaranty atomicity. In most cases, atomic types should not be used for tasking. Instead, protected types should be used. When an object is declared as atomic, it just means that it will be read from or written to memory atomically. The compiler will not generate atomic instructions or memory barriers when accessing to that object. \lstinline{pragma Atomic} force compiler only to:

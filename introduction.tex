@@ -17,7 +17,7 @@ The most important part of Safety-Critical Systems Design is hazard analysis. Ho
 \label{introduction:motivation}
 There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between them. Drug dosed by PCA Pump may affect patient's level of oxygen and carbon dioxide level. Thus adequate monitoring of patient's levels of oxygen and carbon dioxide is required. Moreover, integrated system, which will take adequate action in case of hazard is needed. The solution for such a problem is "Integrated Clinical Environment" (ICE). SAnToS Lab at Kansas State University, in cooperation with University of Pennsylvania are working on Medical Device Coordination Framework (MDCF) \cite{MedicalApplicationPlatforms:Paper}, which is prototype implementation of ICE. It is an open source framework for coordinating multiple medical devices to work together.
 
-Devices working under MDCF have to satisfy some requirements. To make Developer's life easier, the requirements will be not only in documentation, but also in AADL/BLESS models. Model Driven Development in this case means that there from base models (in AADL/BLESS) for medical devices development, skeleton code (in SPARK Ada) will be generated. Then developer will extend and customize them according to his needs. In the same fashion like File > 'New Java project' in Eclipse, File > 'New Medical device project' will work in GNAT Programming Studio. AADL/BLESS Model will be specification and requirements. The ultimate goal is to create set of AADL/BLESS models for different medical devices, which can be automatically translated to SPARK Ada. These models will be base for Medical Devices Developers, who can extend and adjust them to implement specific devices. 
+Devices working under MDCF have to satisfy some requirements. To make Developer's life easier, the requirements are not only in documentation, but also in form of software and hardware models. Model Driven Development in this case means that there from base models for medical devices development, from which skeleton code can be generated. Developers extend and customize generated code for specific device. In the same fashion like File > 'New Java project' create code skeleton, File > 'New Medical device project' will create code structure which has to be implemented. The ultimate goal is to create set of models for different medical devices, which can be automatically translated to code.
 
 PCA pump prototype created in this thesis is as an example of Medical Device, which ultimately will work under MDCF.
 
@@ -27,7 +27,7 @@ PCA pump prototype created in this thesis is as an example of Medical Device, wh
 
 AADL (Architecture Analysis \& Design Language) is modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems. AADL allows for the description of both software and hardware parts of a system. It is used to describe architecture, but AADL allows to add behavioral extensions through annex languages. BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sub language defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
 
-Ada is one of the most popular (along with C/C++) programming language targeted at embedded and real-time systems. SPARK Ada is subset of Ada, designed for the development of safety and security critical systems. It contains subset, which allows to reason about and prove correctness of program and its entities.
+Ada is one of the most popular (along with C/C++) programming language targeted at embedded and real-time systems. SPARK Ada is subset of Ada, designed for the development of safety and security critical systems. It contains subset, which allows to reason about and prove correctness of program and its entities. There are also SPARK tools for software verification.
 
 \section{Goals}
 \label{introduction:goals}
@@ -49,8 +49,6 @@ The initial goals, which most of them is accomplished are as follows:
 			\item GNATprove
 		\end{itemize}
 \end{itemize}
-
-
 
 
 \section{Contribution}
