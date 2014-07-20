@@ -427,45 +427,199 @@ There are two ways to access protected variable in task body:
 Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then we get semantic error: \lstinline{Trip is a protected own variable}. To preserve pre- and postconditions from original Odometer, atomic types (\lstinline{Distance} and \lstinline{Meters_Per_Second}) has been used. The capability to specify pre- and postconditions has been preserved, but now application is not thread safe.
 
 
-\subsection{Controlling PCA pump motor}
+\subsection{Controlling PCA pump actuator}
 \label{pcapumpimpl:beagleboard:pcapumpmotor}
 
-PCA pump prototype created as part of this thesis interacts with external device (pump motor) through GPIO ports. 
+PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins and 3 of them are PWM. In order to run the pump, pin has to be turned on and off with specified frequency.
 
-// pca motor
+GPIO ports interact with the BeagleBoard platform through memory maps. This means that turning particular pin on or off is achieved by writing values into a memory segment associated with the pin. Memory segment is further mapped into file system. Memory maps are synchronized via continuous refresh loops.
 
+PWM enable pin, used for PCA pump is pin 14. It is mapped into file \lstinline{/sys/class/gpio/gpio162/direction}. To turn pin on, file has to contain '1'. To turn it off - '0'. Pump is also connected to pin 28 (GND). Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}.
 
-Expansion port 14(PWM) and 28(GND?)
-GPIO158
-memory mapped ports
-Java Program to Run the pump for 10 seconds
-Include source of simple program?
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+	#!/bin/sh
+	
+	cleanup() { # Release the GPIO port
+	 echo 162 > /sys/class/gpio/unexport
+	 exit
+	}
+	echo 162 > /sys/class/gpio/export # open port
+
+	trap cleanup SIGINT # call cleanup on Ctrl-C
+
+	while [ "1" = "1" ]; do
+	 echo "1" > /sys/class/gpio/gpio162/direction
+	 sleep 1
+	 echo "0" > /sys/class/gpio/gpio162/direction 
+	 sleep 1
+	done
+\end{lstlisting} 
+\label{listing:SwitchingPin}
+
+The same program, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+	import java.io.File;
+	import java.io.FileNotFoundException;
+	import java.io.IOException;
+	import java.io.PrintWriter;
+	import java.io.UnsupportedEncodingException;
+
+	public class PcaMain {
+		public static void main(String[] args) throws IOException, InterruptedException {
+			final String GPIO = "158";
+			final String BASE_DIR = "/sys/class/gpio";
+			
+			WriteToFile(BASE_DIR+"/export", GPIO);
+			
+			for(int i=0; i<10; ++i) {
+	            WriteToFile(BASE_DIR+"/gpio"+GPIO+"/direction", "high");
+	            Thread.sleep(1000);
+				WriteToFile(BASE_DIR+"/gpio"+GPIO+"/direction", "low");
+	            Thread.sleep(1000);
+			}
+			
+			WriteToFile(BASE_DIR+"/unexport", GPIO);
+		}
+		
+		public static void WriteToFile(String filename, String content) throws IOException {
+			File file = new File(filename);
+			 
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			PrintWriter writer = new PrintWriter(filename, "UTF-8");
+			writer.println(content);
+			writer.close();
+		}
+	}
+\end{lstlisting} 
+\label{listing:pca_java}
+
+Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
+
+The same program written in Ada is presented in listing \ref{listing:pca_basic}.
+
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+	with Ada.Real_Time;
+	use type Ada.Real_Time.Time;
+	package Pca_Pump is   
+	   procedure Start_Pump;
+	   procedure Stop_Pump;
+	   procedure Run_Pump(N: in Integer);
+	   procedure Write_Signal(Signal: in Integer);
+	end Pca_Pump;
+
+	with Ada.Strings.Unbounded;
+	use type Ada.Strings.Unbounded;
+	with Ada.Text_IO.Unbounded_IO;
+	use type Ada.Text_IO;
+
+	package body Pca_Pump
+	is
+	   procedure Start_Pump is
+	      F    : Ada.Text_IO.File_Type;
+	      Data : Unbounded_String := To_Unbounded_String("pumping");
+	      File_Export : Ada.Text_IO.File_Type;
+	      File_Direction : Ada.Text_IO.File_Type;
+	   begin
+	      Create(File_Export, Ada.Text_IO.Out_File, "/sys/class/gpio/export");
+	      Put_Line(File_Export, "162");
+	      Close(File_Export);
+
+	      Create(File_Direction, Ada.Text_IO.Out_File, "/sys/class/gpio/gpio162/direction");
+	      Put_Line(File_Direction, "out");
+	      Close(File_Direction);
+
+	      Create(F, Ada.Text_IO.Out_File, "/home/root/pump_status.txt");
+	      Unbounded_IO.Put_Line(F, Data);
+	      Put_Line("Pumping...");
+	      Close(F);
+	   end Start_Pump;
+
+	   procedure Stop_Pump is
+	      F    : Ada.Text_IO.File_Type;
+	      Data : Unbounded_String := To_Unbounded_String("IDLE");
+	      File_Unexport : Ada.Text_IO.File_Type;
+	   begin
+	      Create(File_Unexport, Ada.Text_IO.Out_File, "/sys/class/gpio/unexport");
+	      Put_Line(File_Unexport, "162");
+	      Close(File_Unexport);
+
+	      Create(F, Ada.Text_IO.Out_File, "/home/root/pump_status.txt");
+	      Unbounded_IO.Put_Line(F, Data);
+	      Put_Line("Stopped");
+	      Close(F);
+	   end Stop_Pump;
+
+	   procedure Run_Pump(N: in Integer) is
+	      Interval: constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds(100);
+	      Next_Time: Ada.Real_Time.Time;
+	   begin
+	      Next_Time := Ada.Real_Time.Clock;
+	      Start_Pump;
+	      for I in Integer range 1 .. N*1000 loop
+		 Next_Time := Next_Time + Interval;
+	         Write_Signal(1);
+	         delay until Next_Time;
+
+	         Next_Time := Next_Time + Interval;
+	         Write_Signal(0);
+	         delay until Next_Time;
+	      end loop;
+	      Stop_Pump;
+	   end Run_Pump;
+
+	   procedure Write_Signal(Signal : in Integer) is
+	      Filename	: String := "/sys/class/gpio/gpio162/value";
+	      File : Ada.Text_IO.File_Type;
+	      Data : Unbounded_String;
+	   begin
+	      Ada.Text_IO.Open (File => File,
+	                        Mode => Ada.Text_IO.Out_File,
+	                        Name => Filename);
+	      if Signal = 1 then
+	         Data := To_Unbounded_String("1");
+	      else
+	         Data := To_Unbounded_String("0");
+	      end if;
+	      Unbounded_IO.Put_Line(File, Data);
+	      Ada.Text_IO.Close(File);
+	   end Write_Signal;
+
+	end Pca_Pump;
+\end{lstlisting} 
+\label{listing:pca_basic}
+
 
 
 \section{Implementation based on Requirements Document and AADL models}
 \label{pcapumpimpl:manual}
 
-First step was to create mock (based on doc, aadl models and implemented PCA Pump).
-
-In this thesis, only the operation module is implemented. Req doc don't specified all implementation details, like how basal rate should be infused.
-
-The first step, was to check if implementation of PCA Pump specified in Requirements Document is possible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document was created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version.
-
-Pump internal implementation based on \cite{CADD-PrizmAmbulatoryInfusionPump:Online}.
-- basal dose deliver in increments - easier to track delivered amount (page 14)
-
-The pump has three tasks in total:
+The first step, was to check if implementation of PCA Pump specified in Requirements Document is feasible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document has been created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version. Thus, pump has three tasks in total:
 \begin{itemize}
-    \item main task (requesting boluses, displaying volume infused etc.)
-    \item rate controller - to control the speed of infusion rate
-    \item max drug per hour watcher - to control overinfusion
+    \item main task - interface for controlling and monitoring the pump
+    \item \lstinline{Rate_Controller} - control the speed of infusion rate
+    \item \lstinline{Max_Drug_Per_Hour_Watcher} - control over infusion
 \end{itemize}
 
-The main PCA Pump Package can be verified using SPARK tools. The Pump engine (motor) is separated entity. It has an interface allowing request infusion of 0.1 ml of drug.
+Open PCA pump, according to requirements document \cite{PcaReq}, has 5 operational modes:
+\begin{itemize}
+	\item Stopped: $\displaystyle\ F = 0 ml/hr$
+	\item Keep Vein Open (KVO): $\displaystyle\ F = 0.1 ml/hr$
+	\item Basal infusion: $\displaystyle\ F = F_{Basal}$
+	\item Patient bolus: $\displaystyle\ F = F_{Basal} + F_{Bolus}$
+	\item Clinician bolus: $\displaystyle\ F = F_{Basal} + F_{Square_Bolus}$ (square bolus is calculated value: VTBI divided by the duration chosen by the clinician)
+\end{itemize}
 
-PCA Pump prototype was developed based on Requirements Documentation created by Brian Larson, John Hatcliff and Partice Chalin \cite{PcaReq}.
+Requirements document does not specify implementation details. One of implementation decisions, which had to be made was to decide how basal infusion will work. One solution was to run actuator continuously on speed calculated based on current flow rate. Another solution was to dose drug in 0.1 ml increments. This is how CADD-Prizm Ambulatory Infusion Pump \cite{CADD-PrizmAmbulatoryInfusionPump:Online} works and this implementation was chosen. It allows for easier bolus monitoring and calculations. Pump engine controller is separated module. It is written in Ada, so it will not be verified with SPARK tools. Using increments, instead of continues speed allows to issue request of 0.1 ml dose to engine module, and it is its responsibility to deliver requested amount of dose. Performing calculations based on speed changes would be much more complicated. For monitoring, amount of drug dosed in last hour (to guard against over infusion), array with size = (60 * 60) has been created. Its elements represents all seconds of last hour. Last element is incremented once request to the engine is issued. This is done in \lstinline{Rate_Controller} task. \lstinline{Max_Drug_Per_Hour_Watcher} checks dosed amount by summing all elements. It also shifts array in every second, so doses older than 1 hour are not take into account anymore.
+
+To avoid using floating point types, internal calculations are in micro liters: 1 micro liter ($\mu$l) = 0.001 ml, thus 1 ml = 1000$\mu$l.
 
 In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation or being separated entities on which SPARK tools are not run. PCA motor is separated entity.
+
+Code listing of implemented PCA pump along with mapped types is attached in appendix \ref{Appendix:pca_ravenscar}
 
 //summary
 The biggest challenge during PCA Pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it required to isolate some functionalities or implement them in different way. An example might be reading and writing numbers to standard input.
@@ -475,7 +629,7 @@ The biggest challenge during PCA Pump development was the SPARK limitations. The
 \section{Code generation from AADL/BLESS models}
 \label{pcapumpimpl:codegen}
 
-PCA Pump prototype was mocked using translations schemas from chapter \ref{codegen}.
+PCA Pump prototype was mocked using translations schemes from chapter \ref{codegen}.
 
 The original models were simplified and truncated for the purpose of this thesis. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation.
 
@@ -491,25 +645,15 @@ Show generated code.
 \section{Implementation for generated code}
 \label{pcapumpimpl:codegenimpl}
 
-Mocked code was extended (e.g. to Prescription\_Store Set/Get methods for record fields were added).
-
-Overview of issues solved: 
-* Bolus options: FBasal + FPatient or FPatient => implemented: FBasal + FPatient (consistent in doc)
-5 modes:
-* Stopped: F=0
-* KVO: F=0.1
-* Basal: F=Fbasal
-* Patient: F = Fbasal + Fbolus (for vtbi/Fbolus)
-* Clinician: F = Fbalsal + Fbolus (for specified time)
-
-Most common Examiner\cite{Examiner:Online} erroes/warnings:
-***        Warning                     :302: This expression may be
-***        Semantic Error              :725: Protected function or variable XXX may only appear directly in an assignment or return statement.
-
-Discuss implementation of basal infusion: 0.1 ml pulses timed according to the desired rate. (based on CADD-Prizm page 14). Easier bolus monitoring/calculations. Possibility to separate pulse from engine logic. Just array with time stamps(?) or array with size = (60 * 60 /min\_possible\_time\_between\_activations) and set 1 if activation occured. In every second, update array: array[i]=array[i+1]. Array is protected object, so bolus thread cannot access it in the same time, when update thread.
-Another option: constant speed of engine and speed-up on boluses. Harder bolus monitoring/calculations?
 
 
-Internal calculations are in micro liters 1 micro liters ($\mu$l) = 0.001 ml thus 1 ml = 1000$\mu$l.
 
+\section{Communication with MDCF}
+\label{pcapumpimpl:mdcf}
+
+BB has Ethernet, communication can go through it.
+
+sockets? create Java and Ada apps communication
+% http://en.wikibooks.org/wiki/Ada_Programming/Libraries/GNAT.Sockets_examples 
+% ask Shiwei how he connected his PCA Pump to ICE
 
