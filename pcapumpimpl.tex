@@ -433,31 +433,43 @@ PCA pump prototype created as part of this thesis interacts with external device
 
 GPIO ports interact with the BeagleBoard platform through memory maps. This means that turning particular pin on or off is achieved by writing values into a memory segment associated with the pin. Memory segment is further mapped into file system. Memory maps are synchronized via continuous refresh loops.
 
-Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}.
+Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
 	#!/bin/sh
-	
-	cleanup() { # Release the GPIO port
-	 echo 162 > /sys/class/gpio/unexport
-	 exit
-	}
-	echo 162 > /sys/class/gpio/export # open port
 
-	trap cleanup SIGINT # call cleanup on Ctrl-C
+	if [ $# = 0 ]
+	then
+	  GPIO=162
+	else
+	  GPIO=$1
+	fi
+
+	cleanup() {
+	  echo $GPIO > /sys/class/gpio/unexport
+	  exit
+	}
+
+	trap cleanup SIGINT
+
+	echo $GPIO > /sys/class/gpio/export
+	echo "out" > /sys/class/gpio/gpio$GPIO/direction
 
 	while [ "1" = "1" ]; do
-	 echo "1" > /sys/class/gpio/gpio162/direction
-	 sleep 1
-	 echo "0" > /sys/class/gpio/gpio162/direction 
-	 sleep 1
+	  echo "1" > /sys/class/gpio/gpio$GPIO/value
+	  sleep 1
+	  echo "0" > /sys/class/gpio/gpio$GPIO/value
+	  sleep 1
 	done
+
+	cleanup
+
 \end{lstlisting} 
 \label{listing:SwitchingPin}
 
 Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
 
-BeagleBoard-xM with Linux Angstrom allows to install software packages using package manager \lstinline{opkg}\footnote{http://wiki.openwrt.org/doc/techref/opkg}. Packages feeds can be found on \lstinline{http://feeds.angstrom-distribution.org/feeds} and set in \lstinline{.conf} files in \lstinline{/etc/opkg} directory. In this thesis version 2012.01 of Angstrom has been used and the following feeds:
+BeagleBoard-xM with Linux Angstrom allows to install software packages using package manager \lstinline{opkg}\footnote{http://wiki.openwrt.org/doc/techref/opkg}. Packages feeds can be found on \lstinline{http://feeds.angstrom-distribution.org/feeds} and set in \lstinline{.conf} files in \lstinline{/etc/opkg} directory. In this thesis version 2012.01 of Angstrom (with Linux 3.0.14+) has been used and the following feeds:
 \begin{itemize}
 	\item \lstinline{base-feed.conf}: \lstinline{src/gz base http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/base}
 	\item \lstinline{beagleboard-feed.conf}: \lstinline{src/gz beagleboard http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/beagleboard}
@@ -470,7 +482,7 @@ BeagleBoard-xM with Linux Angstrom allows to install software packages using pac
 
 Once, feeds are set, it is recommended to update list of available packages with command: \lstinline{opkg update}. To update all installed packages, following command has to be used: \lstinline{opkg upgrade}. To install Java runtime-environment (JVM), the following command can be used: \lstinline{opkg install openjdk-6-java}. Java Development Kit, which contains Java compiler and allows to compile Java programs on BeagleBoard, can be installed with: \lstinline{opkg install openjdk-6-jdk}.
 
-The same program, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
+Similar program to bash script presented in listing \ref{listing:SwitchingPin}, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}. 
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
 	import java.io.*;
@@ -503,7 +515,7 @@ The same program, but working for 20 seconds and terminating, written in Java is
 \end{lstlisting} 
 \label{listing:pca_java}
 
-The same program written in Ada is presented in listing \ref{listing:pca_basic}.
+Extended program from listing \ref{listing:pca_java}, with procedures to start and stop the pump, written in Ada, is presented in listing \ref{listing:pca_basic}.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
 	with Ada.Real_Time;
@@ -600,14 +612,14 @@ The same program written in Ada is presented in listing \ref{listing:pca_basic}.
 \section{Implementation based on Requirements Document and AADL models}
 \label{pcapumpimpl:manual}
 
-The first step, was to check if implementation of PCA Pump specified in Requirements Document is feasible. Especially whether it will work on BeagleBoard-xM device. To do that, simple version of PCA Pump based on Requirements Document has been created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version. Thus, pump has three tasks in total:
+In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, simple PCA pump prototype has been created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version. Thus, pump has three tasks in total:
 \begin{itemize}
     \item main task - interface for controlling and monitoring the pump
     \item \lstinline{Rate_Controller} - control the speed of infusion rate
     \item \lstinline{Max_Drug_Per_Hour_Watcher} - control over infusion
 \end{itemize}
 
-Open PCA pump, according to requirements document \cite{PcaReq}, has 5 operational modes:
+The Open PCA pump, according to requirements document \cite{PcaReq}, has 5 operational modes:
 \begin{itemize}
 	\item Stopped: $\displaystyle\ F = 0 ml/hr$
 	\item Keep Vein Open (KVO): $\displaystyle\ F = 0.1 ml/hr$
