@@ -15,9 +15,18 @@ The most important part of Safety-Critical Systems Design is hazard analysis. Ho
 
 \section{Motivation}
 \label{introduction:motivation}
+
+[IF FIRST=BETTER]
+Nowadays, medical devices works rather independently. It leads to many accidents, which could have been avoided by their interoperability. For example some drug (e.g. morphine), which is delivered by Patient-controlled analgesia (PCA) pump after surgery, can cause low oxygen level or even lack of pulse. That can lead to patient's death. PCA pump does not monitor oxygen level, but Oxygen monitoring device does. If these two devices are organized in centralized system, which implements safety interlock mechanism to shutdown the pump when low oxygen level is detected, accident can be avoided. 
+
+In order to communicate, devices have to use compatible interfaces and protocols. There is a concept of "Integrated Clinical Environment" (ICE). It is series of standards, which describes medical device integration and interoperability. SAnToS lab created Medical Device Coordination Framework (MDCF), which is prototype implementation of ICE. Standards are captured not only as requirement documents, but also in software and hardware models form. It allows different medical devices, created by different vendors, to be connected and work under supervision of centralized system.
+
+[ELSE]
 There are many accidents where Medical Devices are involved. Very often, the reason is the lack of communication between them. Drug dosed by PCA Pump may affect patient's level of oxygen and carbon dioxide level. Thus adequate monitoring of patient's levels of oxygen and carbon dioxide is required. Moreover, integrated system, which will take adequate action in case of hazard is needed. The solution for such a problem is "Integrated Clinical Environment" (ICE). SAnToS Lab at Kansas State University, in cooperation with University of Pennsylvania are working on Medical Device Coordination Framework (MDCF) \cite{MedicalApplicationPlatforms:Paper}, which is prototype implementation of ICE. It is an open source framework for coordinating multiple medical devices to work together.
 
 Devices working under MDCF have to satisfy some requirements. To make Developer's life easier, the requirements are not only in documentation, but also in form of software and hardware models. Model Driven Development in this case means that there from base models for medical devices development, from which skeleton code can be generated. Developers extend and customize generated code for specific device. In the same fashion like File > 'New Java project' create code skeleton, File > 'New Medical device project' will create code structure which has to be implemented. The ultimate goal is to create set of models for different medical devices, which can be automatically translated to code.
+
+[END IF]
 
 PCA pump prototype created in this thesis is as an example of Medical Device, which ultimately will work under MDCF.
 

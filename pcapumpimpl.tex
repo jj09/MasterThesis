@@ -43,7 +43,7 @@ The main file has to be always specified in project file (\lstinline{.gpr}) in o
     \label{figure:mainfiles}
 \end{figure}
 
-Entire project can be compiled and linked with following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (where \lstinline{helloworld.gpr} is GNAT Programming Studio project file). Addditional flags can be specified in command line or directly in project file (manually or through GNAT Programming Studio Interface).
+To enable cross-compilation, for current version of cross-compiler, environmental variable \lstinline{\$ENV_PREFIX} has to be set to directory, which contains \lstinline{/lib} and \lstinline{/usr} directories. Latter should also contains \lstinline{/usr/lib} and \lstinline{/usr/include} subdirectories. After mentioned directories has been copied into \lstinline{/home/super/angstrom-arm} directory, \lstinline{\$ENV_PREFIX} has been exported with following command: \lstinline{export ENV_PREFIX=/home/super/angstrom-arm}. Entire project can be compiled and linked with following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (where \lstinline{helloworld.gpr} is GNAT Programming Studio project file). Additional flags can be specified in command line or directly in project file (manually or through GNAT Programming Studio Interface).
 
 More complex example, which takes advantage of SPARK contracts is presented in section \ref{pcapumpimpl:beagleboard:odometer}.
 
@@ -105,7 +105,7 @@ Odometer is a simple SPARK Ada program, which implements basic functions of stan
 	    begin
 	        Trip := Trip + 1;
 	        Total := Total + 1;
-	    end Inc;	    
+	    end Inc;
 	end Odometer;
 \end{lstlisting} 
 \label{listing:Odometer2005}
@@ -113,10 +113,10 @@ Odometer is a simple SPARK Ada program, which implements basic functions of stan
 
 There are 4 subprograms (2 procedures and 2 functions), which are globally available (through other packages and program units):
 \begin{itemize}
-    \item Zero\_Trip procedure - reset Odometer to 0
-    \item Read\_Trip function - returns current distance
-    \item Read\_Total function - returns total distance traveled
-    \item Inc procedure - increment total and current distance by 1
+    \item \lstinline{Zero_Trip} procedure - reset Odometer to 0
+    \item \lstinline{Read_Trip} function - returns current distance
+    \item \lstinline{Read_Total} function - returns total distance traveled
+    \item \lstinline{Inc} procedure - increment total and current distance by 1
 \end{itemize}
 
 Given program contains code contracts. Tough it does not matter in compilation phase, it shows that SPARK verification tools can be used for given example. 
@@ -124,7 +124,6 @@ Given program contains code contracts. Tough it does not matter in compilation p
 Annotation \lstinline{global} means that subprogram uses some global variable. Postfix in, out or in out means that particular variable is read, write or read and write respectively. Annotation \lstinline{derives} says that some variable value depends on other variables. E.g. in procedure \lstinline{Inc} variable \lstinline{Trip} is dependent on its current value (before procedure call). Annotations \lstinline{pre} and \lstinline{post} define pre- and postconditions of procedure. We can see, that in \lstinline{Zero_Trip} procedure postcondition requires that variable \lstinline{Trip} is equal to 0. In procedure \lstinline{Inc}, postconditions requires that variables \lstinline{Trip} and \lstinline{Total} are incremented by 1 ('\lstinline{~}' is the value of variable before procedure call). Annotation \lstinline{own} expose private variables for use in public methods specification. Annotation \lstinline{initializes} ensures that given variables are initializes. 
 
 In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} procedure has been created. It is presented in listing \ref{listing:main}.
-
 
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Main procedure for \lstinline{Odometer} package}]
@@ -246,7 +245,7 @@ Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014
 \end{lstlisting}
 \doublespacing
 
-Odometer example was created to check possible limitations or issues related to different platform and processor (ARM). No limitations were found.
+Odometer example was created to check possible limitations and issues related to different platform (ARM-based). No limitations were found.
 
 
 \subsection{Multitasking applications}
@@ -430,11 +429,11 @@ Protected variables may not be used in proof contexts. Thus, if we try to use pr
 \subsection{Controlling PCA pump actuator}
 \label{pcapumpimpl:beagleboard:pcapumpmotor}
 
-PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins and 3 of them are PWM. In order to run the pump, pin has to be turned on and off with specified frequency.
+PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins. Three of them are PWM enable (pin 4 - mapped as \lstinline{GPIO_144}, pin 6 - \lstinline{GPIO_146} and pin 10 - \lstinline{GPIO_145}). All of these pins allow to control external device by specifying frequency and duty cycle. However it requires PWM driver\footnote{http://beagleboard.org/project/PWM+driver+for+Beagle+Board/}. PWM can be also simulated manually. To run the pump, pin has to be turned on and off with specified frequency. In order to do that, \lstinline{sleep} function can be used. 
 
 GPIO ports interact with the BeagleBoard platform through memory maps. This means that turning particular pin on or off is achieved by writing values into a memory segment associated with the pin. Memory segment is further mapped into file system. Memory maps are synchronized via continuous refresh loops.
 
-PWM enable pin, used for PCA pump is pin 14. It is mapped into file \lstinline{/sys/class/gpio/gpio162/direction}. To turn pin on, file has to contain '1'. To turn it off - '0'. Pump is also connected to pin 28 (GND). Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}.
+Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
 	#!/bin/sh
@@ -456,36 +455,43 @@ PWM enable pin, used for PCA pump is pin 14. It is mapped into file \lstinline{/
 \end{lstlisting} 
 \label{listing:SwitchingPin}
 
-The same program, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}.
+Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
+
+BeagleBoard-xM with Linux Angstrom allows to install software packages using package manager \lstinline{opkg}\footnote{http://wiki.openwrt.org/doc/techref/opkg}. Packages feeds can be found on \lstinline{http://feeds.angstrom-distribution.org/feeds} and set in \lstinline{.conf} files in \lstinline{/etc/opkg} directory. In this thesis version 2012.01 of Angstrom has been used and the following feeds:
+\begin{itemize}
+	\item \lstinline{base-feed.conf}: \lstinline{src/gz base http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/base}
+	\item \lstinline{beagleboard-feed.conf}: \lstinline{src/gz beagleboard http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/beagleboard}
+	\item \lstinline{debug-feed.conf}: \lstinline{src/gz debug http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/debug}
+	\item \lstinline{gstreamer-feed.conf}: \lstinline{src/gz gstreamer http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/gstreamer}
+	\item \lstinline{noarch-feed.conf}: \lstinline{src/gz no-arch http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/all}
+	\item \lstinline{perl-feed.conf}: \lstinline{src/gz perl http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/perl}
+	\item \lstinline{python-feed.conf}: \lstinline{src/gz python http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/python}
+\end{itemize}
+
+Once, feeds are set, it is recommended to update list of available packages with command: \lstinline{opkg update}. To update all installed packages, following command has to be used: \lstinline{opkg upgrade}. To install Java runtime-environment (JVM), the following command can be used: \lstinline{opkg install openjdk-6-java}. Java Development Kit, which contains Java compiler and allows to compile Java programs on BeagleBoard, can be installed with: \lstinline{opkg install openjdk-6-jdk}.
+
+The same program, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
 
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
-	import java.io.File;
-	import java.io.FileNotFoundException;
-	import java.io.IOException;
-	import java.io.PrintWriter;
-	import java.io.UnsupportedEncodingException;
+	import java.io.*;
 
 	public class PcaMain {
 		public static void main(String[] args) throws IOException, InterruptedException {
-			final String GPIO = "158";
-			final String BASE_DIR = "/sys/class/gpio";
-			
+			final String GPIO = "162";
+			final String BASE_DIR = "/sys/class/gpio";			
 			WriteToFile(BASE_DIR+"/export", GPIO);
-			
+			WriteToFile(BASE_DIR+"/gpio"+GPIO+"/direction", "out");			
 			for(int i=0; i<10; ++i) {
-	            WriteToFile(BASE_DIR+"/gpio"+GPIO+"/direction", "high");
+	            WriteToFile(BASE_DIR+"/gpio"+GPIO+"/value", "1");
 	            Thread.sleep(1000);
-				WriteToFile(BASE_DIR+"/gpio"+GPIO+"/direction", "low");
+				WriteToFile(BASE_DIR+"/gpio"+GPIO+"/value", "0");
 	            Thread.sleep(1000);
-			}
-			
+			}			
 			WriteToFile(BASE_DIR+"/unexport", GPIO);
 		}
 		
 		public static void WriteToFile(String filename, String content) throws IOException {
-			File file = new File(filename);
-			 
-			// if file doesnt exists, then create it
+			File file = new File(filename);			 
 			if (!file.exists()) {
 				file.createNewFile();
 			}
@@ -496,8 +502,6 @@ The same program, but working for 20 seconds and terminating, written in Java is
 	}
 \end{lstlisting} 
 \label{listing:pca_java}
-
-Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
 
 The same program written in Ada is presented in listing \ref{listing:pca_basic}.
 
@@ -587,7 +591,6 @@ The same program written in Ada is presented in listing \ref{listing:pca_basic}.
 	      Unbounded_IO.Put_Line(File, Data);
 	      Ada.Text_IO.Close(File);
 	   end Write_Signal;
-
 	end Pca_Pump;
 \end{lstlisting} 
 \label{listing:pca_basic}
@@ -653,7 +656,8 @@ Show generated code.
 
 BB has Ethernet, communication can go through it.
 
-sockets? create Java and Ada apps communication
+GNAT.Sockets
+
 % http://en.wikibooks.org/wiki/Ada_Programming/Libraries/GNAT.Sockets_examples 
 % ask Shiwei how he connected his PCA Pump to ICE
 
