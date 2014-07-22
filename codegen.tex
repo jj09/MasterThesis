@@ -1973,4 +1973,8 @@ Recommended way to create translator is to parse AADL models, create Abstract Sy
 
 Development should be performed incrementally. From adding translation for the simplest constructs, like data types or single ports, to port communication and BLESS. First step, would be AADL grammar development. It is recommended to initially, specify only part of required AADL subset and then extend it incrementally. In order to do that, AADL Syntax Card\footnote{https://wiki.sei.cmu.edu/aadl/images/d/d2/AADL\_V2.1\_Syntax\_Card.pdf} might be helpful. During translator development unit testing and Test Driven Development is recommended. Translation schemes can be used as input and expected output of particular test cases. It will help to ensure correctness of translator while working on new features support.
 
-
+Additionally, automatic translator should work in two modes:
+\begin{itemize}
+	\item Ravenscar: as described above, with protected objects and multiple tasks
+	\item Sequential: single-threaded application, without notion of tasks and protected objects	
+\end{itemize}

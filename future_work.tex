@@ -5,8 +5,6 @@
 \chapter{Future work}
 \label{future_work}
 
-What has to be done now.
-
 translation of BLESS state machine (issue: time notion):
 	* states
 	* transitions
@@ -21,16 +19,13 @@ try to apply child packages for feature
 
 extend property set translation (only aadlinteger and simple types are handled)
 
-Translator:
-* it should ignore all not defined properties in data types translations
-
 Decompose code (get rid of 1 big/huge package):
 * separate packages
 * child packages?
 * maybe every thread should be in child package?
 
 PCA Pump:
-* Interface to ICE
+* Interface to ICE: on BB can be done through Etherned port with GNAT.Sockets
 * drug concentration
 * monitoring of infused drug by sensors
 
@@ -38,6 +33,5 @@ Two way communication between SPARK packages: circular dependency issue (4.2.1).
 
 Interport connections: table 10-3 in AADL book (p.193) and 1 to many connections (multiple events calling).
 
-Add task periods
+Add task periods to translation schemes and automatic translator
 
-Automatic translator for sequential programs (without protected objects).

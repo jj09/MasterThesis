@@ -6,7 +6,7 @@
 \chapter{PCA pump prototype implementation and code generation}
 \label{pcapumpimpl}
 
-This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})), code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}) and overview of not generated parts, which has to be implemented by developer (\ref{pcapumpimpl:codegenimpl}). All programs presented in this section works the same on Intel processor (PC or MacBook) and on BeagleBoard-xM (ARM device).
+This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})) and code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}). All programs presented in this section works the same on Intel processor (PC or MacBook) and on BeagleBoard-xM (ARM device).
 
 
 \section{Running SPARK Ada programs on BeagleBoard-xM}
@@ -612,11 +612,19 @@ Extended program from listing \ref{listing:pca_java}, with procedures to start a
 \section{Implementation based on Requirements Document and AADL models}
 \label{pcapumpimpl:manual}
 
-In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, simple PCA pump prototype has been created. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher} in stripped version. Thus, pump has three tasks in total:
+In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, simple PCA pump prototype has been created. Implemented prototype is multitasking application (using Ravenscar profile) running on BeagleBoard-xM. The base for implementation was \lstinline{Pca_Operation} package. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}. Thus, pump has three tasks in total:
 \begin{itemize}
     \item main task - interface for controlling and monitoring the pump
     \item \lstinline{Rate_Controller} - control the speed of infusion rate
     \item \lstinline{Max_Drug_Per_Hour_Watcher} - control over infusion
+\end{itemize}
+
+The first step was to translate types required by operation module. Strings and float types were skipped to keep verification simple (using only integer types and its subtypes). Besides that, all types from following packages are translated:
+\begin{itemize}
+	\item \lstinline{Base_Types}
+	\item \lstinline{Bless_Types}
+	\item \lstinline{Ice_Types}
+	\item \lstinline{Pca_Types}
 \end{itemize}
 
 The Open PCA pump, according to requirements document \cite{PcaReq}, has 5 operational modes:
@@ -628,48 +636,46 @@ The Open PCA pump, according to requirements document \cite{PcaReq}, has 5 opera
 	\item Clinician bolus: $\displaystyle\ F = F_{Basal} + F_{Square_Bolus}$ (square bolus is calculated value: VTBI divided by the duration chosen by the clinician)
 \end{itemize}
 
-Requirements document does not specify implementation details. One of implementation decisions, which had to be made was to decide how basal infusion will work. One solution was to run actuator continuously on speed calculated based on current flow rate. Another solution was to dose drug in 0.1 ml increments. This is how CADD-Prizm Ambulatory Infusion Pump \cite{CADD-PrizmAmbulatoryInfusionPump:Online} works and this implementation was chosen. It allows for easier bolus monitoring and calculations. Pump engine controller is separated module. It is written in Ada, so it will not be verified with SPARK tools. Using increments, instead of continues speed allows to issue request of 0.1 ml dose to engine module, and it is its responsibility to deliver requested amount of dose. Performing calculations based on speed changes would be much more complicated. For monitoring, amount of drug dosed in last hour (to guard against over infusion), array with size = (60 * 60) has been created. Its elements represents all seconds of last hour. Last element is incremented once request to the engine is issued. This is done in \lstinline{Rate_Controller} task. \lstinline{Max_Drug_Per_Hour_Watcher} checks dosed amount by summing all elements. It also shifts array in every second, so doses older than 1 hour are not take into account anymore.
+Requirements document does not specify implementation details. One of implementation decisions, which had to be made, was to decide how basal infusion will work. One solution was to run actuator continuously on speed calculated based on current flow rate. Another solution was to dose drug in 0.1 ml increments. This is how CADD-Prizm Ambulatory Infusion Pump \cite{CADD-PrizmAmbulatoryInfusionPump:Online} works and this implementation was chosen. It allows for easier bolus monitoring and calculations. Pump engine controller is separated module. It is written in Ada, so it will not be verified with SPARK tools. Using increments, instead of continues speed allows to issue request of 0.1 ml dose to engine module, and it is its responsibility to deliver requested amount of dose. Performing calculations based on speed changes would be much more complicated. For monitoring, amount of drug dosed in last hour (to guard against over infusion), array with size = (60 * 60) has been created. Its elements represents all seconds of last hour. Last element is incremented once request to the engine is issued. This is done in \lstinline{Rate_Controller} task. \lstinline{Max_Drug_Per_Hour_Watcher} checks dosed amount by summing all elements. It also shifts array in every second, so doses older than 1 hour are not take into account anymore.
 
 To avoid using floating point types, internal calculations are in micro liters: 1 micro liter ($\mu$l) = 0.001 ml, thus 1 ml = 1000$\mu$l.
 
-In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation or being separated entities on which SPARK tools are not run. PCA motor is separated entity.
+In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation or being separated entities on which SPARK tools are not run. \lstinline{Pca_Engine} package is separated entity, which control the pump actuator. It use Ada features not present in SPARK, thus it is not verified by SPARK tools. 
+
+Implemented PCA pump prototype is console Ada application with textual interface, which has following functionalities:
+\begin{itemize}
+	\item Entering prescription, which comprises of following parameters:
+		\begin{itemize}
+			\item Basal flow rate
+			\item Volume to be infused (VTBI) during patient or clinician bolus
+			\item Maximum dose of drug allowed per hour
+			\item Minimum time between patient's boluses
+		\end{itemize}
+	\item Starting the pump
+	\item Stopping the pump
+	\item Monitoring drug dosed in last hour: when maximum allowed dose is exceeded, it switches pump state to KVO rate
+	\item Performing patient bolus:
+		\begin{itemize}
+			\item if bolus request too soon (faster than minimum time between bolus) then it is ignored
+			\item if bolus is requested during clinician bolus, then clinician bolus is paused and patient bolus starts; once patient bolus is done, pump switches back to clinician bolus
+		\end{itemize}
+	\item Performing clinician bolus (time has to be specified):
+		\begin{itemize}
+			\item bolus requested during previously requested (not finished) clinician bolus is ignored
+			\item bolus requested during patient bolus is performed right after patient bolus is done
+		\end{itemize}
+\end{itemize}
 
 Code listing of implemented PCA pump along with mapped types is attached in appendix \ref{Appendix:pca_ravenscar}
-
-//summary
-The biggest challenge during PCA Pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it required to isolate some functionalities or implement them in different way. An example might be reading and writing numbers to standard input.
 
 
 
 \section{Code generation from AADL/BLESS models}
 \label{pcapumpimpl:codegen}
 
-PCA Pump prototype was mocked using translations schemes from chapter \ref{codegen}.
+The original models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_prototype} contains translated PCA pump code. 
 
-The original models were simplified and truncated for the purpose of this thesis. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation.
+Raw, translated code cannot be verified with SPARK tools, because it contains not implemented parts. E.g. translated from BLESS assertions, which are defined but not implemented in models. Once, these missing parts will be implemented, code can be verified.
 
-[code listings of aadl model]
-
-
-Skeleton code 'generated' from simplified AADL models. Then implemented.
-
-Show generated code.
-
-
-
-\section{Implementation for generated code}
-\label{pcapumpimpl:codegenimpl}
-
-
-
-
-\section{Communication with MDCF}
-\label{pcapumpimpl:mdcf}
-
-BB has Ethernet, communication can go through it.
-
-GNAT.Sockets
-
-% http://en.wikibooks.org/wiki/Ada_Programming/Libraries/GNAT.Sockets_examples 
-% ask Shiwei how he connected his PCA Pump to ICE
+[ADD SOME LISTINGS HERE? SHOW WHICH PARTS HAVE TO BE IMPLEMENTED?]
 
