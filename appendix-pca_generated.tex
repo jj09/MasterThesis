@@ -1,0 +1,1579 @@
+%!TEX root = JakubJedryszek-MasterThesis.tex
+
+\cleardoublepage
+
+\chapter{PCA pump Prototype - translated from simplified AADL models}
+\label{Appendix:pca_generated}
+
+This appendinx presents PCA pump prototype, which was created by direct translation from simplified AADL/BLESS models presented in appendix \ref{Appendix:AADL}.
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Base_Types} package}]
+package Base_Types
+is
+    protected type Boolean_Store
+    is
+        pragma Priority (10);
+
+        function Get return Boolean;
+        --# global in Boolean_Store;
+
+        procedure Put(X : in Boolean);
+        --# global out Boolean_Store;
+        --# derives Boolean_Store from X;
+    private
+        TheStoredData : Boolean := False;
+    end Boolean_Store;
+
+    protected type Integer_Store
+    is
+        pragma Priority (10);
+
+        function Get return Integer;
+        --# global in Integer_Store;
+
+        procedure Put(X : in Integer);
+        --# global out Integer_Store;
+        --# derives Integer_Store from X;
+    private
+        TheStoredData : Integer := 0;
+    end Integer_Store;
+
+    protected type Natural_Store
+    is
+        pragma Priority (10);
+
+        function Get return Natural;
+        --# global in Natural_Store;
+
+        procedure Put(X : in Natural);
+        --# global out Natural_Store;
+        --# derives Natural_Store from X;
+    private
+        TheStoredData : Natural := 0;
+    end Natural_Store;
+
+    type Integer_8 is new Integer range -2**(1*8-1) .. 2**(1*8-1)-1;
+
+    protected type Integer_8_Store
+    is
+        pragma Priority (10);
+
+        function Get return Integer_8;
+        --# global in Integer_8_Store;
+
+        procedure Put(X : in Integer_8);
+        --# global out Integer_8_Store;
+        --# derives Integer_8_Store from X;
+    private
+        TheStoredData : Integer_8 := 0;
+    end Integer_8_Store;
+
+    type Integer_16 is new Integer range -2**(2*8-1) .. 2**(2*8-1)-1;
+
+    protected type Integer_16_Store
+    is
+        pragma Priority (10);
+
+        function Get return Integer_16;
+        --# global in Integer_16_Store;
+
+        procedure Put(X : in Integer_16);
+        --# global out Integer_16_Store;
+        --# derives Integer_16_Store from X;
+    private
+        TheStoredData : Integer_16 := 0;
+    end Integer_16_Store;
+
+    type Integer_32 is new Integer range -2**(4*8-1) .. 2**(4*8-1)-1;
+
+    protected type Integer_32_Store
+    is
+        pragma Priority (10);
+
+        function Get return Integer_32;
+        --# global in Integer_32_Store;
+
+        procedure Put(X : in Integer_32);
+        --# global out Integer_32_Store;
+        --# derives Integer_32_Store from X;
+    private
+        TheStoredData : Integer_32 := 0;
+    end Integer_32_Store;
+
+    type Integer_64 is range -2**(8*8-1) .. 2**(8*8-1)-1; -- with new Integer gnat compiler error: value not in range of type "Standard.Integer"
+
+    protected type Integer_64_Store
+    is
+        pragma Priority (10);
+
+        function Get return Integer_64;
+        --# global in Integer_64_Store;
+
+        procedure Put(X : in Integer_64);
+        --# global out Integer_64_Store;
+        --# derives Integer_64_Store from X;
+    private
+        TheStoredData : Integer_64 := 0;
+    end Integer_64_Store;
+
+    type Unsigned_8 is new Integer range 0 .. 2**(1*8)-1;
+
+    protected type Unsigned_8_Store
+    is
+        pragma Priority (10);
+
+        function Get return Unsigned_8;
+        --# global in Unsigned_8_Store;
+
+        procedure Put(X : in Unsigned_8);
+        --# global out Unsigned_8_Store;
+        --# derives Unsigned_8_Store from X;
+    private
+        TheStoredData : Unsigned_8 := 0;
+    end Unsigned_8_Store;
+
+    type Unsigned_16 is new Integer range 0 .. 2**(2*8)-1;
+
+    protected type Unsigned_16_Store
+    is
+        pragma Priority (10);
+
+        function Get return Unsigned_16;
+        --# global in Unsigned_16_Store;
+
+        procedure Put(X : in Unsigned_16);
+        --# global out Unsigned_16_Store;
+        --# derives Unsigned_16_Store from X;
+    private
+        TheStoredData : Unsigned_16 := 0;
+    end Unsigned_16_Store;
+
+    type Unsigned_32 is range 0 .. 2**(4*8)-1; -- with new Integer gnat compiler error: value not in range of type "Standard.Integer"
+
+    protected type Unsigned_32_Store
+    is
+        pragma Priority (10);
+
+        function Get return Unsigned_32;
+        --# global in Unsigned_32_Store;
+
+        procedure Put(X : in Unsigned_32);
+        --# global out Unsigned_32_Store;
+        --# derives Unsigned_32_Store from X;
+    private
+        TheStoredData : Unsigned_32 := 0;
+    end Unsigned_32_Store;
+
+    --type Unsigned_64 is range 0 .. 2**64-1; -- gnat compiler error: integer type definition bounds out of range
+
+end Base_Types;
+
+package body Base_Types
+is
+    protected body Boolean_Store is
+        function Get return Boolean
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Boolean)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Boolean_Store;
+
+    protected body Integer_Store is
+        function Get return Integer
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Integer)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Integer_Store;
+
+    protected body Natural_Store is
+        function Get return Natural
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Natural)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Natural_Store;
+
+    protected body Integer_8_Store is
+        function Get return Integer_8
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Integer_8)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Integer_8_Store;
+
+    protected body Integer_16_Store is
+        function Get return Integer_16
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Integer_16)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Integer_16_Store;
+
+    protected body Integer_32_Store is
+        function Get return Integer_32
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Integer_32)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Integer_32_Store;
+
+    protected body Integer_64_Store is
+        function Get return Integer_64
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Integer_64)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Integer_64_Store;
+
+    protected body Unsigned_8_Store is
+        function Get return Unsigned_8
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Unsigned_8)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Unsigned_8_Store;
+
+    protected body Unsigned_16_Store is
+        function Get return Unsigned_16
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Unsigned_16)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Unsigned_16_Store;
+
+    protected body Unsigned_32_Store is
+        function Get return Unsigned_32
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Unsigned_32)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Unsigned_32_Store;
+
+end Base_Types;
+\end{lstlisting} 
+\label{listing:pca_generated:base_types}
+\doublespacing
+
+\newpage
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Bless_Types} package}]
+with Base_Types;
+--# inherit Base_Types;
+package Bless_Types
+is
+    subtype Fixed_Point is Integer;
+    protected type Fixed_Point_Store 
+    is
+        pragma Priority (10);
+        function Get return Fixed_Point;
+        --# global in Fixed_Point_Store;
+        procedure Put(X : in Fixed_Point);
+        --# global out Fixed_Point_Store;
+        --# derives Fixed_Point_Store from X;
+    private
+        TheStoredData : Fixed_Point := 0;
+    end Fixed_Point_Store;
+
+    subtype Time is Base_Types.Integer_64;
+    protected type Time_Store 
+    is
+        pragma Priority (10);
+        function Get return Time;
+        --# global in Time_Store;
+        procedure Put(X : in Time);
+        --# global out Time_Store;
+        --# derives Time_Store from X;
+    private
+        TheStoredData : Time := 0;
+    end Time_Store;
+end Bless_Types;
+
+package body Bless_Types
+is
+    protected body Fixed_Point_Store is
+        function Get return Fixed_Point
+        --# global in TheStoredData;
+        is begin
+            return TheStoredData;
+        end Get;
+        procedure Put(X : in Fixed_Point)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is begin
+            TheStoredData := X;
+        end Put;
+    end Fixed_Point_Store;
+
+    protected body Time_Store is
+        function Get return Time
+        --# global in TheStoredData;
+        is begin
+            return TheStoredData;
+        end Get;
+        procedure Put(X : in Time)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is begin
+            TheStoredData := X;
+        end Put;
+    end Time_Store;
+end Bless_Types;
+\end{lstlisting} 
+\label{listing:pca_generated:bless_types}
+\doublespacing
+
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Ice_Types} package}]
+with Base_Types;
+--# inherit Base_Types;
+package Ice_Types
+is
+    subtype Milliliter is Base_Types.Unsigned_16 range 0 .. 1000;
+
+    protected type Milliliter_Store
+    is
+        pragma Priority (10);
+
+        function Get return Milliliter;
+        --# global in Milliliter_Store;
+
+        procedure Put(X : in Milliliter);
+        --# global out Milliliter_Store;
+        --# derives Milliliter_Store from X;
+    private
+        TheStoredData : Milliliter := 0;
+    end Milliliter_Store;
+
+
+    subtype Milliliter_Per_Hour is Base_Types.Unsigned_16 range 0 .. 1000;
+
+    protected type Milliliter_Per_Hour_Store
+    is
+        pragma Priority (10);
+
+        function Get return Milliliter_Per_Hour;
+        --# global in Milliliter_Per_Hour_Store;
+
+        procedure Put(X : in Milliliter_Per_Hour);
+        --# global out Milliliter_Per_Hour_Store;
+        --# derives Milliliter_Per_Hour_Store from X;
+    private
+        TheStoredData : Milliliter_Per_Hour := 0;
+    end Milliliter_Per_Hour_Store;
+
+
+    subtype Microliter_Per_Hour is Base_Types.Unsigned_16 range 0 .. 1000;
+
+    protected type Microliter_Per_Hour_Store
+    is
+        pragma Priority (10);
+
+        function Get return Microliter_Per_Hour;
+        --# global in Microliter_Per_Hour_Store;
+
+        procedure Put(X : in Microliter_Per_Hour);
+        --# global out Microliter_Per_Hour_Store;
+        --# derives Microliter_Per_Hour_Store from X;
+    private
+        TheStoredData : Microliter_Per_Hour := 0;
+    end Microliter_Per_Hour_Store;
+
+
+    subtype Minute is Base_Types.Unsigned_16 range 0 .. 1000;
+
+    protected type Minute_Store
+    is
+        pragma Priority (10);
+
+        function Get return Minute;
+        --# global in Minute_Store;
+
+        procedure Put(X : in Minute);
+        --# global out Minute_Store;
+        --# derives Minute_Store from X;
+    private
+        TheStoredData : Minute := 0;
+    end Minute_Store;
+
+
+    type Alarm_Signal is (On, Alarm_Off, Alarm_Paused, Audio_Off, Audio_Paused);
+
+    protected type Alarm_Signal_Store
+    is
+        pragma Priority (10);
+
+        function Get return Alarm_Signal;
+        --# global in Alarm_Signal_Store;
+
+        procedure Put(X : in Alarm_Signal);
+        --# global out Alarm_Signal_Store;
+        --# derives Alarm_Signal_Store from X;
+    private
+        TheStoredData : Alarm_Signal := Alarm_Signal'First;
+    end Alarm_Signal_Store;
+
+
+    subtype Percent is Base_Types.Unsigned_8 range 0 .. 100;
+
+    protected type Percent_Store
+    is
+        pragma Priority (10);
+
+        function Get return Percent;
+        --# global in Percent_Store;
+
+        procedure Put(X : in Percent);
+        --# global out Percent_Store;
+        --# derives Percent_Store from X;
+    private
+        TheStoredData : Percent := 0;
+    end Percent_Store;
+
+
+    type Minute_Count is new Integer;
+
+    protected type Minute_Count_Store
+    is
+        pragma Priority (10);
+
+        function Get return Minute_Count;
+        --# global in Minute_Count_Store;
+
+        procedure Put(X : in Minute_Count);
+        --# global out Minute_Count_Store;
+        --# derives Minute_Count_Store from X;
+    private
+        TheStoredData : Minute_Count := 0;
+    end Minute_Count_Store;
+
+
+    type Second_Count is new Integer;
+
+    protected type Second_Count_Store
+    is
+        pragma Priority (10);
+
+        function Get return Second_Count;
+        --# global in Second_Count_Store;
+
+        procedure Put(X : in Second_Count);
+        --# global out Second_Count_Store;
+        --# derives Second_Count_Store from X;
+    private
+        TheStoredData : Second_Count := 0;
+    end Second_Count_Store;
+end Ice_Types;
+
+package body Ice_Types
+is
+    protected body Milliliter_Store is
+        function Get return Milliliter
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Milliliter)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Milliliter_Store;
+
+    protected body Milliliter_Per_Hour_Store is
+        function Get return Milliliter_Per_Hour
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Milliliter_Per_Hour)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Milliliter_Per_Hour_Store;
+
+    protected body Microliter_Per_Hour_Store is
+        function Get return Microliter_Per_Hour
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Microliter_Per_Hour)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Microliter_Per_Hour_Store;
+
+    protected body Minute_Store is
+        function Get return Minute
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Minute)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Minute_Store;
+
+    protected body Alarm_Signal_Store is
+        function Get return Alarm_Signal
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Alarm_Signal)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Alarm_Signal_Store;
+
+    protected body Percent_Store is
+        function Get return Percent
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Percent)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Percent_Store;
+
+    protected body Minute_Count_Store is
+        function Get return Minute_Count
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Minute_Count)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Minute_Count_Store;
+
+    protected body Second_Count_Store is
+        function Get return Second_Count
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Second_Count)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Second_Count_Store;
+
+end Ice_Types;
+\end{lstlisting} 
+\label{listing:pca_generated:ice_types}
+\doublespacing
+
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Types} package}]
+with Base_Types;
+with Bless_Types;
+with Ice_Types;
+with Pca_Properties;
+--# inherit Base_Types,
+--#         Bless_Types,
+--#         Ice_Types,
+--#         Pca_Properties;
+package Pca_Types
+is
+    type Alarm_Type is (
+                        No_Alarm,
+                        Pump_Overheated,
+                        Defective_Battery,
+                        Low_Battery,
+                        POST_Failure,
+                        RAM_Failure,
+                        ROM_failure,
+                        CPU_Failure,
+                        Thread_Monitor_Failure,
+                        Air_In_Line,
+                        Upstream_Occlusion,
+                        Downstream_Occlusion,
+                        Empty_Reservoir,
+                        Basal_Overinfusion,
+                        Bolus_Overinfusion,
+                        Square_Bolus_Overinfusion
+                        );
+
+    protected type Alarm_Type_Store
+    is
+        pragma Priority (10);
+
+        function Get return Alarm_Type;
+        --# global in Alarm_Type_Store;
+
+        procedure Put(X : in Alarm_Type);
+        --# global out Alarm_Type_Store;
+        --# derives Alarm_Type_Store from X;
+    private
+        TheStoredData : Alarm_Type := Alarm_Type'First;
+    end Alarm_Type_Store;
+
+
+    type Warning_Type is (No_Warning,
+                          Over_Max_Drug_Per_Hour,
+                          Soft_Limit,
+                          Low_Reservoir,
+                          Priming_Failure,
+                          Basal_Underinfusion,
+                          Bolus_Underinfusion,
+                          Square_Bolus_Underinfusion,
+                          Input_Needed,
+                          Long_Pause,
+                          Drug_Not_In_Library,
+                          Hard_Limit_Violated,
+                          Voltage_OOR
+                          );
+
+    protected type Warning_Type_Store
+    is
+        pragma Priority (10);
+
+        function Get return Warning_Type;
+        --# global in Warning_Type_Store;
+
+        procedure Put(X : in Warning_Type);
+        --# global out Warning_Type_Store;
+        --# derives Warning_Type_Store from X;
+    private
+        TheStoredData : Warning_Type := Warning_Type'First;
+    end Warning_Type_Store;
+
+
+    type Status_Type is (Stopped, Bolus, Basal, KVO, Square_Bolus);
+
+    protected type Status_Type_Store
+    is
+        pragma Priority (10);
+
+        function Get return Status_Type;
+        --# global in Status_Type_Store;
+
+        procedure Put(X : in Status_Type);
+        --# global out Status_Type_Store;
+        --# derives Status_Type_Store from X;
+    private
+        TheStoredData : Status_Type := Status_Type'First;
+    end Status_Type_Store;
+
+
+    subtype Flow_Rate is Base_Types.Integer_16;
+
+    protected type Flow_Rate_Store
+    is
+        pragma Priority (10);
+
+        function Get return Flow_Rate;
+        --# global in Flow_Rate_Store;
+
+        procedure Put(X : in Flow_Rate);
+        --# global out Flow_Rate_Store;
+        --# derives Flow_Rate_Store from X;
+    private
+        TheStoredData : Flow_Rate := 0;
+    end Flow_Rate_Store;
+
+
+    subtype Drug_Volume is Base_Types.Integer_16;
+
+    protected type Drug_Volume_Store
+    is
+        pragma Priority (10);
+
+        function Get return Drug_Volume;
+        --# global in Drug_Volume_Store;
+
+        procedure Put(X : in Drug_Volume);
+        --# global out Drug_Volume_Store;
+        --# derives Drug_Volume_Store from X;
+    private
+        TheStoredData : Drug_Volume := 0;
+    end Drug_Volume_Store;
+
+
+    subtype Drug_Weight is Base_Types.Integer_16;
+
+    protected type Drug_Weight_Store
+    is
+        pragma Priority (10);
+
+        function Get return Drug_Weight;
+        --# global in Drug_Weight_Store;
+
+        procedure Put(X : in Drug_Weight);
+        --# global out Drug_Weight_Store;
+        --# derives Drug_Weight_Store from X;
+    private
+        TheStoredData : Drug_Weight := 0;
+    end Drug_Weight_Store;
+
+
+    type Drug_Concentration is new Integer;
+
+    protected type Drug_Concentration_Store
+    is
+        pragma Priority (10);
+
+        function Get return Drug_Concentration;
+        --# global in Drug_Concentration_Store;
+
+        procedure Put(X : in Drug_Concentration);
+        --# global out Drug_Concentration_Store;
+        --# derives Drug_Concentration_Store from X;
+    private
+        TheStoredData : Drug_Concentration := 0;
+    end Drug_Concentration_Store;
+
+
+    type Drug_Record is record
+        Amount : Drug_Weight;
+        Concentration : Drug_Concentration;
+        Vtbi_Lower_Soft : Drug_Volume;
+        Vtbi_Lower_Hard : Drug_Volume;
+        Vtbi_Typical : Drug_Volume;
+        Vtbi_Upper_Soft : Drug_Volume;
+        Vtbi_Upper_Hard : Drug_Volume;
+        Basal_Rate_Lower_Soft : Flow_Rate;
+        Basal_Rate_Lower_Hard : Flow_Rate;
+        Basal_Rate_Typical : Flow_Rate;
+        Basal_Rate_Upper_Soft : Flow_Rate;
+        Basal_Rate_Upper_Hard : Flow_Rate;
+        Bolus_Typical : Drug_Volume;
+        Bolus_Time_Typical : Ice_Types.Minute;
+    end record;
+
+    protected type Drug_Record_Store
+    is
+        pragma Priority (10);
+
+        function Get return Drug_Record;
+        --# global in Drug_Record_Store;
+
+        procedure Put(X : in Drug_Record);
+        --# global out Drug_Record_Store;
+        --# derives Drug_Record_Store from X;
+    private
+        TheStoredData : Drug_Record :=
+          Drug_Record'(Amount => Drug_Weight'First,
+                       Concentration => Drug_Concentration'First,
+                       Vtbi_Lower_Soft => Drug_Volume'First,
+                       Vtbi_Lower_Hard => Drug_Volume'First,
+                       Vtbi_Typical => Drug_Volume'First,
+                       Vtbi_Upper_Soft => Drug_Volume'First,
+                       Vtbi_Upper_Hard => Drug_Volume'First,
+                       Basal_Rate_Lower_Soft => Flow_Rate'First,
+                       Basal_Rate_Lower_Hard => Flow_Rate'First,
+                       Basal_Rate_Typical => Flow_Rate'First,
+                       Basal_Rate_Upper_Soft => Flow_Rate'First,
+                       Basal_Rate_Upper_Hard => Flow_Rate'First,
+                       Bolus_Typical => Drug_Volume'First,
+                       Bolus_Time_Typical => Ice_Types.Minute'First
+                       );
+    end Drug_Record_Store;
+
+
+    subtype Drug_Library_Index is Integer range 1 .. Pca_Properties.Drug_Library_Size;
+    type Drug_Library is array (Drug_Library_Index) of Drug_Record;
+
+    protected type Drug_Library_Store
+    is
+        pragma Priority (10);
+
+        function Get(Ind : in Integer) return Drug_Record;
+        --# global in Drug_Library_Store;
+
+        procedure Put(Ind : in Integer; Val : in Drug_Record);
+        --# global in out Drug_Library_Store;
+        --# derives Drug_Library_Store from Drug_Library_Store, Ind, Val;
+   private
+      TheStoredData : Drug_Library := Drug_Library'(others =>        
+                           Drug_Record'(Amount => Drug_Weight'First,
+                                        Concentration => Drug_Concentration'First,
+                                        Vtbi_Lower_Soft => Drug_Volume'First,
+                                        Vtbi_Lower_Hard => Drug_Volume'First,
+                                        Vtbi_Typical => Drug_Volume'First,
+                                        Vtbi_Upper_Soft => Drug_Volume'First,
+                                        Vtbi_Upper_Hard => Drug_Volume'First,
+                                        Basal_Rate_Lower_Soft => Flow_Rate'First,
+                                        Basal_Rate_Lower_Hard => Flow_Rate'First,
+                                        Basal_Rate_Typical => Flow_Rate'First,
+                                        Basal_Rate_Upper_Soft => Flow_Rate'First,
+                                        Basal_Rate_Upper_Hard => Flow_Rate'First,
+                                        Bolus_Typical => Drug_Volume'First,
+                                        Bolus_Time_Typical => Ice_Types.Minute'First
+                                       ));
+    end Drug_Library_Store;
+
+    type Prescription is record
+        Concentration : Drug_Concentration;
+        Initial_Volume : Drug_Volume;
+        Basal_Flow_Rate : Flow_Rate;
+        Vtbi : Drug_Volume;
+        Max_Drug_Per_Hour : Drug_Volume;
+        Minimum_Time_Between_Bolus : Ice_Types.Minute;
+    end record;
+
+    protected type Prescription_Store
+    is
+        pragma Priority (10);
+
+        function Get return Prescription;
+        --# global in Prescription_Store;
+
+        procedure Put(Prescription_In : in Prescription);
+        --# global out Prescription_Store;
+        --# derives Prescription_Store from Prescription_In;
+
+    private
+        TheStoredData : Prescription :=
+          Prescription'(Concentration => 0,
+                        Initial_Volume => 0,
+                        Basal_Flow_Rate => 0,
+                        Vtbi => 0,
+                        Max_Drug_Per_Hour => 0,
+                        Minimum_Time_Between_Bolus => 0
+                       );
+
+    end Prescription_Store;
+
+    type Fault_Record is record
+        Alarm : Alarm_Type;
+        Warning : Warning_Type;
+        Time : Bless_Types.Time;
+    end record;
+
+    protected type Fault_Record_Store
+    is
+        pragma Priority (10);
+
+        function Get return Fault_Record;
+        --# global in Fault_Record_Store;
+
+        procedure Put(X : in Fault_Record);
+        --# global out Fault_Record_Store;
+        --# derives Fault_Record_Store from X;
+    private
+        TheStoredData : Fault_Record := Fault_Record'(Alarm => Alarm_Type'First,
+                                                      Warning => Warning_Type'First,
+                                                      Time => Bless_Types.Time'First
+                                                     );
+    end Fault_Record_Store;
+
+
+    subtype Fault_Log_Index is Integer range 1 .. Pca_Properties.Fault_Log_Size;
+    type Fault_Log is array (Fault_Log_Index) of Fault_Record;
+
+    protected type Fault_Log_Store
+    is
+        pragma Priority (10);
+
+        function Get(Ind : in Integer) return Fault_Record;
+        --# global in Fault_Log_Store;
+
+        procedure Put(Ind : in Integer; Val : in Fault_Record);
+        --# global in out Fault_Log_Store;
+        --# derives Fault_Log_Store from Fault_Log_Store, Ind, Val;
+    private
+        TheStoredData : Fault_Log := Fault_Log'(others =>
+                                                        Fault_Record'(Alarm => Alarm_Type'First,
+                                                                      Warning => Warning_Type'First,
+                                                                      Time => Bless_Types.Time'First
+                                                                     ));
+    end Fault_Log_Store;
+
+
+    type Event_Record is record
+        Time : Bless_Types.Time;
+    end record;
+
+    protected type Event_Record_Store
+    is
+        pragma Priority (10);
+
+        function Get return Event_Record;
+        --# global in Event_Record_Store;
+
+        procedure Put(X : in Event_Record);
+        --# global out Event_Record_Store;
+        --# derives Event_Record_Store from X;
+    private
+        TheStoredData : Event_Record := Event_Record'(Time => Bless_Types.Time'First);
+    end Event_Record_Store;
+
+
+    subtype Event_Log_Index is Integer range 1 .. Pca_Properties.Event_Log_Size;
+    type Event_Log is array (Event_Log_Index) of Event_Record;
+
+    protected type Event_Log_Store
+    is
+        pragma Priority (10);
+
+        function Get(Ind : in Integer) return Event_Record;
+        --# global in Event_Log_Store;
+
+        procedure Put(Ind : in Integer; Val : in Event_Record);
+        --# global in out Event_Log_Store;
+        --# derives Event_Log_Store from Event_Log_Store, Ind, Val;
+    private
+        TheStoredData : Event_Log := Event_Log'(others => Event_Record'(Time => Bless_Types.Time'First));
+    end Event_Log_Store;
+
+
+    type Infusion_Type is (Bolus_Infusion, Square_Infusion, Basal_Infusion, KVO_Infusion);
+
+    protected type Infusion_Type_Store
+    is
+        pragma Priority (10);
+
+        function Get return Infusion_Type;
+        --# global in Infusion_Type_Store;
+
+        procedure Put(X : in Infusion_Type);
+        --# global out Infusion_Type_Store;
+        --# derives Infusion_Type_Store from X;
+    private
+        TheStoredData : Infusion_Type := Infusion_Type'First;
+    end Infusion_Type_Store;
+
+
+    type Pump_Fault_Type is (Prime_Failure, Pump_Hot, Bubble, Upstream_Occlusion_Fault, Downstream_Occlusion_Fault, Overinfusion, Underinfusion);
+
+    protected type Pump_Fault_Type_Store
+    is
+        pragma Priority (10);
+
+        function Get return Pump_Fault_Type;
+        --# global in Pump_Fault_Type_Store;
+
+        procedure Put(X : in Pump_Fault_Type);
+        --# global out Pump_Fault_Type_Store;
+        --# derives Pump_Fault_Type_Store from X;
+    private
+        TheStoredData : Pump_Fault_Type := Pump_Fault_Type'First;
+    end Pump_Fault_Type_Store;
+
+end Pca_Types;
+
+package body Pca_Types
+is
+    protected body Alarm_Type_Store is
+        function Get return Alarm_Type
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Alarm_Type)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Alarm_Type_Store;
+
+    protected body Warning_Type_Store is
+        function Get return Warning_Type
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Warning_Type)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Warning_Type_Store;
+
+    protected body Status_Type_Store is
+        function Get return Status_Type
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Status_Type)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Status_Type_Store;
+
+    protected body Flow_Rate_Store is
+        function Get return Flow_Rate
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Flow_Rate)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Flow_Rate_Store;
+
+    protected body Drug_Volume_Store is
+        function Get return Drug_Volume
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Drug_Volume)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Drug_Volume_Store;
+
+    protected body Drug_Weight_Store is
+        function Get return Drug_Weight
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Drug_Weight)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Drug_Weight_Store;
+
+    protected body Drug_Concentration_Store is
+        function Get return Drug_Concentration
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Drug_Concentration)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Drug_Concentration_Store;
+
+    protected body Drug_Record_Store is
+        function Get return Drug_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Drug_Record)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Drug_Record_Store;
+
+    protected body Drug_Library_Store is
+        function Get(Ind : in Integer) return Drug_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData(Ind);
+        end Get;
+
+        procedure Put(Ind : in Integer; Val : in Drug_Record)
+          --# global in out TheStoredData;
+          --# derives TheStoredData from TheStoredData, Ind, Val;
+        is
+        begin
+            TheStoredData(Ind) := Val;
+        end Put;
+    end Drug_Library_Store;
+
+    protected body Prescription_Store
+    is
+        function Get return Prescription
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(Prescription_In : in Prescription)
+        --# global out TheStoredData;
+        --# derives TheStoredData from Prescription_In;
+        is
+        begin
+            TheStoredData := Prescription_In;
+        end Put;
+    end Prescription_Store;
+
+    protected body Fault_Record_Store is
+        function Get return Fault_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Fault_Record)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Fault_Record_Store;
+
+    protected body Fault_Log_Store is
+        function Get(Ind : in Integer) return Fault_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData(Ind);
+        end Get;
+
+        procedure Put(Ind : in Integer; Val : in Fault_Record)
+          --# global in out TheStoredData;
+          --# derives TheStoredData from TheStoredData, Ind, Val;
+        is
+        begin
+            TheStoredData(Ind) := Val;
+        end Put;
+    end Fault_Log_Store;
+
+    protected body Event_Record_Store is
+        function Get return Event_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Event_Record)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Event_Record_Store;
+
+    protected body Event_Log_Store is
+        function Get(Ind : in Integer) return Event_Record
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData(Ind);
+        end Get;
+
+        procedure Put(Ind : in Integer; Val : in Event_Record)
+          --# global in out TheStoredData;
+          --# derives TheStoredData from TheStoredData, Ind, Val;
+        is
+        begin
+            TheStoredData(Ind) := Val;
+        end Put;
+    end Event_Log_Store;
+
+    protected body Infusion_Type_Store is
+        function Get return Infusion_Type
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Infusion_Type)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Infusion_Type_Store;
+
+    protected body Pump_Fault_Type_Store is
+        function Get return Pump_Fault_Type
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData;
+        end Get;
+
+        procedure Put(X : in Pump_Fault_Type)
+          --# global out TheStoredData;
+          --# derives TheStoredData from X;
+        is
+        begin
+            TheStoredData := X;
+        end Put;
+    end Pump_Fault_Type_Store;
+
+end Pca_Types;
+\end{lstlisting} 
+\label{listing:pca_generated:pca_types}
+\doublespacing
+
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Properties} package}]
+package Pca_Properties
+is
+    Drug_Library_Size : constant Integer := 500;
+    Fault_Log_Size : constant Integer := 150;
+    Event_Log_Size : constant Integer := 1500;
+    KVO_Rate_Constant : constant Integer := 1;
+    KVO_Rate : constant Integer := KVO_Rate_Constant;
+    Max_Rate : constant Integer := 10;
+end Pca_Properties;
+\end{lstlisting} 
+\label{listing:pca_generated:pca_properties}
+\doublespacing
+
+\newpage
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Operation} package}]
+with Pca_Properties,
+    Base_Types,
+    Bless_Types,
+    Ice_Types,
+     Pca_Types;
+--# inherit Pca_Properties,
+--#         Base_Types,
+--#         Bless_Types,
+--#         Ice_Types,
+--#         Pca_Types;
+package Pca_Operation
+--# own protected Bolus_Duration : Ice_Types.Minute_Store (Priority=>10);
+--#     protected Infusion_Flow_Rate : PCA_Types.Flow_Rate_Store (Priority=>10);
+--#     protected System_Status : Pca_Types.Status_Type_Store (Priority=>10);
+--#     protected Rx : Pca_Types.Prescription_Store (Priority=>10);
+--#     task mdphw : Max_Drug_Per_Hour_Watcher;
+--#     task rc : Rate_Controller;
+--#     task pbc : Patient_Bolus_Checker;
+is
+    procedure Put_Start_Button_Pressed;
+
+    procedure Put_Stop_Button_Pressed;
+
+    procedure Put_Patient_Request_Bolus;
+
+    procedure Put_Clinician_Request_Bolus;
+
+    procedure Put_Bolus_Duration (Bolus_Duration_In : Ice_Types.Minute);
+    --# global out Bolus_Duration;
+    --# derives Bolus_Duration from Bolus_Duration_In;
+
+    procedure Get_Infusion_Flow_Rate (Infusion_Flow_Rate_Out : out Pca_Types.Flow_Rate);
+    --# global in Infusion_Flow_Rate;
+    --# derives Infusion_Flow_Rate_Out from Infusion_Flow_Rate;
+
+    procedure Get_System_Status (System_Status_Out : out Pca_Types.Status_Type);
+    --# global in System_Status;
+    --# derives System_Status_Out from System_Status;
+
+    procedure Put_Rx (Rx_In : Pca_Types.Prescription);
+    --# global out Rx;
+    --# derives Rx from Rx_In;
+
+
+    task type Max_Drug_Per_Hour_Watcher
+    --# global in Infusion_Flow_Rate;
+    is
+        pragma Priority(10);
+    end Max_Drug_Per_Hour_Watcher;
+
+    task type Rate_Controller
+    --# global in Rx;
+    --#        in Bolus_Duration;
+    --#        out Infusion_Flow_Rate;
+    --#        out System_Status;
+    is
+        pragma Priority(10);
+    end Rate_Controller;
+
+    task type Patient_Bolus_Checker
+    is
+        pragma Priority(10);
+    end Patient_Bolus_Checker;
+
+end Pca_Operation;
+
+package body Pca_Operation
+is
+    type la_type is (
+                     StopButton,
+                     TooMuchJuice,
+                     PatientButton,
+                     ResumeSquareBolus,
+                     ResumeBasal,
+                     StartSquareBolus,
+                     SquareBolusDone,
+                     StartButton);
+
+    Bolus_Duration : Ice_Types.Minute_Store;
+    Infusion_Flow_Rate : PCA_Types.Flow_Rate_Store;
+    System_Status : Pca_Types.Status_Type_Store;
+    Rx : Pca_Types.Prescription_Store;
+
+    mdphw : Max_Drug_Per_Hour_Watcher;
+    rc : Rate_Controller;
+    pbc : Patient_Bolus_Checker;
+
+    procedure Put_Start_Button_Pressed
+    is
+    begin
+        -- TODO: implement event handler
+        null;
+    end Put_Start_Button_Pressed;
+
+    procedure Put_Stop_Button_Pressed
+    is
+    begin
+        -- TODO: implement event handler
+        null;
+    end Put_Stop_Button_Pressed;
+
+    procedure Put_Patient_Request_Bolus
+    is
+    begin
+        -- TODO: implement event handler
+        null;
+    end Put_Patient_Request_Bolus;
+
+    procedure Put_Clinician_Request_Bolus
+    is
+    begin
+        -- TODO: implement event handler
+        null;
+    end Put_Clinician_Request_Bolus;
+
+    procedure Put_Bolus_Duration (Bolus_Duration_In : ICE_Types.Minute)
+    is
+    begin
+        Bolus_Duration.Put(Bolus_Duration_In);
+    end Put_Bolus_Duration;
+
+    procedure Get_Infusion_Flow_Rate (Infusion_Flow_Rate_Out : out Pca_Types.Flow_Rate)
+    is
+    begin
+        Infusion_Flow_Rate_Out := Infusion_Flow_Rate.Get;
+    end Get_Infusion_Flow_Rate;
+
+    procedure Get_System_Status (System_Status_Out : out Pca_Types.Status_Type)
+    is
+    begin
+        System_Status_Out := System_Status.Get;
+    end Get_System_Status;
+
+    procedure Put_Rx (Rx_In : Pca_Types.Prescription)
+    is
+    begin
+        Rx.Put(Rx_In);
+    end Put_Rx;
+
+
+    task body Max_Drug_Per_Hour_Watcher
+    is
+    begin
+        loop
+            --# assert PUMP_RATE;
+            null;
+        end loop;
+    end Max_Drug_Per_Hour_Watcher;
+
+    task body Rate_Controller
+    is
+        la : la_type;
+    begin
+        loop
+            --# assert true;
+            --# assert Rx_APPROVED;
+            --# assert PUMP_RATE;
+            --# assert (la=StopButton) -> HALT;
+            --# assert (la=TooMuchJuice) -> KVO_RATE;
+            --# assert (la=PatientButton) -> PB_RATE;
+            --# assert ((la=StartSquareBolus) or (la=ResumeSquareBolus)) -> CCB_RATE;
+            --# assert ((la=StartButton) or (la=ResumeBasal) or (la=SquareBolusDone)) -> BASAL_RATE;
+            --# assert (PUMP_RATE = 0) -> HALT;
+            --# assert (PUMP_RATE = Pca_Properties.KVO_Rate) -> KVO_RATE;
+            --# assert (PUMP_RATE = Patient_Bolus_Rate) -> PB_RATE;
+            --# assert (PUMP_RATE = Square_Bolus_Rate) -> CCB_RRATE;
+            --# assert (PUMP_RATE = Basal_Rate) -> BASAL_RATE;
+            null;
+        end loop;
+    end Rate_Controller;
+
+    task body Patient_Bolus_Checker
+    is
+    begin
+        loop
+            --# assert true;
+            null;
+        end loop;
+    end Patient_Bolus_Checker;
+
+end Pca_Operation;
+\end{lstlisting} 
+\label{listing:pca_generated:pca_operation}
+\doublespacing
+

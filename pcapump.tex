@@ -168,16 +168,6 @@ AADL model captures structure of device. BLESS - its behavior. Listing \ref{list
   annex BLESS
   {**
   assert
-  --the infusion flow rate shall be:
-  --  =0, after stop pump completely (from safety architecture), 
-  --      clinician pressed stop button
-  --  =KVO rate, after KVO rate command, or
-  --      exceeded max drug per hour
-  --      some alarms,
-  --  =max rate, during patient-requested infusion
-  --  =square bolus rate, during clinician-commanded infusion 
-  --  =priming rate during pump priming
-  --  =basal rate, otherwise
   <<HALT : :(la=SafetyPumpStop) or (la=StopButton) or (la=EndPriming)>>  --pump at 0 if stop button, or safety architecture says, or done priming
   <<KVO_RATE : :(la=KVOcommand) or (la=KVOalarm) or (la=TooMuchJuice)>>  --pump at KVO rate when commanded, some alarms, or excedded hourly limit
   <<PB_RATE : :la=PatientButton>>  --patient button pressed, and allowed

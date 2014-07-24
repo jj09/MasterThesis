@@ -2,9 +2,553 @@
 
 \cleardoublepage
 
-\chapter{Simplified PCA Pump AADL/BLESS models}
+\chapter{Simplified PCA pump AADL models}
 \label{Appendix:AADL}
 
-Content of this appendix.
+This appendix contains simplified AADL/BLESS models. They were created based on AADL/BLESS models of PCA pump, created by Brian Larson.
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Properties} property set}]
+property set BLESS_Properties is
+  with AADL_Project;
 
-%code listings with numbers
+  Supported_Operators : list of aadlstring applies to ( data );
+  Supported_Relations : list of aadlstring applies to ( data );
+  Radix : AADL_Project::Size_Units applies to ( data );
+end BLESS_Properties;
+\end{lstlisting} 
+\label{listing:aadl:bless_properties}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS} property set}]
+property set BLESS is
+  Assertion : aadlstring applies to ( all );
+  Typed : aadlstring applies to ( all );
+  Invariant : aadlstring applies to ( all );
+end BLESS;
+\end{lstlisting} 
+\label{listing:aadl:bless}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Properties} property set}]
+property set PCA_Properties is
+  with PCA_Types;  
+  
+  Drug_Library_Size : constant aadlinteger => 500;
+  Fault_Log_Size : constant aadlinteger => 150;
+  Event_Log_Size : constant aadlinteger => 1500;      
+  KVO_Rate_Constant : constant aadlinteger => 1;  
+  KVO_Rate : constant aadlinteger => PCA_Properties::KVO_Rate_Constant;
+  Max_Rate : constant aadlinteger => 10;     
+end PCA_Properties;
+\end{lstlisting} 
+\label{listing:aadl:pca_properties}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Types} package}]
+package BLESS_Types public
+with Base_Types, BLESS_Properties, Data_Model, Memory_Properties, BLESS;
+
+data Integer extends Base_Types::Integer
+  properties  --operators and relation symbols defined for Integer
+    BLESS::Typed => "integer";
+    BLESS_Properties::Supported_Operators => ("+", "*", "-", "/", "mod", "rem", "**");
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+end Integer;    
+    
+data Natural extends Base_Types::Natural
+  properties  --operators and relation symbols defined for Natural
+    BLESS::Typed => "natural";
+    BLESS_Properties::Supported_Operators => ("+", "*", "-", "/", "mod", "rem", "**");
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+end Natural;    
+    
+data Real extends Base_Types::Float
+  properties  --operators and relation symbols defined for Float
+    BLESS::Typed => "real";
+    BLESS_Properties::Supported_Operators => ("+", "*", "-", "/", "**");
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+end Real;    
+    
+data String extends Base_Types::String
+  properties  --operators and relation symbols defined for String
+    BLESS::Typed => "string";
+    BLESS_Properties::Supported_Operators => ("+", "-"); --just concatenation
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+end String;    
+    
+data Fixed_Point
+  properties  --operators and relation symbols defined for fixed-point arithmetic
+    BLESS::Typed => "fixed";
+    BLESS_Properties::Supported_Operators => ("+", "*", "-", "/", "**");
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+    Data_Model::Data_Representation => Integer;
+end Fixed_Point;
+
+data Time extends Base_Types::Integer_64  --in milliseconds
+  properties  --operators and relation symbols defined for Time
+    --don't have a way to say that Time may be multiplied or divided by scalar
+    --but not another Time
+    BLESS::Typed => "integer";
+    BLESS_Properties::Supported_Operators => ("+", "*", "-", "/");
+    BLESS_Properties::Supported_Relations => ("=", "!=", "<", "<=", ">=", ">");
+end Time;
+    
+end BLESS_Types;
+\end{lstlisting} 
+\label{listing:aadl:bless_types}
+\doublespacing
+
+\newpage
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{ICE_Types} package}]
+package ICE_Types
+public
+with Data_Model;
+with Base_Types;
+	data Milliliter
+	properties
+		Data_Model::Data_Representation => Integer;
+		Data_Model::Base_Type => (classifier (Base_Types::Unsigned_16)); --two bytes for 0-1000 ml
+		Data_Model::Integer_Range => 0 .. 1000;
+		Data_Model::Measurement_Unit => "ml";
+	end Milliliter;
+
+	data Milliliter_Per_Hour
+	properties
+		Data_Model::Data_Representation => Integer;
+		Data_Model::Base_Type => (classifier (Base_Types::Unsigned_16)); --two bytes for 0-1000 ml/hr
+		Data_Model::Integer_Range => 0 .. 1000;
+		Data_Model::Measurement_Unit => "ml_per_hr";
+	end Milliliter_Per_Hour;
+
+	data Microliter_Per_Hour
+	properties
+		Data_Model::Data_Representation => Integer;
+		Data_Model::Base_Type => (classifier (Base_Types::Unsigned_16)); --two bytes for 0-1000 ul/hr
+		Data_Model::Integer_Range => 0 .. 1000;
+		Data_Model::Measurement_Unit => "ul_per_hr";
+	end Microliter_Per_Hour;
+
+	data Minute
+	properties
+		Data_Model::Data_Representation => Integer;
+		Data_Model::Base_Type => (classifier (Base_Types::Unsigned_16)); --two bytes for 0-1000 minutes
+		Data_Model::Integer_Range => 0 .. 1000;
+		Data_Model::Measurement_Unit => "min";
+	end Minute;
+
+	data Alarm_Signal --according to IEC 60601-1-8/FDIS AAA.201.8 ALARM SIGNAL inactivation states
+	properties
+		Data_Model::Data_Representation => Enum;
+		Data_Model::Enumerators => ("On", "Alarm_Off", "Alarm_Paused", "Audio_Off", "Audio_Paused");
+	end Alarm_Signal;
+
+	data Percent
+	properties
+		Data_Model::Data_Representation => Integer;
+		Data_Model::Base_Type => (classifier (Base_Types::Unsigned_8)); --one byte for 0-100 percent
+		Data_Model::Integer_Range => 0 .. 100;
+	end Percent;
+
+	data Minute_Count extends Base_Types::Integer
+	end Minute_Count;
+
+	data Second_Count extends Base_Types::Integer
+	end Second_Count;
+
+end ICE_Types;
+\end{lstlisting} 
+\label{listing:aadl:ice_types}
+\doublespacing
+
+\newpage
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Types} package}]
+package PCA_Types
+public
+  with Base_Types, Data_Model, PCA_Properties, ICE_Types, BLESS_Types, BLESS;
+
+data Alarm_Type
+  properties
+    BLESS::Typed=>"enumeration (
+					No_Alarm,
+					Pump_Overheated,
+					Defective_Battery,
+					Low_Battery,
+      				POST_Failure,
+					RAM_Failure,
+					ROM_failure,
+					CPU_Failure,
+					Thread_Monitor_Failure,
+					Air_In_Line,
+					Upstream_Occlusion,
+					Downstream_Occlusion,
+					Empty_Reservoir,
+					Basal_Overinfusion,
+					Bolus_Overinfusion,
+					Square_Bolus_Overinfusion)";
+    Data_Model::Data_Representation => Enum;
+    Data_Model::Enumerators => (
+    	"No_Alarm",
+    	"Pump_Overheated",
+    	"Defective_Battery",
+    	"Low_Battery",
+        "POST_Failure",
+        "RAM_Failure",
+        "ROM_failure",
+        "CPU_Failure",
+        "Thread_Monitor_Failure",
+        "Air_In_Line",
+        "Upstream_Occlusion",
+        "Downstream_Occlusion",
+        "Empty_Reservoir",
+    	"Basal_Overinfusion",
+    	"Bolus_Overinfusion",
+    	"Square_Bolus_Overinfusion");
+end Alarm_Type;  
+
+data Warning_Type
+  properties
+    BLESS::Typed=>
+      "enumeration (No_Warning,
+					Over_Max_Drug_Per_Hour,
+					Soft_Limit,
+					Low_Reservoir,
+					Priming_Failure,
+					Basal_Underinfusion,
+					Bolus_Underinfusion,
+					Square_Bolus_Underinfusion,
+					Input_Needed,
+					Long_Pause,
+					Drug_Not_In_Library,
+					Hard_Limit_Violated,
+					Voltage_OOR)";
+    Data_Model::Data_Representation => Enum;
+    Data_Model::Enumerators => (
+    	"No_Warning",
+    	"Over_Max_Drug_Per_Hour",
+        "Soft_Limit",
+        "Low_Reservoir",
+        "Priming_Failure",
+    	"Basal_Underinfusion",
+    	"Bolus_Underinfusion",
+    	"Square_Bolus_Underinfusion",
+    	"Input_Needed",
+    	"Long_Pause",
+    	"Drug_Not_In_Library",
+    	"Hard_Limit_Violated",
+    	"Voltage_OOR");  	
+end Warning_Type;
+
+data Status_Type
+  properties
+    BLESS::Typed=>"enumeration (Stopped,Bolus,Basal,KVO,Square_Bolus)";
+    Data_Model::Data_Representation => Enum;
+    Data_Model::Enumerators => ("Stopped","Bolus","Basal","KVO","Square_Bolus");
+end Status_Type;
+
+data Flow_Rate  --dose rate
+  properties
+    BLESS::Typed=>"integer";
+    Data_Model::Base_Type => (classifier(Base_Types::Integer_16));
+    Data_Model::Measurement_Unit => "ml/hr";
+end Flow_Rate;  
+
+data Drug_Volume  --volume of VTBI
+  properties
+    BLESS::Typed=>"integer";
+    Data_Model::Base_Type => (classifier(Base_Types::Integer_16));
+    Data_Model::Measurement_Unit => "ml";
+end Drug_Volume;  
+
+data Drug_Weight  --string representing what drug, conectration, and volume is in the reservoir
+  properties
+    BLESS::Typed=>"integer";
+    Data_Model::Base_Type => (classifier(Base_Types::Integer_16));
+    Data_Model::Measurement_Unit => "mg";
+end Drug_Weight;
+
+data Drug_Concentration  --string representing what drug, conectration, and volume is in the reservoir
+  properties
+    BLESS::Typed=>"integer";
+    Data_Model::Base_Type => (classifier(Base_Types::Integer));
+    Data_Model::Measurement_Unit => "mg/l";
+end Drug_Concentration;
+
+data Drug_Record  --holds pharmacy data for a drug that may be used with the pump
+  properties
+    BLESS::Typed =>
+		"record (
+		  Amount : PCA_Types::Drug_Weight;               --The weight of the drug dissolved in the diluent (mg)
+		  Concentration : PCA_Types::Drug_Concentration; --Drug concentration; as prescribed
+		  Vtbi_Lower_Soft : PCA_Types::Drug_Volume;      --Lower soft limit of drug volume to be infused
+		  Vtbi_Lower_Hard : PCA_Types::Drug_Volume;      --Lower hard limit of drug volume to be infused
+		  Vtbi_Typical : PCA_Types::Drug_Volume;         --Typical drug volume to be infused
+		  Vtbi_Upper_Soft : PCA_Types::Drug_Volume;      --Upper soft limit of drug volume to be infused
+		  Vtbi_Upper_Hard : PCA_Types::Drug_Volume;      --Upper hard limit of drug volume to be infused
+		  Basal_Rate_Lower_Soft : PCA_Types::Flow_Rate;  --Lower soft limit of basal drug dose rate
+		  Basal_Rate_Lower_Hard : PCA_Types::Flow_Rate;  --Lower hard limit of basal drug dose rate
+		  Basal_Rate_Typical : PCA_Types::Flow_Rate;     --Typical basal drug dose rate
+		  Basal_Rate_Upper_Soft : PCA_Types::Flow_Rate;  --Upper soft limit of basal drug dose rate
+		  Basal_Rate_Upper_Hard : PCA_Types::Flow_Rate;  --Upper hard limit of basal drug dose rate
+		  Bolus_Typical : PCA_Types::Drug_Volume;        --Typical Value of Bolus Volume
+		  Square_Bolus_rate_typical : PCA_Types::Flow_Rate;        --Typical duration of clinician commanded bolus
+		  )";
+    Data_Model::Data_Representation => Struct;
+    Data_Model::Element_Names => 
+      ( "Amount",                 --The weight of the drug dissolved in the diluent (mg)
+    	"Concentration",          --Drug concentration; as prescribed
+    	"Vtbi_Lower_Soft",        --Lower soft limit of drug volume to be infused
+    	"Vtbi_Lower_Hard",        --Lower hard limit of drug volume to be infused
+    	"Vtbi_Typical",           --Typical drug volume to be infused
+    	"Vtbi_Upper_Soft",        --Upper soft limit of drug volume to be infused
+    	"Vtbi_Upper_Hard",        --Upper hard limit of drug volume to be infused
+    	"Basal_Rate_Lower_Soft",  --Lower soft limit of basal drug dose rate
+    	"Basal_Rate_Lower_Hard",  --Lower hard limit of basal drug dose rate
+    	"Basal_Rate_Typical",     --Typical basal drug dose rate
+    	"Basal_Rate_Upper_Soft",  --Upper soft limit of basal drug dose rate
+    	"Basal_Rate_Upper_Hard",  --Upper hard limit of basal drug dose rate
+    	"Bolus_Typical",          --Typical Value of Bolus Volume
+    	"Square_Bolus_Rate_Typical"      --Typical rate of clinician commanded bolus
+      );
+    Data_Model::Base_Type => 
+      ( classifier(Drug_Weight),         --amount
+      	classifier(Drug_Concentration),  --concentration
+      	classifier(Drug_Volume),     --vtbi_lower_soft
+      	classifier(Drug_Volume),     --vtbi_lower_hard
+      	classifier(Drug_Volume),     --vtbi_typical
+      	classifier(Drug_Volume),     --vtbi_upper_soft
+      	classifier(Drug_Volume),     --vtbi_upper_hard
+      	classifier(Flow_Rate),           --basal_rate_lower_soft
+      	classifier(Flow_Rate),           --basal_rate_lower_hard
+      	classifier(Flow_Rate),           --basal_rate_typical
+      	classifier(Flow_Rate),           --basal_rate_upper_soft
+      	classifier(Flow_Rate),           --basal_rate_upper_hard
+      	classifier(Drug_Volume),     --bolus_typical
+      	classifier(Flow_Rate)    --ssquare_bolus_rate_typical
+      );
+end Drug_Record;
+
+
+data Drug_Library  --holds drug records for all drugs approved by the hospital pharmacy
+  properties
+    BLESS::Typed => "array [PCA_Properties::Drug_Library_Size] of PCA_Types::Drug_Record";
+    Data_Model::Data_Representation => Array;
+    Data_Model::Base_Type => (classifier(Drug_Record));
+    Data_Model::Dimension => (PCA_Properties::Drug_Library_Size);
+end Drug_Library;
+  
+data Prescription
+  properties
+    BLESS::Typed => 
+		"record (
+		Concentration : Drug_Concentration;
+		Initial_Volume : Drug_Volume;
+		Basal_Flow_Rate : Flow_Rate;
+		Vtbi : Drug_Volume;
+		Max_Drug_Per_Hour : Drug_Volume;
+		Minimum_Time_Between_Bolus : ICE_Types::Minute;
+		)";
+    Data_Model::Data_Representation => Struct;
+    Data_Model::Element_Names => 
+      ( "Concentration",
+		"Initial_Volume",
+		"Basal_Flow_Rate",
+		"Vtbi",
+		"Max_Drug_Per_Hour",
+		"Minimum_Time_Between_Bolus"
+      );
+    Data_Model::Base_Type => 
+      ( classifier(Drug_Concentration),   --concentration
+        classifier(Drug_Volume),          --initial volume
+        classifier(Flow_Rate),            --basal flow rate
+        classifier(Drug_Volume),          --VTBI
+        classifier(Drug_Volume),          --maximum drug allowed per hour
+        classifier(ICE_Types::Minute)    --min time between bolus doses        
+      );
+end Prescription;  
+  
+data Fault_Record  --record of fault for log
+  properties
+    BLESS::Typed => "record (Alarm:Alarm_Type; Warning:Warning_Type; Occurrence_Time:BLESS_Types::Time;)";
+    Data_Model::Data_Representation => Struct;
+    Data_Model::Element_Names => ("Alarm","Warning","Occurrence_Time");
+    Data_Model::Base_Type => ( classifier(Alarm_Type),classifier(Warning_Type),classifier(BLESS_Types::Time));
+end Fault_Record;  
+
+data Fault_Log  --holds records of faults
+  properties    
+    BLESS::Typed => "array [PCA_Properties::Fault_Log_Size] of PCA_Types::Fault_Record";
+    Data_Model::Data_Representation => Array;
+    Data_Model::Base_Type => (classifier(Fault_Record));
+    Data_Model::Dimension => (PCA_Properties::Fault_Log_Size);
+end Fault_Log;
+
+data Event_Record  --record of event for log
+  properties
+  	BLESS::Typed => "record ( Time : BLESS_Types::Time)";
+  	Data_Model::Data_Representation => Struct;
+    Data_Model::Element_Names => ( "Time" );
+    Data_Model::Base_Type => (classifier(BLESS_Types::Time));
+end Event_Record;  
+
+data Event_Log  --holds records of events
+  properties
+    BLESS::Typed => "array [PCA_Properties::Event_Log_Size] of PCA_Types::Event_Record";
+    Data_Model::Data_Representation => Array;
+    Data_Model::Base_Type => (classifier(Event_Record));
+    Data_Model::Dimension => (PCA_Properties::Event_Log_Size);
+end Event_Log;
+
+data Infusion_Type   --used for over- and under-infusion alarms
+  properties
+    BLESS::Typed=>"enumeration(Bolus_Infusion, Square_Infusion, Basal_Infusion, KVO_Infusion)";
+    Data_Model::Data_Representation => Enum;
+    Data_Model::Enumerators => ("Bolus_Infusion","Square_Infusion","Basal_Infusion","KVO_Infusion");
+end Infusion_Type;  
+  
+data Pump_Fault_Type
+  properties
+    BLESS::Typed=>"enumeration(Prime_Failure, Pump_Hot, Bubble, Upstream_Occlusion_Fault, Downstream_Occlusion_Fault, Overinfusion, Underinfusion)";
+    Data_Model::Data_Representation => Enum;
+    Data_Model::Enumerators => ("Prime_Failure","Pump_Hot","Bubble","Upstream_Occlusion_Fault","Downstream_Occlusion_Fault","Overinfusion","Underinfusion" );
+end Pump_Fault_Type;
+
+end PCA_Types;
+\end{lstlisting} 
+\label{listing:aadl:pca_types}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Operation} package}]
+package PCA_Operation
+  public
+  with PCA_Properties, Base_Types, BLESS, BLESS_Types, ICE_Types, PCA_Types;
+
+system operation
+  features
+    Start_Button_Pressed: in event port;
+    Stop_Button_Pressed: in event port;  
+    Patient_Request_Bolus: in event port;
+    Clinician_Request_Bolus: in event port; 
+    Bolus_Duration: in event data port ICE_Types::Minute;
+    Infusion_Flow_Rate: out data port PCA_Types::Flow_Rate;
+    System_Status: out data port PCA_Types::Status_Type;
+    Rx: in event data port PCA_Types::Prescription;
+end operation;
+
+system implementation operation.imp
+  subcomponents
+    operation_process: process operation_process.imp;
+  connections
+  	start: port Start_Button_Pressed -> operation_process.Start_Button_Pressed;
+    stop: port Stop_Button_Pressed -> operation_process.Stop_Button_Pressed;
+  	pbp: port Patient_Request_Bolus -> operation_process.Patient_Request_Bolus;
+  	crb: port Clinician_Request_Bolus -> operation_process.Clinician_Request_Bolus;
+  	bd: port Bolus_Duration -> operation_process.Bolus_Duration;
+  	pfr: port operation_process.Infusion_Flow_Rate -> Infusion_Flow_Rate;
+    stat: port operation_process.System_Status -> System_Status;
+    rxo: port Rx->operation_process.Rx;
+end operation.imp;
+
+process operation_process
+  features
+  	Start_Button_Pressed: in event port;
+    Stop_Button_Pressed: in event port;  
+    Patient_Request_Bolus: in event port;
+    Clinician_Request_Bolus: in event port; 
+    Bolus_Duration: in event data port ICE_Types::Minute;
+    Infusion_Flow_Rate: out data port PCA_Types::Flow_Rate;
+    System_Status: out data port PCA_Types::Status_Type;
+    Rx: in event data port PCA_Types::Prescription; 
+end operation_process;
+
+process implementation operation_process.imp
+  subcomponents
+    Max_Drug_Per_Hour_Watcher : thread Max_Drug_Per_Hour_Watcher.imp;
+    Rate_Controller : thread Rate_Controller.imp;
+    Patient_Bolus_Checker : thread Patient_Bolus_Checker.imp;
+  connections
+  	start: port Start_Button_Pressed -> Rate_Controller.Start_Button_Pressed;
+    stop: port Stop_Button_Pressed -> Rate_Controller.Stop_Button_Pressed;
+    pb: port Patient_Request_Bolus -> Patient_Bolus_Checker.Patient_Request_Bolus;
+    crb: port Clinician_Request_Bolus -> Rate_Controller.Clinician_Request_Bolus;
+    bd: port Bolus_Duration -> Rate_Controller.Bolus_Duration;
+    pfr: port Rate_Controller.Infusion_Flow_Rate -> Infusion_Flow_Rate;
+    ss: port Rate_Controller.System_Status -> System_Status;
+    rxrc: port Rx->Rate_Controller.Rx;       
+end operation_process.imp;
+
+thread Max_Drug_Per_Hour_Watcher
+features
+    Infusion_Flow_Rate: in data port PCA_Types::Flow_Rate 
+      {BLESS::Assertion => "<<:=PUMP_RATE()>>";};    
+    Max_Drug_Per_Hour: in data port PCA_Types::Drug_Volume
+      {BLESS::Assertion => "<<:=MAX_DRUG_PER_HOUR>>";};  
+end Max_Drug_Per_Hour_Watcher;
+
+thread implementation Max_Drug_Per_Hour_Watcher.imp
+end Max_Drug_Per_Hour_Watcher.imp;
+
+thread Rate_Controller
+features
+	Start_Button_Pressed: in event port;
+	Stop_Button_Pressed: in event port;
+	Rx: in event data port PCA_Types::Prescription
+	  {BLESS::Assertion => "<<:=Rx_APPROVED()>>";}; 
+    Clinician_Request_Bolus: in event port;   
+    Bolus_Duration: in event data port ICE_Types::Minute;  
+    Infusion_Flow_Rate: out data port PCA_Types::Flow_Rate
+      {BLESS::Assertion => "<<:=PUMP_RATE()>>";};   
+    System_Status: out event data port PCA_Types::Status_Type;
+end Rate_Controller;
+
+thread implementation Rate_Controller.imp
+annex BLESS
+{**
+assert
+<<HALT : :(la=StopButton) >>  													--pump at 0 if stop button
+<<KVO_RATE : :(la=TooMuchJuice)>>  												--pump at KVO rate when commanded, some alarms, or excedded hourly limit
+<<PB_RATE : :la=PatientButton>>  												--patient button pressed, and allowed
+<<CCB_RATE : :(la=StartSquareBolus) or (la=ResumeSquareBolus)>>  				--clinician-commanded bolus start or resumption after patient bolus
+<<BASAL_RATE : :(la=StartButton) or (la=ResumeBasal) or (la=SquareBolusDone)>>  --regular infusion
+<<PUMP_RATE : :=
+  (HALT()) -> 0,                                 			--no flow
+  (KVO_RATE()) -> PCA_Properties::KVO_Rate,      			--KVO rate
+  (PB_RATE()) -> Patient_Bolus_Rate,						--maximum infusion upon patient request
+  (CCB_RATE()) -> Square_Bolus_Rate,             			--square bolus rate=VTBI/duration, from data port
+  (BASAL_RATE()) -> Basal_Rate                   			--basal rate, from data port
+>>
+invariant <<true>>
+variables
+  la :   --last action
+    enumeration (	
+    	StopButton,				--clinician pressed stop button
+    	TooMuchJuice,     		--exceeded max drug per hour, pump at KVO until prescription and patient are re-authenticated
+    	PatientButton,			--patient requested drug
+      ResumeSquareBolus,		--infusion of VTBI finished, resume clinician-commanded bolus
+      ResumeBasal,				--infusion of VTBI finished, resume basal-rate
+      StartSquareBolus,			--begin clinician-commanded bolus
+      SquareBolusDone,  		--infusion of VTBI finished
+      StartButton				--start pumping at basal rate
+    );
+**};
+end Rate_Controller.imp;
+
+thread Patient_Bolus_Checker
+  features
+    Patient_Request_Bolus: in event port;
+end Patient_Bolus_Checker;
+
+thread implementation Patient_Bolus_Checker.imp
+end Patient_Bolus_Checker.imp;
+
+end PCA_Operation;
+\end{lstlisting} 
+\label{listing:aadl:pca_operation}
+\doublespacing

@@ -673,7 +673,7 @@ Code listing of implemented PCA pump along with mapped types is attached in appe
 \section{Code generation from AADL/BLESS models}
 \label{pcapumpimpl:codegen}
 
-The original models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_prototype} contains translated PCA pump code. 
+The original AADL/BLESS models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. Simplified AADL/BLESS models can be found in appendix \ref{Appendix:AADL}. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_generated} contains translated PCA pump code. 
 
 Raw, translated code cannot be verified with SPARK tools, because it contains not implemented parts. E.g. translated from BLESS assertions, which are defined but not implemented in models. Once, these missing parts will be implemented, code can be verified.
 

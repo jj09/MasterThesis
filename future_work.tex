@@ -5,33 +5,23 @@
 \chapter{Future work}
 \label{future_work}
 
-translation of BLESS state machine (issue: time notion):
-	* states
-	* transitions
+The following are possible extensions for work done in this thesis:
 
-The semantics of BLESS contain notions of time that make translation to SPARK difficult.
-
-translations for SPARK 2014 (for now, thread -> task translation can be done in Ada 2012 and then Sparking Ada)
-
-try to apply generics on types translation
-
-try to apply child packages for feature 
-
-extend property set translation (only aadlinteger and simple types are handled)
-
-Decompose code (get rid of 1 big/huge package):
-* separate packages
-* child packages?
-* maybe every thread should be in child package?
-
-PCA Pump:
-* Interface to ICE: on BB can be done through Etherned port with GNAT.Sockets
-* drug concentration
-* monitoring of infused drug by sensors
-
-Two way communication between SPARK packages: circular dependency issue (4.2.1).
-
-Interport connections: table 10-3 in AADL book (p.193) and 1 to many connections (multiple events calling).
-
-Add task periods to translation schemes and automatic translator
-
+\begin{itemize}
+	\item Creation of automatic translator described in section \ref{codegen:translator} would be good validation of created translation schemes. It may reveal some issues not present for manual translation.
+	\item Currently AADL thread properties are not take into account in thread to task mapping, in section \ref{codegen:mapping:threads}. Properties like priority or period would be very useful in SPARK Ada programs. For now, former is hard-coded as 10 and latter simply skipped, which requires developer to handle it. However, such property modeled and analyzed in AADL models, should be translated automatically to maintain synchronization between model and the code. AADL properties are described in \cite{AadlBook}, in the Appendix A.
+	\item Data types translation presented in section \ref{codegen:mapping:data}, in additions to straightforward type mapping, comprises of protected types. However, all protected types has the same set of subprograms (\lstinline{Put} and \lstinline{Get}). It is worth to consider introduction of generics, which will allow to specify generic protected type and then reuse it for all types.
+	\item In feature groups translation (section \ref{codegen:mapping:feature_groups}), idea of child or nested packages is abandoned. However, it would be good to reconsider it. Maybe by introduction of getter functions in parent package or some other techniques, which will allow for better separation and decomposition.
+	\item AADL property set mapping in section \ref{codegen:mapping:propertyset} handles only \lstinline{aadlinteger} type. Thus, it requires extension for handling other, more complex constructs.
+	\item Current translation schemes cause creation of pretty big packages, which will become bigger after adding implementation. Thus, some decomposition is desired. Following techniques can be considered: 
+		\begin{itemize}
+			\item partition of packages
+			\item take advantage of child packages
+			\item separation of threads to different packages (e.g. one thread per child package and all common functionalities in parent package)
+		\end{itemize} simple package separation
+	\item Mapping for BLESS are limited only to small subset. Development of translations for BLESS state machine (states and transitions) would be good addition. It will allow for behavior translation. Good point to start is \lstinline{Rate_Controller} thread, which can be found in \lstinline{PCA_Operation_Threads} package in original AADL models created by Brian Larson. The semantics of BLESS contain notions of time that make translation to SPARK difficult. This problem occurs in state machine models. Finding solution for that is needed. Maybe even, by changing BLESS semantics.
+	\item For the time, when this thesis was written, SPARK 2014 did not support multitasking. However, there were plans to introduce it into SPARK 2014 like it took place in case of SPARK 2005. Once, multitasking support would be present, translations for SPARK 2014 will be possible.
+	\item There is an issue with two way communication between SPARK packages caused by circular dependency. It is described in section \ref{codegen:port_communication:thread}.
+	\item Port communication presented in section \ref{codegen:port_communication} captures only 1:1 connections between ports of the same type and opposite direction. In AADL there are also inter-port connections and one-to-many or many-to-one connections. \cite{AadlBook} They should be taken into AADL subset for medical devices modeling and translation. 
+	\item Created PCA pump prototype contains only basic functionalities. Some parameters (like drug concentration) are ignored. The next step is its development, would be taken skipped parts into account. In addition to that, interaction with external modules, like sensors for monitoring drug flow, or communication with ICE through Ethernet port is desired. It requires creation of communication channel 	between BeagleBoard (SPARK Ada application) and these systems. 	
+\end{itemize}

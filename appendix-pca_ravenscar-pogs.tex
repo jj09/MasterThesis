@@ -1,0 +1,911 @@
+%!TEX root = JakubJedryszek-MasterThesis.tex
+
+\cleardoublepage
+
+\chapter{PCA pump prototype - simple, implemented, working pump}
+\label{Appendix:pca_ravenscar:pogs}
+
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={POGS report for PCA Pump prototype}]
+-------------------------------------------------------------------------------
+                          Semantic Analysis Summary                            
+                                POGS GPL 2012                                  
+            Copyright (C) 2012 Altran Praxis Limited, Bath, U.K.               
+-------------------------------------------------------------------------------
+
+Summary of:
+
+Verification Condition files (.vcg)
+Simplified Verification Condition files (.siv)
+Victor result files (.vct)
+Riposte result files (.rsm)
+Proof Logs (.plg)
+Dead Path Conjecture files (.dpc)
+Summary Dead Path files (.sdp)
+
+"status" column keys:
+    1st character:
+        '-' - No VC
+        'S' - No SIV
+        'U' - Undischarged
+        'E' - Proved by Examiner
+        'I' - Proved by Simplifier by Inference
+        'X' - Proved by Simplifier by Contradiction
+        'P' - Proved by Simplifier using User Defined Proof Rules
+        'V' - Proved by Victor
+        'O' - Proved by Riposte
+        'C' - Proved by Checker
+        'R' - Proved by Review
+        'F' - VC is False
+    2nd character:
+        '-' - No DPC
+        'S' - No SDP
+        'U' - Unchecked
+        'D' - Dead path
+        'L' - Live path
+
+in the directory:
+/Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar
+
+Summary produced: 24-JUL-2014 11:40:08.21
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.vcg
+procedure Pca_Engine.Start_Pumping
+
+VCs generated 21-JUL-2014 21:52:42
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.dpc
+DPCs generated 21-JUL-2014 21:52:42
+
+DPC ZombieScoped 21-JUL-2014  21:54:5
+
+VCs for procedure_start_pumping :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | False              | Live      |   FL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.vcg
+procedure Pca_Engine.Stop_Pumping
+
+VCs generated 21-JUL-2014 21:52:42
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.dpc
+DPCs generated 21-JUL-2014 21:52:42
+
+DPC ZombieScoped 21-JUL-2014  21:54:5
+
+VCs for procedure_stop_pumping :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | False              | Live      |   FL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.vcg
+procedure Pca_Engine.Write_Signal
+
+VCs generated 21-JUL-2014 21:52:42
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.dpc
+DPCs generated 21-JUL-2014 21:52:42
+
+DPC ZombieScoped 21-JUL-2014  21:54:5
+
+VCs for procedure_write_signal :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | False              | Live      |   FL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/clinicianbolus.vcg
+procedure Pca_Operation.ClinicianBolus
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/clinicianbolus.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_clinicianbolus :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 198     | Inference          | Unchecked |   IU   |
+| 2   | start | rtc check @ 200     | Inference          | Unchecked |   IU   |
+| 3   | start | rtc check @ 201     | Inference          | Unchecked |   IU   |
+| 4   | start | rtc check @ 203     | Inference          | Unchecked |   IU   |
+| 5   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 6   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 7   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_state.vcg
+function Pca_Operation.Get_State
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_state.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_get_state :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 110     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.vcg
+function Pca_Operation.Get_Time_Between_Activations
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:16
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_get_time_between_activations :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 91      | Undischarged       | Unchecked |   UU   |
+| 2   | start | rtc check @ 92      | Inference          | Unchecked |   IU   |
+| 3   | start | rtc check @ 95      | Undischarged       | Unchecked |   UU   |
+| 4   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_volume_infused.vcg
+function Pca_Operation.Get_Volume_Infused
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:17
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_volume_infused.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_get_volume_infused :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.vcg
+function Pca_Operation.Integer_Array_Store.Get
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:17
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_get :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 39      | Undischarged       | Unchecked |   UU   |
+| 2   | start |    assert @ finish  | Inference          | Live      |   IL   |
+| 3   |       | refinement          | Examiner           | No DPC    |   E-   |
+| 4   |       | refinement          | Examiner           | No DPC    |   E-   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.vcg
+procedure Pca_Operation.Integer_Array_Store.Inc
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:17
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_inc :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 56      | Undischarged       | Unchecked |   UU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 3   |       | refinement          | Examiner           | No DPC    |   E-   |
+| 4   |       | refinement          | Examiner           | No DPC    |   E-   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/pulse.vcg
+procedure Pca_Operation.Integer_Array_Store.Pulse
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:17
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/pulse.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_pulse :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 76      | Inference          | Unchecked |   IU   |
+| 2   | start | rtc check @ 76      | Inference          | Unchecked |   IU   |
+| 3   | start |    assert @ 77      | Inference          | Live      |   IL   |
+| 4   | 77    |    assert @ 77      | Inference          | Live      |   IL   |
+| 5   | 77    | rtc check @ 78      | Inference          | Unchecked |   IU   |
+| 6   | start | rtc check @ 80      | Inference          | Unchecked |   IU   |
+| 7   | 77    | rtc check @ 80      | Inference          | Unchecked |   IU   |
+| 8   | start |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 9   | 77    |    assert @ finish  | Examiner           | Live      |   EL   |
+| 10  |       | refinement          | Examiner           | No DPC    |   E-   |
+| 11  |       | refinement          | Examiner           | No DPC    |   E-   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.vcg
+procedure Pca_Operation.Integer_Array_Store.Put
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:18
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_put :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 48      | Undischarged       | Unchecked |   UU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 3   |       | refinement          | Examiner           | No DPC    |   E-   |
+| 4   |       | refinement          | Examiner           | No DPC    |   E-   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.vcg
+function Pca_Operation.Integer_Array_Store.Sum
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:18
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_sum :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ 65      | Inference          | Live      |   IL   |
+| 2   | 65    |    assert @ 65      | Undischarged       | Live      |   UL   |
+| 3   | 65    | rtc check @ 66      | Undischarged       | Unchecked |   UU   |
+| 4   | 65    |    assert @ finish  | Inference          | Live      |   IL   |
+| 5   |       | refinement          | Examiner           | No DPC    |   E-   |
+| 6   |       | refinement          | Examiner           | No DPC    |   E-   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.vcg
+task_type Pca_Operation.Max_Drug_Per_Hour_Watcher
+
+VCs generated 24-JUL-2014 11:39:13
+
+VCs simplified 24-JUL-2014 11:39:18
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.dpc
+DPCs generated 24-JUL-2014 11:39:13
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for task_type_max_drug_per_hour_watcher :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ 330     | Examiner           | Live      |   EL   |
+| 2   | 330   |    assert @ 330     | Examiner           | Live      |   EL   |
+| 3   | 330   |    assert @ 330     | Examiner           | Live      |   EL   |
+| 4   | 330   | rtc check @ 332     | Inference          | Unchecked |   IU   |
+| 5   | 330   | rtc check @ 333     | Inference          | Unchecked |   IU   |
+| 6   | 330   | rtc check @ 333     | Undischarged       | Unchecked |   UU   |
+| 7   | 330   | rtc check @ 336     | Inference          | Unchecked |   IU   |
+| 8   | 330   | rtc check @ 337     | Inference          | Unchecked |   IU   |
+| 9   | 330   | rtc check @ 338     | Inference          | Unchecked |   IU   |
+| 10  | 330   | rtc check @ 339     | Inference          | Unchecked |   IU   |
+| 11  | 330   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 12  | 330   |    assert @ finish  | Examiner           | Dead      |   ED   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_basal_flow_rate.vcg
+function Pca_Operation.Panel_Get_Basal_Flow_Rate
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_basal_flow_rate.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_panel_get_basal_flow_rate :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_max_drug_per_hour.vcg
+function Pca_Operation.Panel_Get_Max_Drug_Per_Hour
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_max_drug_per_hour.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_panel_get_max_drug_per_hour :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_minimum_time_between_bolus.vcg
+function Pca_Operation.Panel_Get_Minimum_Time_Between_Bolus
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_minimum_time_between_bolus.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_panel_get_minimum_time_between_bolus :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_vtbi.vcg
+function Pca_Operation.Panel_Get_Vtbi
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_vtbi.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for function_panel_get_vtbi :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start |    assert @ finish  | Inference          | Live      |   IL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_basal_flow_rate.vcg
+procedure Pca_Operation.Panel_Set_Basal_Flow_Rate
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_basal_flow_rate.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_panel_set_basal_flow_rate :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 117     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_max_drug_per_hour.vcg
+procedure Pca_Operation.Panel_Set_Max_Drug_Per_Hour
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:19
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_max_drug_per_hour.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_panel_set_max_drug_per_hour :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 141     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_minimum_time_between_bolus.vcg
+procedure Pca_Operation.Panel_Set_Minimum_Time_Between_Bolus
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:20
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_minimum_time_between_bolus.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:1
+
+VCs for procedure_panel_set_minimum_time_between_bolus :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 153     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_vtbi.vcg
+procedure Pca_Operation.Panel_Set_Vtbi
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:20
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_vtbi.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:2
+
+VCs for procedure_panel_set_vtbi :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 129     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.vcg
+procedure Pca_Operation.PatientBolus
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:20
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:2
+
+VCs for procedure_patientbolus :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 182     | Inference          | Unchecked |   IU   |
+| 2   | start | rtc check @ 183     | Inference          | Unchecked |   IU   |
+| 3   | start | rtc check @ 184     | Inference          | Unchecked |   IU   |
+| 4   | start | rtc check @ 184     | Undischarged       | Unchecked |   UU   |
+| 5   | start | rtc check @ 185     | Inference          | Unchecked |   IU   |
+| 6   | start | rtc check @ 186     | Inference          | Unchecked |   IU   |
+| 7   | start | rtc check @ 190     | Inference          | Unchecked |   IU   |
+| 8   | start | rtc check @ 190     | Inference          | Unchecked |   IU   |
+| 9   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 10  | start |    assert @ finish  | Examiner           | Live      |   EL   |
+| 11  | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.vcg
+task_type Pca_Operation.Rate_Controller
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:28
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:2
+
+VCs for task_type_rate_controller :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 2   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 3   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 4   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 5   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 6   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 7   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 8   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 9   | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 10  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 11  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 12  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 13  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 14  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 15  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 16  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 17  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 18  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 19  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 20  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 21  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 22  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 23  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 24  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 25  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 26  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 27  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 28  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 29  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 30  | 234   | rtc check @ 231     | Inference          | Unchecked |   IU   |
+| 31  | start | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 32  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 33  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 34  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 35  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 36  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 37  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 38  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 39  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 40  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 41  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 42  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 43  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 44  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 45  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 46  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 47  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 48  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 49  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 50  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 51  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 52  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 53  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 54  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 55  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 56  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 57  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 58  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 59  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 60  | 234   | rtc check @ 232     | Inference          | Unchecked |   IU   |
+| 61  | start |    assert @ 234     | Examiner           | Live      |   EL   |
+| 62  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 63  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 64  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 65  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 66  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 67  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 68  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 69  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 70  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 71  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 72  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 73  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 74  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 75  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 76  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 77  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 78  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 79  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 80  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 81  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 82  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 83  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 84  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 85  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 86  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 87  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 88  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 89  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 90  | 234   |    assert @ 234     | Examiner           | Live      |   EL   |
+| 91  | 234   | rtc check @ 240     | Inference          | Unchecked |   IU   |
+| 92  | 234   | rtc check @ 240     | Inference          | Unchecked |   IU   |
+| 93  | 234   | rtc check @ 241     | Inference          | Unchecked |   IU   |
+| 94  | 234   | rtc check @ 241     | Undischarged       | Unchecked |   UU   |
+| 95  | 234   | rtc check @ 242     | Inference          | Unchecked |   IU   |
+| 96  | 234   | rtc check @ 243     | Inference          | Unchecked |   IU   |
+| 97  | 234   | pre check @ 244     | Inference          | Unchecked |   IU   |
+| 98  | 234   | rtc check @ 247     | Inference          | Unchecked |   IU   |
+| 99  | 234   | rtc check @ 248     | Inference          | Unchecked |   IU   |
+| 100 | 234   | rtc check @ 248     | Inference          | Unchecked |   IU   |
+| 101 | 234   | rtc check @ 249     | Inference          | Unchecked |   IU   |
+| 102 | 234   | rtc check @ 249     | Undischarged       | Unchecked |   UU   |
+| 103 | 234   | rtc check @ 250     | Inference          | Unchecked |   IU   |
+| 104 | 234   | rtc check @ 251     | Inference          | Unchecked |   IU   |
+| 105 | 234   | pre check @ 252     | Inference          | Unchecked |   IU   |
+| 106 | 234   | rtc check @ 256     | Inference          | Unchecked |   IU   |
+| 107 | 234   | rtc check @ 257     | Inference          | Unchecked |   IU   |
+| 108 | 234   | rtc check @ 257     | Inference          | Unchecked |   IU   |
+| 109 | 234   | rtc check @ 258     | Inference          | Unchecked |   IU   |
+| 110 | 234   | rtc check @ 258     | Undischarged       | Unchecked |   UU   |
+| 111 | 234   | rtc check @ 259     | Inference          | Unchecked |   IU   |
+| 112 | 234   | rtc check @ 260     | Inference          | Unchecked |   IU   |
+| 113 | 234   | pre check @ 261     | Inference          | Unchecked |   IU   |
+| 114 | 234   | rtc check @ 265     | Inference          | Unchecked |   IU   |
+| 115 | 234   | rtc check @ 265     | Inference          | Unchecked |   IU   |
+| 116 | 234   | rtc check @ 265     | Inference          | Unchecked |   IU   |
+| 117 | 234   | rtc check @ 265     | Inference          | Unchecked |   IU   |
+| 118 | 234   | rtc check @ 266     | Inference          | Unchecked |   IU   |
+| 119 | 234   | rtc check @ 266     | Inference          | Unchecked |   IU   |
+| 120 | 234   | rtc check @ 266     | Undischarged       | Unchecked |   UU   |
+| 121 | 234   | rtc check @ 266     | Undischarged       | Unchecked |   UU   |
+| 122 | 234   | rtc check @ 267     | Inference          | Unchecked |   IU   |
+| 123 | 234   | rtc check @ 267     | Inference          | Unchecked |   IU   |
+| 124 | 234   | rtc check @ 270     | Inference          | Unchecked |   IU   |
+| 125 | 234   | rtc check @ 270     | Inference          | Unchecked |   IU   |
+| 126 | 234   | rtc check @ 271     | Undischarged       | Unchecked |   UU   |
+| 127 | 234   | rtc check @ 271     | Undischarged       | Unchecked |   UU   |
+| 128 | 234   | rtc check @ 272     | Inference          | Unchecked |   IU   |
+| 129 | 234   | rtc check @ 272     | Inference          | Unchecked |   IU   |
+| 130 | 234   | rtc check @ 275     | Inference          | Unchecked |   IU   |
+| 131 | 234   | rtc check @ 275     | Inference          | Unchecked |   IU   |
+| 132 | 234   | rtc check @ 275     | Inference          | Unchecked |   IU   |
+| 133 | 234   | rtc check @ 275     | Inference          | Unchecked |   IU   |
+| 134 | 234   | pre check @ 276     | Inference          | Unchecked |   IU   |
+| 135 | 234   | pre check @ 276     | Inference          | Unchecked |   IU   |
+| 136 | 234   | pre check @ 276     | Inference          | Unchecked |   IU   |
+| 137 | 234   | pre check @ 276     | Inference          | Unchecked |   IU   |
+| 138 | 234   | rtc check @ 278     | Undischarged       | Unchecked |   UU   |
+| 139 | 234   | rtc check @ 278     | Undischarged       | Unchecked |   UU   |
+| 140 | 234   | rtc check @ 278     | Undischarged       | Unchecked |   UU   |
+| 141 | 234   | rtc check @ 278     | Undischarged       | Unchecked |   UU   |
+| 142 | 234   | rtc check @ 282     | Inference          | Unchecked |   IU   |
+| 143 | 234   | rtc check @ 282     | Inference          | Unchecked |   IU   |
+| 144 | 234   | rtc check @ 282     | Inference          | Unchecked |   IU   |
+| 145 | 234   | rtc check @ 282     | Inference          | Unchecked |   IU   |
+| 146 | 234   | rtc check @ 285     | Inference          | Unchecked |   IU   |
+| 147 | 234   | rtc check @ 285     | Inference          | Unchecked |   IU   |
+| 148 | 234   | rtc check @ 285     | Inference          | Unchecked |   IU   |
+| 149 | 234   | rtc check @ 285     | Inference          | Unchecked |   IU   |
+| 150 | 234   | rtc check @ 291     | Inference          | Unchecked |   IU   |
+| 151 | 234   | rtc check @ 292     | Inference          | Unchecked |   IU   |
+| 152 | 234   | rtc check @ 292     | Inference          | Unchecked |   IU   |
+| 153 | 234   | rtc check @ 293     | Inference          | Unchecked |   IU   |
+| 154 | 234   | rtc check @ 293     | Undischarged       | Unchecked |   UU   |
+| 155 | 234   | rtc check @ 294     | Inference          | Unchecked |   IU   |
+| 156 | 234   | rtc check @ 295     | Inference          | Unchecked |   IU   |
+| 157 | 234   | pre check @ 296     | Inference          | Unchecked |   IU   |
+| 158 | 234   | rtc check @ 300     | Inference          | Unchecked |   IU   |
+| 159 | 234   | rtc check @ 300     | Inference          | Unchecked |   IU   |
+| 160 | 234   | rtc check @ 301     | Inference          | Unchecked |   IU   |
+| 161 | 234   | rtc check @ 301     | Inference          | Unchecked |   IU   |
+| 162 | 234   | rtc check @ 302     | Undischarged       | Unchecked |   UU   |
+| 163 | 234   | rtc check @ 302     | Undischarged       | Unchecked |   UU   |
+| 164 | 234   | rtc check @ 302     | Inference          | Unchecked |   IU   |
+| 165 | 234   | rtc check @ 302     | Inference          | Unchecked |   IU   |
+| 166 | 234   | rtc check @ 303     | Inference          | Unchecked |   IU   |
+| 167 | 234   | rtc check @ 303     | Inference          | Unchecked |   IU   |
+| 168 | 234   | rtc check @ 303     | Undischarged       | Unchecked |   UU   |
+| 169 | 234   | rtc check @ 303     | Undischarged       | Unchecked |   UU   |
+| 170 | 234   | rtc check @ 304     | Inference          | Unchecked |   IU   |
+| 171 | 234   | rtc check @ 304     | Inference          | Unchecked |   IU   |
+| 172 | 234   | rtc check @ 307     | Inference          | Unchecked |   IU   |
+| 173 | 234   | rtc check @ 307     | Inference          | Unchecked |   IU   |
+| 174 | 234   | rtc check @ 308     | Inference          | Unchecked |   IU   |
+| 175 | 234   | rtc check @ 308     | Inference          | Unchecked |   IU   |
+| 176 | 234   | rtc check @ 311     | Inference          | Unchecked |   IU   |
+| 177 | 234   | rtc check @ 311     | Inference          | Unchecked |   IU   |
+| 178 | 234   | rtc check @ 311     | Inference          | Unchecked |   IU   |
+| 179 | 234   | rtc check @ 311     | Inference          | Unchecked |   IU   |
+| 180 | 234   | pre check @ 312     | Inference          | Unchecked |   IU   |
+| 181 | 234   | pre check @ 312     | Inference          | Unchecked |   IU   |
+| 182 | 234   | pre check @ 312     | Inference          | Unchecked |   IU   |
+| 183 | 234   | pre check @ 312     | Inference          | Unchecked |   IU   |
+| 184 | 234   | rtc check @ 314     | Undischarged       | Unchecked |   UU   |
+| 185 | 234   | rtc check @ 314     | Undischarged       | Unchecked |   UU   |
+| 186 | 234   | rtc check @ 314     | Undischarged       | Unchecked |   UU   |
+| 187 | 234   | rtc check @ 314     | Undischarged       | Unchecked |   UU   |
+| 188 | 234   | rtc check @ 316     | Inference          | Unchecked |   IU   |
+| 189 | 234   | rtc check @ 316     | Inference          | Unchecked |   IU   |
+| 190 | 234   | rtc check @ 316     | Inference          | Unchecked |   IU   |
+| 191 | 234   | rtc check @ 316     | Inference          | Unchecked |   IU   |
+| 192 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 193 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 194 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 195 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 196 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 197 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 198 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 199 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 200 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 201 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 202 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 203 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 204 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 205 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 206 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 207 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 208 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 209 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 210 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 211 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 212 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 213 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 214 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 215 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 216 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 217 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 218 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 219 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+| 220 | 234   |    assert @ finish  | Examiner           | Dead      |   ED   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/startpump.vcg
+procedure Pca_Operation.StartPump
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:36
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/startpump.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:3
+
+VCs for procedure_startpump :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 166     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/stoppump.vcg
+procedure Pca_Operation.StopPump
+
+VCs generated 24-JUL-2014 11:39:12
+
+VCs simplified 24-JUL-2014 11:39:36
+
+File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/stoppump.dpc
+DPCs generated 24-JUL-2014 11:39:12
+
+DPC ZombieScoped 24-JUL-2014  11:39:3
+
+VCs for procedure_stoppump :
+ -----------------------------------------------------------------------------
+| #   | From  | To                  | Proved By          | Dead Path | Status |
+|-----------------------------------------------------------------------------
+| 1   | start | rtc check @ 173     | Inference          | Unchecked |   IU   |
+| 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
+ -----------------------------------------------------------------------------
+
+
+===============================================================================
+Summary:
+
+The following subprograms have VCs proved false:
+
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.vcg
+
+The following subprograms have undischarged VCs (excluding those proved false):
+
+   2  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.vcg
+   2  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.vcg
+  20  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.vcg
+
+Proof strategies used by subprograms
+-------------------------------------------------------------------------
+Total subprograms with at least one VC proved by examiner:             15
+Total subprograms with at least one VC proved by simplifier:           20
+Total subprograms with at least one VC proved by contradiction:         0
+Total subprograms with at least one VC proved with user proof rule:     0
+Total subprograms with at least one VC proved by Victor:                0
+Total subprograms with at least one VC proved by Riposte:               0
+Total subprograms with at least one VC proved using checker:            0
+Total subprograms with at least one VC discharged by review:            0
+
+Maximum extent of strategies used for fully proved subprograms:
+-------------------------------------------------------------------------
+Total subprograms with proof completed by examiner:                     0
+Total subprograms with proof completed by simplifier:                  14
+Total subprograms with proof completed with user defined rules:         0
+Total subprograms with proof completed by Victor:                       0
+Total subprograms with proof completed by Riposte:                      0
+Total subprograms with proof completed by checker:                      0
+Total subprograms with VCs discharged by review:                        0
+
+Overall subprogram summary:
+-------------------------------------------------------------------------
+Total subprograms fully proved:                                        14
+Total subprograms with at least one undischarged VC:                    8  <<<
+Total subprograms with at least one false VC:                           3  <<<
+                                                                    -----
+Total subprograms for which VCs have been generated:                   25
+
+
+ZombieScope Summary:
+-------------------------------------------------------------------------
+Total subprograms for which DPCs have been generated:                  25
+Total number subprograms with dead paths found:                         3
+Total number of dead paths found:                                      32
+
+
+VC summary:
+-------------------------------------------------------------------------
+Note: (User) denotes where the Simplifier has proved VCs using one or
+      more user-defined proof rules.
+
+Total VCs by type:
+------------------
+                    Total   Examiner Simplifier False    Undisc.
+Assert/Post            96         80         12     3          1
+Precondition           12          0         12     0          0
+Check stmnt.            0          0          0     0          0
+Runtime check         187          0        159     0         28
+Refinem. VCs           10         10          0     0          0
+Inherit. VCs            0          0          0     0          0
+================================================================
+Totals:               305         90        183     3         29 <<<
+%Totals:                         30%        60%    1%        10%
+
+===================== End of Semantic Analysis Summary ========================
+
+\end{lstlisting}
+\label{listing:pca_ravenscar:pogs_full}
+\doublespacing

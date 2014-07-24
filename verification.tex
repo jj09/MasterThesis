@@ -7,34 +7,102 @@
 
 % meeting with Hatcliff: check for runtime exceptions, flow analysis based on derives, see photo/whiteboard
 
-The strategy for Software Verification using SPARK tools is as follows. First, Examiner is run. It generates and discharge some Verification Conditions (VCs). Next, SPARKSimp. It runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. Along with Simplifier, ZombieScope runs to find dead paths. SPARKSimp can also run Victor (and it is in this case) to discharge VCs not discharged by Examiner nor Simplifier. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness.
+The strategy for Software Verification using SPARK tools is as follows. First, Examiner generates and discharge some Verification Conditions (VCs) and Dead Path Conjectures (DPCs). Next, SPARKSimp runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. SPARKSimp runs also ZombieScope to analyze DPCs and ViCToR to discharge VCs (not discharged by Examiner nor Simplifier) with SMT Solver. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness. This approach is presented in the figure \ref{figure:sparkverificationstrategy}. Detailed overview of SPARK verification tools can be found in chapter 12 of SPARK book \cite{Barnes:Book}.
 
-% verification tool chain diagram
-
-An overview of verification contracts and annotations can be found in chapter 12 of Barnes' book \cite{Barnes:Book}.
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+        \includegraphics[width=1.0\textwidth]{figures/spark-verification.png}
+        \caption{SPARK verification strategy}
+    \end{center}
+    \label{figure:sparkverificationstrategy}
+\end{figure}
 
 \section{Verification of implemented prototype}
 \label{verification:prototype}
 
-During PCA Pump prototype implementation, syntax was regularly check with SPARK Examiner.
+During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were run. The result of this analysis in the form of POGS report summary is presented in listing \ref{listing:pca_ravenscar:pogs}. Full report can be found in appendix \ref{Appendix:pca_ravenscar:pogs}.
 
-First run
-\begin{lstlisting}[frame=single, gobble=0, caption={POGS report for PCA Pump prototype}, label={listing:pcapump_prototype_pogs}]
------ BEGIN PROOF SUMMARY -----
-VCs discharged:        556
-VCs false:               2
-VCs undischarged:       37
-Warnings: No
-Errors:   YES
------ END PROOF SUMMARY ----- 
+Three false VCs applies to \lstinline{Pca_Engine} module, which should not be taken into account during verification, thus they are ignored. 30\% (90) of VCs were discharged by Examiner and 60\% (183) by Simplifier. There are 29 undischarged VCs. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:spark:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate, sequential module was created. Verification process of this module is described in section \ref{verification:pcapump:monitoring}.
+
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={Summary of POGS report for PCA Pump prototype}]
+Summary:
+
+The following subprograms have VCs proved false:
+
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.vcg
+
+The following subprograms have undischarged VCs (excluding those proved false):
+
+   2  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.vcg
+   2  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.vcg
+   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.vcg
+  20  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.vcg
+
+Proof strategies used by subprograms
+-------------------------------------------------------------------------
+Total subprograms with at least one VC proved by examiner:             15
+Total subprograms with at least one VC proved by simplifier:           20
+Total subprograms with at least one VC proved by contradiction:         0
+Total subprograms with at least one VC proved with user proof rule:     0
+Total subprograms with at least one VC proved by Victor:                0
+Total subprograms with at least one VC proved by Riposte:               0
+Total subprograms with at least one VC proved using checker:            0
+Total subprograms with at least one VC discharged by review:            0
+
+Maximum extent of strategies used for fully proved subprograms:
+-------------------------------------------------------------------------
+Total subprograms with proof completed by examiner:                     0
+Total subprograms with proof completed by simplifier:                  14
+Total subprograms with proof completed with user defined rules:         0
+Total subprograms with proof completed by Victor:                       0
+Total subprograms with proof completed by Riposte:                      0
+Total subprograms with proof completed by checker:                      0
+Total subprograms with VCs discharged by review:                        0
+
+Overall subprogram summary:
+-------------------------------------------------------------------------
+Total subprograms fully proved:                                        14
+Total subprograms with at least one undischarged VC:                    8  <<<
+Total subprograms with at least one false VC:                           3  <<<
+                                                                    -----
+Total subprograms for which VCs have been generated:                   25
+
+
+ZombieScope Summary:
+-------------------------------------------------------------------------
+Total subprograms for which DPCs have been generated:                  25
+Total number subprograms with dead paths found:                         3
+Total number of dead paths found:                                      32
+
+
+VC summary:
+-------------------------------------------------------------------------
+Note: (User) denotes where the Simplifier has proved VCs using one or
+      more user-defined proof rules.
+
+Total VCs by type:
+------------------
+                    Total   Examiner Simplifier False    Undisc.
+Assert/Post            96         80         12     3          1
+Precondition           12          0         12     0          0
+Check stmnt.            0          0          0     0          0
+Runtime check         187          0        159     0         28
+Refinem. VCs           10         10          0     0          0
+Inherit. VCs            0          0          0     0          0
+================================================================
+Totals:               305         90        183     3         29 <<<
+%Totals:                         30%        60%    1%        10%
 \end{lstlisting}
+\label{listing:pca_ravenscar:pogs}
+\doublespacing
 
-Two false VCs applies to \lstinline{Status_Store} protected type's subprograms: \lstinline{Put} and \lstinline{Get}.
-Error? The same implementation like for other enumeration types.
-
-POGS report is not included here, because it has almost 3000 lines.
-
-There is 37 undischarged VCs. As mentioned in chapter \ref{background:spark:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate module was created. Verification process of this module is described in section \ref{verification:pcapump:monitoring}.
 
 
 \section{Monitoring dosed amount}
@@ -44,9 +112,8 @@ Verification of module responsible for tracking dosed amount of drug.
 Isolated to verify, because of Ravenscar limitations.
 Sequential.
 
-Code:
-
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Dose monitor module specification}, label={listing:pcapump_dosemonitor_spec}]
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Dose monitor module specification}]
 package Pca_Pump
 --# own Dosed;
 --#     Dose_Volume;
@@ -69,10 +136,7 @@ is
     --# derives Dosed from Dosed;
 
 end Pca_Pump;
-\end{lstlisting}
 
-
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Dose monitor module body}, label={listing:pcapump_dosemonitor_body}]
 package body Pca_Pump
 is
     Dosed : Integer_Array := Integer_Array'(others => 0);
@@ -106,9 +170,9 @@ is
     end Move_Dosed;
 
 end Pca_Pump;
-
 \end{lstlisting}
-
+\label{listing:pcapump_dosemonitor}
+\doublespacing
 
 Verification with Examiner, Simplifier, ZombieScope, Victor, POGS and then Bakar Kiasan.
 SPARKSimp run Simplifier and Victor with command \lstinline{sparksimp -victor}.
@@ -116,53 +180,10 @@ SPARKSimp run Simplifier and Victor with command \lstinline{sparksimp -victor}.
 Examiner:
 No errors or warnings
 
-[REMOVE] SPARKSimp:
-\begin{lstlisting}[frame=single, gobble=0, caption={SPARKSimp output}, label={listing:pcapump_dosemonitor_sparksimp}]
-gnatspark sparksimp -P/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_verification.gpr
-sparksimp -victor
-SPARKSimp GPL 2012
-Copyright (C) 2012 Altran Praxis Limited, Bath, U.K.
-Simplifier  binary located at: /Users/jj/Sireum/apps/spark/2012/bin/spadesimp
-ZombieScope binary located at: /Users/jj/Sireum/apps/spark/2012/bin/zombiescope
-Victor binary located at: /Users/jj/Sireum/apps/spark/2012/bin/victor
-
-Files to be simplified are:
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.dpc, 1474 bytes
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg, 1457 bytes
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.dpc, 6072 bytes
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.vcg, 9612 bytes
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.dpc, 3089 bytes
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg, 5189 bytes
-
- 6 files require processing
-
-Job-ID Status     Filename
-====== ======     ========
-     1 Started - ZOMBIESCOPE - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.dpc
-     1 Finished    0: 0: 0.10
-     2 Started - SIMPLIFY - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
-     2 Finished    0: 0: 0.12
-     3 Started - ZOMBIESCOPE - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.dpc
-     3 Finished    0: 0: 0.17
-     4 Started - SIMPLIFY - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.vcg
-     4 Finished    0: 0: 0.18
-     5 Started - ZOMBIESCOPE - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.dpc
-     5 Finished    0: 0: 0.18
-     6 Started - SIMPLIFY - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
-     6 Finished    0: 0: 0.17
-     7 Started - VICTOR - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
-     7 Finished    0: 0: 0.08
-     8 Started - VICTOR - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.vcg
-     8 Finished    0: 0: 0.02
-     9 Started - VICTOR - /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
-     9 Finished    0: 0: 0.36
-Total elapsed time:    0: 0: 1.39
-[2014-07-01 14:45:00] process terminated successfully (elapsed time: 01.53s)
-\end{lstlisting}
-
-[truncate?]POGS Report:
-
-\begin{lstlisting}[frame=single, gobble=0, caption={POGS report}, label={listing:pcapump_dosemonitor_pogs}]
+[TRUNCATE?]
+POGS Report:
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={POGS report}]
 -------------------------------------------------------------------------------
                           Semantic Analysis Summary                            
                                 POGS GPL 2012                                  
@@ -341,8 +362,9 @@ Totals:                15          3          9          3 <<<
 %Totals:                         20%        60%        20%
 
 ===================== End of Semantic Analysis Summary ========================
-
 \end{lstlisting}
+\label{listing:pcapump_dosemonitor_pogs}
+\doublespacing
 
 pca-pump-verification-step1.png
 
@@ -350,6 +372,7 @@ problem: Integer'First = Integer'Last = 1 :O
 
 solution: added standard.ads:
 
+\singlespacing
 \begin{lstlisting}
 package Standard is
 
@@ -357,6 +380,7 @@ package Standard is
 
 end Standard;
 \end{lstlisting}
+\doublespacing
 
 pca-pump-verification-step2.png
 
@@ -377,62 +401,9 @@ Examiner Error: \lstinline{pca_pump.ads:19:51: Semantic Error  35 - Binary opera
 Declared \lstinline{Dose_Volume} type in \lstinline{--# own}: \lstinline{--# Dose_Volume : Drug_Volume;}
 
 Rerun Examiner and SPARKSimp:
-[truncate?]
-\begin{lstlisting}[frame=single, gobble=0, caption={Second POGS report}, label={listing:pcapump_dosemonitor_pogs2}]
--------------------------------------------------------------------------------
-                          Semantic Analysis Summary                            
-                                POGS GPL 2012                                  
-            Copyright (C) 2012 Altran Praxis Limited, Bath, U.K.               
--------------------------------------------------------------------------------
-
-Summary of:
-
-Verification Condition files (.vcg)
-Simplified Verification Condition files (.siv)
-Victor result files (.vct)
-Riposte result files (.rsm)
-Proof Logs (.plg)
-Dead Path Conjecture files (.dpc)
-Summary Dead Path files (.sdp)
-
-"status" column keys:
-    1st character:
-        '-' - No VC
-        'S' - No SIV
-        'U' - Undischarged
-        'E' - Proved by Examiner
-        'I' - Proved by Simplifier by Inference
-        'X' - Proved by Simplifier by Contradiction
-        'P' - Proved by Simplifier using User Defined Proof Rules
-        'V' - Proved by Victor
-        'O' - Proved by Riposte
-        'C' - Proved by Checker
-        'R' - Proved by Review
-        'F' - VC is False
-    2nd character:
-        '-' - No DPC
-        'S' - No SDP
-        'U' - Unchecked
-        'D' - Dead path
-        'L' - Live path
-
-in the directory:
-/Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification
-
-Summary produced: 02-JUL-2014 13:09:29.38
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
-procedure Pca_Pump.Increase_Dosed
-
-VCs generated 02-JUL-2014 13:08:10
-
-VCs simplified 02-JUL-2014 13:08:20
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.dpc
-DPCs generated 02-JUL-2014 13:08:10
-
-DPC ZombieScoped 02-JUL-2014  13:08:2
-
+[TRUNCATE?]
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={Second POGS report}]
 VCs for procedure_increase_dosed :
  -----------------------------------------------------------------------------
 | #   | From  | To                  | Proved By          | Dead Path | Status |
@@ -440,19 +411,6 @@ VCs for procedure_increase_dosed :
 | 1   | start | rtc check @ 9       | Undischarged       | Unchecked |   UU   |
 | 2   | start |    assert @ finish  | Examiner           | Live      |   EL   |
  -----------------------------------------------------------------------------
-
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.vcg
-procedure Pca_Pump.Move_Dosed
-
-VCs generated 02-JUL-2014 13:08:10
-
-VCs simplified 02-JUL-2014 13:08:20
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/move_dosed.dpc
-DPCs generated 02-JUL-2014 13:08:10
-
-DPC ZombieScoped 02-JUL-2014  13:08:2
 
 VCs for procedure_move_dosed :
  -----------------------------------------------------------------------------
@@ -469,19 +427,6 @@ VCs for procedure_move_dosed :
 | 9   | 27    |    assert @ finish  | Examiner           | Live      |   EL   |
  -----------------------------------------------------------------------------
 
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
-function Pca_Pump.Read_Dosed
-
-VCs generated 02-JUL-2014 13:08:10
-
-VCs simplified 02-JUL-2014 13:08:21
-
-File /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.dpc
-DPCs generated 02-JUL-2014 13:08:10
-
-DPC ZombieScoped 02-JUL-2014  13:08:2
-
 VCs for function_read_dosed :
  -----------------------------------------------------------------------------
 | #   | From  | To                  | Proved By          | Dead Path | Status |
@@ -492,35 +437,8 @@ VCs for function_read_dosed :
 | 4   | 17    |    assert @ finish  | Inference          | Live      |   IL   |
  -----------------------------------------------------------------------------
 
-
 ===============================================================================
 Summary:
-
-The following subprograms have undischarged VCs (excluding those proved false):
-
-   1  /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/increase_dosed.vcg
-   1  /Volumes/External/VMS/shared/aadl-medical/pca-pump-beagleboard/Pca_Verification/pca_pump/read_dosed.vcg
-
-Proof strategies used by subprograms
--------------------------------------------------------------------------
-Total subprograms with at least one VC proved by examiner:              2
-Total subprograms with at least one VC proved by simplifier:            2
-Total subprograms with at least one VC proved by contradiction:         0
-Total subprograms with at least one VC proved with user proof rule:     0
-Total subprograms with at least one VC proved by Victor:                0
-Total subprograms with at least one VC proved by Riposte:               0
-Total subprograms with at least one VC proved using checker:            0
-Total subprograms with at least one VC discharged by review:            0
-
-Maximum extent of strategies used for fully proved subprograms:
--------------------------------------------------------------------------
-Total subprograms with proof completed by examiner:                     0
-Total subprograms with proof completed by simplifier:                   1
-Total subprograms with proof completed with user defined rules:         0
-Total subprograms with proof completed by Victor:                       0
-Total subprograms with proof completed by Riposte:                      0
-Total subprograms with proof completed by checker:                      0
-Total subprograms with VCs discharged by review:                        0
 
 Overall subprogram summary:
 -------------------------------------------------------------------------
@@ -558,6 +476,8 @@ Totals:                15          3         10          2 <<<
 
 ===================== End of Semantic Analysis Summary ========================
 \end{lstlisting}
+\label{listing:pcapump_dosemonitor_pogs2}
+\doublespacing
 
 Now, we can see progress. Only 2 VCs (13\%) are undischarged in comparison to 3 (20\%) previously.
 
@@ -567,13 +487,14 @@ pca-pump-verification-step4
 
 \lstinline{Move_Dosed} and \lstinline{Increase_Dosed} are fine: no Exception cases.
 
-\lstinline{Read_Dosed} ConstraintError: the value being assigned to Result is too small. After look at the pre and post state it seems weird. After investigation and talk with Kiasan Developer, it was determined that there is a bug in Kiasan v1(for SPARK 2005). More precisely: checking overflows. For the purpose of verification \lstinline{Drug_Volume} type range was changed to $0 - (2^{15} - 1)$. Negative values in this case are unnecessary. It will give range up to around 1000000. Which is sufficient even if calculations are made in micro liters (as it is in case of PCA Pump implementation). 1000000 micro liters is 1000 ml, which is 1 liter. Which is extreme amount of drug in case of PCA Pump, according to Requirement Document \cite{OpenSourcePCAPump:Paper}. The bug with type ranges is fixed in Kiasan v2 (for SPARK 2014).
+\lstinline{Read_Dosed} ConstraintError: the value being assigned to Result is too small. After look at the pre and post state it seems weird. After investigation and talk with Kiasan Developer, it was determined that there is a bug in Kiasan v1 (for SPARK 2005). More precisely: checking overflows. For the purpose of verification \lstinline{Drug_Volume} type range was changed to $0 - (2^{15} - 1)$. Negative values in this case are unnecessary. It will give range up to around 1000000. Which is sufficient even if calculations are made in micro liters (as it is in case of PCA Pump implementation). 1000000 micro liters is 1000 ml, which is 1 liter. Which is extreme amount of drug in case of PCA Pump, according to Requirement Document \cite{OpenSourcePCAPump:Paper}. The bug with type ranges is fixed in Kiasan v2 (for SPARK 2014).
 
 Another problem is size of Dosed array (3600 elements). First of all, Kiasan array bound and loop bound has to be increased (from default 10). Another thing is computational complexity. The state space grow exponentially and it takes a lot of time to analyze array of 3600 elements. Thus for verification purposes array size was change to 60 elements. Along with increasing array bounds and loop bounds for Kiasan also to 60.
 
 After rerun Kiasan, there is valid test case for \lstinline{Read_Dose}, but there are also 59 Exception cases: Range violation (UPPER), which means there is possible overflow.
-One way to fix it is to add \lstinline{--# assume} annotation to loop in function body, but Kiasan v1 does not support it. Another way is to add pre-condition, which assure, that sum of elements is lower than \lstinline{Drug_Volume'Last}. SPARK does not provide simple library for summing array (like Contracts for Java provide). Thus, this function has to be implemented. However, its implementation is the same like \lstinline{Read_Dosed}. It sum all elements of array. Sum function specification and body is presented on listing \ref{listing:sum_function}.
+One way to fix it is to add \lstinline{--# assume} annotation to loop in function body, but Kiasan v1 does not support it. Another way is to add pre-condition, which assure, that sum of elements is lower than \lstinline{Drug_Volume'Last}. SPARK does not provide simple library for summing array (like Contracts for Java provide). Thus, this function has to be implemented. However, its implementation is the same like \lstinline{Read_Dosed}. It sum all elements of array. Sum function specification and body is presented in listing \ref{listing:sum_function}.
 
+\singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sum function for summing all elements of array}, label={listing:sum_function}]
 function Sum(Arr : Doses_Array) return Drug_Volume;
 
@@ -587,8 +508,8 @@ begin
     end loop;
     return Result;
 end Sum;
-
 \end{lstlisting}
+\doublespacing
 
 
 After rerun Kiasan, there is only valid test case.
@@ -601,11 +522,13 @@ The last thing which can be improved by code contracts is checking if \lstinline
     \item the first element is greater than 0: after Dosed procedure execution, the amount of drug dosed in last hour will decrease, because first element value will no longer be in last hour range
 \end{itemize}
 
+\singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Postconditions added to Move\_Dosed procedure}, label={listing:postconditions_added_to_move_dosed}]
 --# post Dosed(Doses_Array_Index'Last) = 0 
 --#      and (Dosed~(Doses_Array_Index'First)=0 -> Read_Dosed(Dosed~) = Read_Dosed(Dosed))
 --#      and (Dosed~(Doses_Array_Index'First)>0 -> Read_Dosed(Dosed~) > Read_Dosed(Dosed));
 \end{lstlisting}
+\doublespacing
 
 After adding these postconditions Kiasan generates 2 test cases to check both mentioned scenarios. There is no error cases, which means that procedure works as expected.
 
@@ -613,7 +536,8 @@ Better way to validate such requirements is Unit testing. In section \ref{verifi
 
 Running Examiner and SPARKSimp after all changes (truncated result):
 
-\begin{lstlisting}[frame=single, gobble=0, caption={Third POGS report}, label={listing:pcapump_dosemonitor_pogs3}]
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={Third POGS report}]
 VCs for procedure_increase_dosed :
  -----------------------------------------------------------------------------
 | #   | From  | To                  | Proved By          | Dead Path | Status |
@@ -657,6 +581,24 @@ VCs for function_sum :
 | 4   | 11    |    assert @ finish  | Inference          | Live      |   IL   |
  -----------------------------------------------------------------------------
 
+===============================================================================
+Summary:
+
+Overall subprogram summary:
+-------------------------------------------------------------------------
+Total subprograms fully proved:                                         0
+Total subprograms with at least one undischarged VC:                    4  <<<
+Total subprograms with at least one false VC:                           0
+                                                                    -----
+Total subprograms for which VCs have been generated:                    4
+
+
+ZombieScope Summary:
+-------------------------------------------------------------------------
+Total subprograms for which DPCs have been generated:                   4
+Total number subprograms with dead paths found:                         1
+Total number of dead paths found:                                       1
+
 Total VCs by type:
 ------------------
                     Total   Examiner Simplifier    Undisc.
@@ -670,9 +612,13 @@ Inherit. VCs            0          0          0          0
 Totals:                19          1         14          4 <<<
 %Totals:                          5%        74%        21%
 \end{lstlisting}
+\label{listing:pcapump_dosemonitor_pogs3}
+\doublespacing
 
 Now, there is 4 undischarged VCs, but total number of generated VCs is 19. In previous runs there was only 15. Thus there is 4 new VCs and 2 of them are undischarged. The reason is introduction of \lstinline{Sum} function of all subprograms which are using it. To confirm this, look at all undischarged VCs. Which is: 1st VC in \lstinline{increase_dosed.siv} file (listing \ref{listing:pcapump_undischarged_vc_increase_dosed}, 9th VC in \lstinline{move_dosed.siv} file (listing \ref{listing:pcapump_undischarged_vc_move_dosed}, 3rd VC in \lstinline{read_dosed.vcg} file (listing \ref{listing:pcapump_undischarged_vc_read_dosed}) and 3rd VC in \lstinline{sum.vcg} file (listing \ref{listing:pcapump_undischarged_vc_sum}). They conform to subprograms: \lstinline{Increase_Dosed}, \lstinline{Move_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} respectively.
 
+[JOIN INTO 1 LISTING?]
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from increase\_dosed.siv file}, label={listing:pcapump_undischarged_vc_increase_dosed}]
 procedure_increase_dosed_1.
 H1:    read_dosed(dosed) <= 32767 - dose_volume .
@@ -689,7 +635,9 @@ H10:   drug_volume__base__last >= 32767 .
        ->
 C1:    element(dosed, [60]) + dose_volume <= 32767 .
 \end{lstlisting}
+\doublespacing
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from move\_dosed.siv file}, label={listing:pcapump_undischarged_vc_move_dosed}]
 procedure_move_dosed_9.
 H1:    element(dosed, [58]) = element(dosed, [59]) .
@@ -709,7 +657,9 @@ C1:    element(dosed~, [1]) = 0 -> read_dosed(dosed~) = read_dosed(update(
 C2:    element(dosed~, [1]) > 0 -> read_dosed(dosed~) > read_dosed(update(
           update(dosed, [59], element(dosed, [60])), [60], 0)) .
 \end{lstlisting}
+\doublespacing
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from read\_dosed.siv file}, label={listing:pcapump_undischarged_vc_read_dosed}]
 function_read_dosed_3.
 H1:    loop__1__i > 1 -> result >= element(dosed, [loop__1__i - 1]) .
@@ -729,7 +679,9 @@ H13:   drug_volume__base__last >= 32767 .
        ->
 C1:    result + element(dosed, [loop__1__i]) <= 32767 .
 \end{lstlisting}
+\doublespacing
 
+\singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Undischarged Verification Condition from sum.siv file}, label={listing:pcapump_undischarged_vc_sum}]
 function_sum_3.
 H1:    for_all(i___1 : integer, 1 <= i___1 and i___1 <= 60 -> 0 <= element(arr, 
@@ -747,8 +699,43 @@ H11:   drug_volume__base__last >= 32767 .
        ->
 C1:    result + element(arr, [loop__1__i]) <= 32767 .
 \end{lstlisting}
+\doublespacing
 
 In \lstinline{Move_Dosed} procedure, tools cannot prove implications in post conditions. Fortunately, it is already proved by Bakar Kiasan. The problem in \lstinline{Increase_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} is the same. Tools cannot verify, that adding \lstinline{Result} and some element of \lstinline{Dosed} array will not cause overflow. Bakar Kiasan can prove correctness of \lstinline{Increase_Dosed} and \lstinline{Read_Dosed}. However only, with assumption that \lstinline{Sum} is correct. \lstinline{Sum} cannot be proved by Bakar Kiasan. Four exception cases indicating possible overflow are generated. Thus, the only way to prove correctness of this module is to assume, that helper function \lstinline{Sum} is correct.
+
+In procedure \lstinline{Move_Dosed}, there is one dead path found. POGS report gives only information where dead path exists, but not in which circumstances. The information about conditions, in which dead path occurs is stored in \lstinline{.dpc} file. The file path to concrete file is given in the POGS report just before summary table for procedure \lstinline{Move_Dosed}. In this case it is \lstinline{move_dosed.dpc} file. Listing \ref{listing:pcapump_dosemonitor_pogs3} presents truncated POGS report, but as an example, full POGS report of implemented PCA prototype can be found in appendix \ref{Appendix:pca_ravenscar:pogs} (e.g. see line 50, which contains DPC analysis for \lstinline{Start_Pumping} procedure). 
+
+Relevant fragment, which applies to found dead path is presented in listing \ref{listing:pcapump_dosemonitor:dead_path}. It is a list of hypothesis, in which hypothesis 10 (H10) states that number of elements in \lstinline{Doses_Array} is 1 or less. In this case (or more precisely: in this path), for loop will not be visited. \lstinline{Doses_Array} has always 3600 elements, thus this path is impossible (dead). It does not mean something bad, because dead path indicate possible issues. In this case it is not issue. It is expected behavior.
+
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={Dead path in \lstinline{Move_Dosed} procedure}]
+procedure_move_dosed_8.
+H1:    for_all(i___1: integer, ((i___1 >= doses_array_index__first) and (
+           i___1 <= doses_array_index__last)) -> ((element(
+           dosed, [i___1]) >= drug_volume__first) and (element(
+           dosed, [i___1]) <= drug_volume__last))) .
+H2:    doses_array_index__last - 1 >= integer__first .
+H3:    doses_array_index__last - 1 <= integer__last .
+H4:    doses_array_index__last - 1 >= integer__base__first .
+H5:    doses_array_index__last - 1 <= integer__base__last .
+H6:    doses_array_index__first >= integer__first .
+H7:    doses_array_index__first <= integer__last .
+H8:    (doses_array_index__first <= doses_array_index__last - 1) -> ((
+           doses_array_index__last - 1 >= doses_array_index__first) and (
+           doses_array_index__last - 1 <= doses_array_index__last)) .
+H9:    (doses_array_index__first <= doses_array_index__last - 1) -> ((
+           doses_array_index__first >= doses_array_index__first) and (
+           doses_array_index__first <= doses_array_index__last)) .
+H10:   not (doses_array_index__first <= doses_array_index__last - 1) .
+H11:   0 >= drug_volume__first .
+H12:   0 <= drug_volume__last .
+H13:   doses_array_index__last >= doses_array_index__first .
+H14:   doses_array_index__last <= doses_array_index__last .
+        ->
+C1:    false .
+\end{lstlisting}
+\label{listing:pcapump_dosemonitor:dead_path}
+\doublespacing
 
 Complete code of module for dose monitoring can be found in \ref{Appendix:pcapump:dose_monitor_module}.
 
@@ -757,15 +744,42 @@ Unfortunately, introduced changes (pre- and postconditions) cannot be applied to
 This shows, how code implemented based on translation from AADL/BLESS can be verified using SPARK tools.
 
 
+
 \section{Verification of generated code}
 \label{verification:generated}
 
-Raw, generated code cannot be verified, because Examiner return syntax errors. The reason is that some parts of code are not implemented. Especially, BLESS assertions, which are not even defined. In order to verify generated code, it has to be at least partially implemented.
+Code translated from AADL models is presented in appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. It means, that discriminants or task annotation are expected here. In order to pass Examiner syntax check at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used. Complete task declaration is presented in listing \ref{listing:verification:pca_generated:patient_bolus_checker}.
 
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Undischarged Verification Condition from sum.siv file}]
+task type Patient_Bolus_Checker
+--# global in Ada.Real_Time.ClockTime;
+--# derives null from Ada.Real_Time.ClockTime;
+is
+    pragma Priority(10);
+end Patient_Bolus_Checker;
+\end{lstlisting}
+\label{listing:verification:pca_generated:patient_bolus_checker}
+\doublespacing
 
-\subsection{Adding implementation to generated code}
-\label{verification:generated:implementation}
+Once annotation is added, \lstinline{Pca_Operation} package specification passes Examiner syntax check. Verification of package body returns errors, which are caused by not implemented assertions (translated from BLESS). When all assertions are removed, only flow errors (presented in listing \ref{listing:verification:pca_generated:flow_errors}) are found by Examiner. 
 
+\singlespacing
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Flow errors returned by Examiner for \lstinline{Pca_Operation} package body}]
+pca_operation.adb:82:9: Flow Error  30 - The variable Infusion_Flow_Rate is imported but neither referenced nor exported.
+pca_operation.adb:92:9: Flow Error  30 - The variable Bolus_Duration is imported but neither referenced nor exported.
+pca_operation.adb:92:9: Flow Error  32 - The variable Infusion_Flow_Rate is neither imported nor defined.
+pca_operation.adb:92:9: Flow Error  31 - The variable Infusion_Flow_Rate is exported but not (internally) defined.
+pca_operation.adb:92:9: Flow Error  32 - The variable System_Status is neither imported nor defined.
+pca_operation.adb:92:9: Flow Error  31 - The variable System_Status is exported but not (internally) defined.
+pca_operation.adb:92:9: Flow Error  30 - The variable Rx is imported but neither referenced nor exported.
+pca_operation.adb:92:9: Warning 400 - Variable la is declared but not used.
+pca_operation.adb:101:9: Flow Error  35 - Importation of the initial value of variable Ada.Real_Time.ClockTime is ineffective.
+\end{lstlisting}
+\label{listing:verification:pca_generated:flow_errors}
+\doublespacing
+
+This is nice indication what has to be implemented in particular parts of the program. It is recommended to not use VC and DPC generation until there are some syntax errors. When all errors are fixed, program can be initially verified as described in previous sections.
 
 
 \section{AUnit tests}
@@ -777,9 +791,9 @@ Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitori
     \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
 \end{itemize}
 
-Both test cases are presented on listing \ref{listing:pca_pump_move_dosed_unit_tests}.
+Both test cases are presented in listing \ref{listing:pca_pump_move_dosed_unit_tests}.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={AUnit tests for Move\_Dosed procedure}, label={listing:pca_pump_move_dosed_unit_tests}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={AUnit tests for Move\_Dosed procedure}]
 procedure Test_Move_Dosed_First_Element_Zero (Gnattest_T : in out Test) is
   pragma Unreferenced (Gnattest_T);
   Pre_Sum : Pca_Pump.Drug_Volume := 0;
@@ -820,12 +834,17 @@ begin
      "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " should be greater than " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
 end Test_Move_Dosed_First_Element_Not_Zero;
 \end{lstlisting}
+\label{listing:pca_pump_move_dosed_unit_tests}
 
-[add other test cases?]
 
-
-\section{gnatPROVE?}
+\section{gnatPROVE}
 \label{verification:gnatprove}
 
-There is a new tool set "gnatPROVE" for SPARK 2014. It was not used because PCA Pump was developed in SPARK 2005.
-I CAN TRANSLATE SOME SINGLE FUNCTIONS AND USE GNAT PROVE TO VERIFY?
+The sequential module for monitoring dosed amount verification presented in section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. In this purpose "SPARK 2005 to 2014" translator created by AdaCore has been used. Translated code is presented in listing .... It use abstract refinement, which is different than in SPARK 2005. To access private, global variables, ghost functions \lstinline{Dosed_State} and \lstinline{Dose_Volume_State} have to be used. 
+
+%listing-initial code
+
+Code presented in listing ... passes flow analysis. [START FROM HERE]
+
+In SPARK 2014, the \lstinline{Standard.ads} file with type ranges is not necessary, because it is handled by language. 
+

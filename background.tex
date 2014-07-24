@@ -957,12 +957,16 @@ Bakar Kiasan is useful especially, for solving verification issues. It can gener
 Alir is an information flow analysis tool for reasoning about SPARK's derive clauses/information flow (Alir means "flow" in Indonesian). Alir visualizes information flows to ease engineers in understanding information dependencies crucial for specifying and verifying SPARK's derive clauses. It provides various configurable intra-procedural and inter-procedural analyses. The inter-procedural analyses are control flow analysis, reaching definition analysis and data dependence analysis. The inter-procedural analysis in Alir includes building, System Dependence Graph (SDG), slicing and chopping on SDG. \cite{Hari:Thesis}
 
 
-\subsection{GNAT Prove}
+\subsection{GNATprove}
 \label{background:spark:gnatprove}
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 % https://github.com/openETCS/model-evaluation/wiki/Gnatprove-description
 
 GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It is based on the GNAT compiler. GNATprove interprets SPARK Ada annotations exactly like they are interpreted at run time during tests. It can prove that subprograms respect their contracts, expressed as preconditions and postconditions in the syntax of Ada 2012. The tool automatically discovers the subset of subprograms which can be formally analyzed. GNATprove is currently available for x86 linux, x86 windows and x86-64 linux.
+
+GNATprove consists of two distinct analyses, flow analysis and proof. Flow analysis checks the correctness of aspects related to data flow (\lstinline{Global}, \lstinline{Depends}, \lstinline{Abstract_State}, \lstinline{Initializes}, and refinement versions of these), and verifies the initialization of variables. Proof verifies the absence of runtime errors and the correctness of assertions such as \lstinline{Pre} and \lstinline{Post} aspects. Using the switch \lstinline{--mode=<mode>}, whose possible values are \lstinline{flow}, \lstinline{prove} and \lstinline{all}, only one or both of these analyses can be performed (\lstinline{all} is the default). \cite{Spark2014userGuide:Online}
+
+GNATprove use Alt-Ergo prover for verification.
 
 [Add more details? Some example like in Kiasan section?]
 
