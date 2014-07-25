@@ -5,6 +5,707 @@
 \chapter{PCA pump prototype - simple, implemented, working pump}
 \label{Appendix:pca_ravenscar}
 
-Content of this appendix.
+This appendix contains implemented, simple version of PCA Pump, created based on \ref{pcapump:requirements-doc} and AADL models created by Brian Larson. Data types used by this pump are the same like translated from AADL models presented in appendix \ref{Appendix:pca_generated}.
 
-%code listings with numbers
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Operation} package}, label={listing:pca_ravenscar:pca_operation}]
+with Base_Types;
+with Pca_Types;
+with Ice_Types;
+--# inherit Ada.Real_Time,
+--#         Ada.Synchronous_Task_Control,
+--#         Base_Types,
+--#         Pca_Types,
+--#         Ice_Types,
+--#         Pca_Engine;
+package Pca_Operation
+--# own protected Operate (suspendable);
+--#     protected Fluid_Pulses : Integer_Array_Store(Priority => 10);
+--#     protected Prescription : Pca_Types.Prescription_Store(Priority => 10);
+--#     protected State : Pca_Types.Status_Type_Store(Priority => 10);
+--#     protected Clinician_Bolus_Paused : Base_Types.Boolean_Store(Priority => 10);
+--#     protected Clinician_Bolus_Duration : Ice_Types.Minute_Store(Priority => 10);
+--#     task rc : Rate_Controller;
+--#     task mdphw : Max_Drug_Per_Hour_Watcher;
+--#     Last_Patient_Bolus;
+--# initializes Last_Patient_Bolus;
+is
+
+    subtype Integer_Array_Index is Integer range 1 .. 60*60;
+    type Integer_Array is array (Integer_Array_Index) of Integer;
+
+    protected type Integer_Array_Store
+    is
+        pragma Priority (10);
+
+        function Get(Ind : in Integer) return Integer;
+        --# global in Integer_Array_Store;
+
+        procedure Put(Ind : in Integer; Val : in Integer);
+        --# global in out Integer_Array_Store;
+        --# derives Integer_Array_Store from Integer_Array_Store, Ind, Val;
+
+        procedure Inc(Ind : in Integer);
+        --# global in out Integer_Array_Store;
+        --# derives Integer_Array_Store from Integer_Array_Store, Ind;
+
+        function Sum return Integer;
+        --# global in Integer_Array_Store;
+
+        procedure Pulse;
+        --# global in out Integer_Array_Store;
+        --# derives Integer_Array_Store from Integer_Array_Store;
+    private
+        TheStoredData : Integer_Array := Integer_Array'(others => 0);
+    end Integer_Array_Store;
+
+    function Get_Volume_Infused return Integer; -- microliters
+    --# global in     Fluid_Pulses;
+
+    function Get_State return Pca_Types.Status_Type;
+    --# global in     State;
+
+    procedure Panel_Set_Basal_Flow_Rate(Flow_Rate : Pca_Types.Flow_Rate);
+    --# global in out Prescription;
+
+    function Panel_Get_Basal_Flow_Rate return Pca_Types.Flow_Rate;
+    --# global in     Prescription;
+
+    procedure Panel_Set_Vtbi(Vtbi : Pca_Types.Drug_Volume);
+    --# global in out Prescription;
+
+    function Panel_Get_Vtbi return Pca_Types.Drug_Volume;
+    --# global in     Prescription;
+
+    procedure Panel_Set_Max_Drug_Per_Hour(Max_Drug_Per_Hour : Pca_Types.Drug_Volume);
+    --# global in out Prescription;
+
+    function Panel_Get_Max_Drug_Per_Hour return Pca_Types.Drug_Volume;
+    --# global in     Prescription;
+
+    procedure Panel_Set_Minimum_Time_Between_Bolus(Minimum_Time_Between_Bolus : Ice_Types.Minute);
+    --# global in out Prescription;
+
+    function Panel_Get_Minimum_Time_Between_Bolus return Ice_Types.Minute;
+    --# global in     Prescription;
+
+    procedure StartPump;
+    --# global out    Operate;
+    --#        out    State;
+    --# derives Operate from &
+    --#         State from ;
+
+    procedure StopPump;
+    --# global out    Operate;
+    --#        out    State;
+    --# derives Operate from &
+    --#         State from ;
+
+    procedure PatientBolus;
+    --# global in out State;
+    --#        in out Last_Patient_Bolus;
+    --#        in out Clinician_Bolus_Paused;
+    --#        in     Prescription;
+    --#        in     Ada.Real_Time.ClockTime;
+    --# derives State from State, Last_Patient_Bolus, Prescription, Ada.Real_Time.ClockTime &
+    --#         Last_Patient_Bolus from Last_Patient_Bolus, Prescription, Ada.Real_Time.ClockTime &
+    --#         Clinician_Bolus_Paused from Clinician_Bolus_Paused, State, Last_Patient_Bolus, Prescription, Ada.Real_Time.ClockTime;
+
+    procedure ClinicianBolus(Cb_Duration : in     Ice_Types.Minute);
+    --# global in out State;
+    --#        in out Clinician_Bolus_Duration;
+    --#        in out Clinician_Bolus_Paused;
+    --# pre Cb_Duration <= 6 * 60; -- from Requirements 4.3.5
+
+
+private
+    task type Rate_Controller
+    --# global out Operate;
+    --#        in out Fluid_Pulses;
+    --#        in out Clinician_Bolus_Paused;
+    --#        in     Prescription;
+    --#        in out State;
+    --#        in     Ada.Real_Time.ClockTime;
+    --#        in     Clinician_Bolus_Duration;
+    --# derives Operate       from &
+    --#         Fluid_Pulses from Fluid_Pulses, State, Clinician_Bolus_Paused, Ada.Real_Time.ClockTime, Prescription, Clinician_Bolus_Duration &
+    --#         Clinician_Bolus_Paused from State, Clinician_Bolus_Paused, Ada.Real_Time.ClockTime, Prescription, Clinician_Bolus_Duration &
+    --#         State        from State, Prescription, Ada.Real_Time.ClockTime, Clinician_Bolus_Duration, Clinician_Bolus_Paused;
+    --# declare suspends => Operate;
+    is
+        pragma Priority (9);
+    end Rate_Controller;
+
+    task type Max_Drug_Per_Hour_Watcher
+    --# global in out Fluid_Pulses;
+    --#        in     Prescription;
+    --#        in out State;
+    --#        in     Ada.Real_Time.ClockTime;
+    --# derives Fluid_Pulses  from Fluid_Pulses &
+    --#         State         from Prescription, Fluid_Pulses, State &
+    --#         null          from Ada.Real_Time.ClockTime;
+    is
+        pragma Priority (9);
+    end Max_Drug_Per_Hour_Watcher;
+
+end Pca_Operation;
+
+with Ada.Synchronous_Task_Control,
+     Ada.Real_Time,
+     Base_Types,
+     Pca_Types,
+     Pca_Engine;
+use type Ada.Real_Time.Time;
+use type Pca_Types.Status_Type;
+
+package body Pca_Operation
+is
+    Operate : Ada.Synchronous_Task_Control.Suspension_Object;
+    rc : Rate_Controller;
+    mdphw : Max_Drug_Per_Hour_Watcher;
+
+    Fluid_Pulses : Integer_Array_Store;
+
+    State : Pca_Types.Status_Type_Store;
+
+    Prescription : Pca_Types.Prescription_Store;
+
+    Fluid_Pulse_Volume : constant Natural := 100; -- in microliters
+
+    Kvo_Rate : constant Pca_Types.Flow_Rate := 1; -- in mililiters
+
+    Bolus_Flow_Rate : constant Pca_Types.Flow_Rate := 100; -- in mililiters
+
+    Last_Patient_Bolus : Ada.Real_Time.Time := Ada.Real_Time.Time_First;
+
+    Clinician_Bolus_Duration : Ice_Types.Minute_Store;
+
+    Clinician_Bolus_Paused : Base_Types.Boolean_Store;
+
+    protected body Integer_Array_Store
+    is
+        function Get(Ind : in Integer) return Integer
+        --# global in TheStoredData;
+        is
+        begin
+            return TheStoredData(Ind);
+        end Get;
+
+
+        procedure Put(Ind : in Integer; Val : in Integer)
+          --# global in out TheStoredData;
+          --# derives TheStoredData from TheStoredData, Ind, Val;
+        is
+        begin
+            TheStoredData(Ind) := Val;
+        end Put;
+
+        procedure Inc(Ind : in Integer)
+          --# global in out TheStoredData;
+          --# derives TheStoredData from TheStoredData, Ind;
+        is
+        begin
+            TheStoredData(Ind) := TheStoredData(Ind) + Fluid_Pulse_Volume;
+        end Inc;
+
+        function Sum return Integer
+        --# global in TheStoredData;
+        is
+            Result : Integer := 0;
+        begin
+            for I in Integer_Array_Index loop
+                --# assert I > 1 -> Result >= TheStoredData(I-1);
+                Result := Result + TheStoredData(I);
+            end loop;
+            return Result;
+        end Sum;
+
+        procedure Pulse
+        --# global in out TheStoredData;
+        --# derives TheStoredData from TheStoredData;
+        is
+        begin
+            for I in Integer_Array_Index range 1 .. Integer_Array_Index'Last-1 loop
+                --# assert I > 1 -> TheStoredData(I-1) = TheStoredData(I);
+                TheStoredData(I) := TheStoredData(I+1);
+            end loop;
+            TheStoredData(Integer_Array_Index'Last) := 0;
+        end Pulse;
+
+    end Integer_Array_Store;
+
+    function Get_Time_Between_Activations(Flow_Rate : in Pca_Types.Flow_Rate) return Natural
+    is
+        Result : Natural;
+        Flow_Rate_In_Microliters : Natural;
+        Activations_Per_Hour : Natural;
+    begin
+        Flow_Rate_In_Microliters := Natural(Flow_Rate) * 1000; -- convert mL to uL
+        Activations_Per_Hour := Flow_Rate_In_Microliters / Fluid_Pulse_Volume;
+
+        -- miliseconds between activations
+        Result := ((60 * 60) * 1000) / Activations_Per_Hour;
+        return Result;
+    end Get_Time_Between_Activations;
+
+
+    function Get_Volume_Infused return Integer
+    is
+    begin
+        return Fluid_Pulses.Sum;
+    end Get_Volume_Infused;
+
+    function Get_State return Pca_Types.Status_Type
+    is
+        Current_State : Pca_Types.Status_Type;
+    begin
+        Current_State := State.Get;
+        return Current_State;
+    end Get_State;
+
+    procedure Panel_Set_Basal_Flow_Rate(Flow_Rate : Pca_Types.Flow_Rate)
+    is
+    begin
+        Prescription.Set_Basal_Flow_Rate(Flow_Rate);
+    end Panel_Set_Basal_Flow_Rate;
+
+    function Panel_Get_Basal_Flow_Rate return Pca_Types.Flow_Rate
+    is
+    begin
+        return Prescription.Get_Basal_Flow_Rate;
+    end Panel_Get_Basal_Flow_Rate;
+
+    procedure Panel_Set_Vtbi(Vtbi : Pca_Types.Drug_Volume)
+    is
+    begin
+        Prescription.Set_Vtbi(Vtbi);
+    end Panel_Set_Vtbi;
+
+    function Panel_Get_Vtbi return Pca_Types.Drug_Volume
+    is
+    begin
+        return Prescription.Get_Vtbi;
+    end Panel_Get_Vtbi;
+
+    procedure Panel_Set_Max_Drug_Per_Hour(Max_Drug_Per_Hour : Pca_Types.Drug_Volume)
+    is
+    begin
+        Prescription.Set_Max_Drug_Per_Hour(Max_Drug_Per_Hour);
+    end Panel_Set_Max_Drug_Per_Hour;
+
+    function Panel_Get_Max_Drug_Per_Hour return Pca_Types.Drug_Volume
+    is
+    begin
+        return Prescription.Get_Max_Drug_Per_Hour;
+    end Panel_Get_Max_Drug_Per_Hour;
+
+    procedure Panel_Set_Minimum_Time_Between_Bolus(Minimum_Time_Between_Bolus : Ice_Types.Minute)
+    is
+    begin
+        Prescription.Set_Minimum_Time_Between_Bolus(Minimum_Time_Between_Bolus);
+    end Panel_Set_Minimum_Time_Between_Bolus;
+
+    function Panel_Get_Minimum_Time_Between_Bolus return Ice_Types.Minute
+    is
+    begin
+        return Prescription.Get_Minimum_Time_Between_Bolus;
+    end Panel_Get_Minimum_Time_Between_Bolus;
+
+    procedure StartPump
+    is
+    begin
+        Ada.Synchronous_Task_Control.Set_True (Operate);
+        State.Put(Pca_Types.Basal);
+    end StartPump;
+
+    procedure StopPump
+    is
+    begin
+        Ada.Synchronous_Task_Control.Set_False (Operate);
+        State.put(Pca_Types.Stopped);
+    end StopPump;
+
+    procedure PatientBolus
+    is
+        Minimum_Time_Between_Bolus : Ice_Types.Minute;
+        Time_Now : Ada.Real_Time.Time;
+        Current_State : Pca_Types.Status_Type;
+    begin
+        Minimum_Time_Between_Bolus := Prescription.Get_Minimum_Time_Between_Bolus;
+        Time_Now := Ada.Real_Time.Clock;
+        if Last_Patient_Bolus + Ada.Real_Time.Milliseconds(Natural(Minimum_Time_Between_Bolus)*(60*1000)) <= Time_Now then
+            Last_Patient_Bolus := Time_Now;
+            Current_State := State.Get;
+            if Current_State = Pca_Types.Square_Bolus then
+                Clinician_Bolus_Paused.Put(True);
+            end if;
+            State.Put(Pca_Types.Bolus);
+        end if;
+    end PatientBolus;
+
+    procedure ClinicianBolus(Cb_Duration : in     Ice_Types.Minute)
+    is
+        Current_State : Pca_Types.Status_Type;
+    begin
+        Current_State := State.Get;
+        if Current_State = Pca_Types.Basal then
+            Clinician_Bolus_Duration.Put(Cb_Duration);
+            State.Put(Pca_Types.Square_Bolus);
+        elsif Current_State = Pca_Types.Bolus then
+            Clinician_Bolus_Duration.Put(Cb_Duration);
+            Clinician_Bolus_Paused.Put(True);
+        end if;
+    end ClinicianBolus;
+
+
+    task body Rate_Controller
+    is
+        --Release_Time : Ada.Real_Time.Time;
+        Now : Ada.Real_Time.Time;
+        Period : Natural;
+        Last_Basal_Pulse : Ada.Real_Time.Time := Ada.Real_Time.Time_First; -- Ada.Real_Time.Clock - Ada.Real_Time.Milliseconds(1000 * 60 * 60);
+        Last_Kvo_Pulse : Ada.Real_Time.Time := Ada.Real_Time.Time_First; -- Ada.Real_Time.Clock - Ada.Real_Time.Milliseconds(1000 * 60 * 60);
+        Last_Patient_Bolus_Pulse : Ada.Real_Time.Time := Ada.Real_Time.Time_First; -- Ada.Real_Time.Clock - Ada.Real_Time.Milliseconds(1000 * 60 * 60);
+        Last_Clinician_Bolus_Pulse : Ada.Real_Time.Time := Ada.Real_Time.Time_First; -- Ada.Real_Time.Clock - Ada.Real_Time.Milliseconds(1000 * 60 * 60);
+        Patient_Bolus_Volume_Left : Natural := 0;
+        Clinicaian_Bolus_Vtbi : Pca_Types.Drug_Volume;
+        Clinician_Bolus_Volume_Left : Natural := 0;
+        Current_State : Pca_Types.Status_Type;
+        Flow_Rate : Pca_Types.Flow_Rate;
+        Drug_Volume : Pca_Types.Drug_Volume;
+        Clinician_Bolus_Paused_Temp : Boolean;
+        Clinician_Bolus_Duration_Temp : Ice_Types.Minute;
+    begin
+        loop
+            Ada.Synchronous_Task_Control.Suspend_Until_True (Operate); -- wait until user allows Pump to operate
+            Ada.Synchronous_Task_Control.Set_True (Operate); -- Keep the task running, the previous call will have set Operate to False.
+
+            Now := Ada.Real_Time.Clock;
+            Current_State := State.Get;
+
+            --# assert true;
+
+            case Current_State is
+            when Pca_Types.Stopped =>
+                null;
+            when Pca_Types.KVO =>
+                Period := Get_Time_Between_Activations(Kvo_Rate);
+                if Last_Kvo_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Kvo_Pulse := Now;
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+                end if;
+            when Pca_Types.Basal =>
+                Flow_Rate := Prescription.Get_Basal_Flow_Rate;
+                Period := Get_Time_Between_Activations(Flow_Rate);
+                if Last_Basal_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Basal_Pulse := Now;
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+                end if;
+            when Pca_Types.Bolus =>
+                -- basal
+                Flow_Rate := Prescription.Get_Basal_Flow_Rate;
+                Period := Get_Time_Between_Activations(Flow_Rate);
+                if Last_Basal_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Basal_Pulse := Now;
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+                end if;
+
+                -- patient
+                Period := Get_Time_Between_Activations(Bolus_Flow_Rate);
+                if Last_Patient_Bolus_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Patient_Bolus_Pulse := Now;
+
+                    if Patient_Bolus_Volume_Left = 0 then
+                        Drug_Volume := Prescription.Get_Vtbi;
+                        Patient_Bolus_Volume_Left := Natural(Drug_Volume);
+                        Patient_Bolus_Volume_Left := Patient_Bolus_Volume_Left * 1000; -- convert to microliters
+                    end if;
+
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+
+                    Patient_Bolus_Volume_Left := Patient_Bolus_Volume_Left - 100;
+                    if Patient_Bolus_Volume_Left = 0 then
+                        Clinician_Bolus_Paused_Temp := Clinician_Bolus_Paused.Get;
+                        if Clinician_Bolus_Paused_Temp then
+                            State.Put(Pca_Types.Square_Bolus);
+                            Clinician_Bolus_Paused.Put(False);
+                        else
+                            State.Put(Pca_Types.Basal);
+                        end if;
+                    end if;
+                end if;
+            when Pca_Types.Square_Bolus =>
+                -- basal
+                Flow_Rate := Prescription.Get_Basal_Flow_Rate;
+                Period := Get_Time_Between_Activations(Flow_Rate);
+                if Last_Basal_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Basal_Pulse := Now;
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+                end if;
+
+                -- clinician
+                Clinician_Bolus_Duration_Temp := Clinician_Bolus_Duration.Get;
+                Clinicaian_Bolus_Vtbi := Prescription.Get_Vtbi;
+                Period := Get_Time_Between_Activations(Pca_Types.Flow_Rate(Natural(Clinicaian_Bolus_Vtbi) * (60/Natural(Clinician_Bolus_Duration_Temp))));
+                if Last_Clinician_Bolus_Pulse + Ada.Real_Time.Milliseconds(Period) <= Now then
+                    Last_Clinician_Bolus_Pulse := Now;
+
+                    if Clinician_Bolus_Volume_Left = 0 then
+                        Clinicaian_Bolus_Vtbi := Prescription.Get_Vtbi;
+                        Clinician_Bolus_Volume_Left := Natural(Clinicaian_Bolus_Vtbi) * 1000;  -- in microliters
+                    end if;
+
+                    Fluid_Pulses.Inc(Integer_Array_Index'Last); -- each time round, update the volume infused
+                    Pca_Engine.Run_Pumping(100); -- and pump 0.1 ml
+
+                    Clinician_Bolus_Volume_Left := Clinician_Bolus_Volume_Left - 100;
+                    if Clinician_Bolus_Volume_Left = 0 then
+                        State.Put(Pca_Types.Basal);
+                    end if;
+                end if;
+            end case;
+        end loop;
+    end Rate_Controller;
+
+    task body Max_Drug_Per_Hour_Watcher is
+        Release_Time : Ada.Real_Time.Time;
+        Period : constant Integer := 1000; -- update in every second
+        Volume_Infused : Integer;
+        Max_Drug_Per_Hour : Pca_Types.Drug_Volume;
+    begin
+        loop
+            --# assert true;
+
+            Release_Time := Ada.Real_Time.Clock; -- must be simple assignment
+            Release_Time := Release_Time + Ada.Real_Time.Milliseconds(Period);
+            delay until Release_Time;
+            Fluid_Pulses.Pulse; -- each time round, update the volume infused moving window
+            Max_Drug_Per_Hour := Prescription.Get_Max_Drug_Per_Hour;
+            Volume_Infused := Get_Volume_Infused;
+            if Volume_Infused > (Integer(Max_Drug_Per_Hour)*1000) then -- convert to microliters
+                State.Put(Pca_Types.KVO);
+            end if;
+        end loop;
+    end Max_Drug_Per_Hour_Watcher;
+end Pca_Operation;
+\end{lstlisting} 
+\doublespacing
+
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Engine} package}, label={listing:pca_ravenscar:pca_engine}]
+with Ada.Real_Time;
+use type Ada.Real_Time.Time;
+--# inherit Ada.Real_Time;
+package Pca_Engine
+is
+    procedure Start_Pumping;
+
+    procedure Stop_Pumping;
+
+    procedure Run_Pumping(Microliters : in Natural);
+
+end Pca_Engine;
+
+with Ada.Strings.Unbounded;
+use Ada.Strings.Unbounded;
+with Ada.Text_IO.Unbounded_IO;
+use Ada.Text_IO;
+
+package body Pca_Engine
+--# hide Pca_Engine
+is
+    -- BeagleBoard
+    GPIO_Path : constant String := "/sys/class/gpio/";
+    Status_File_Path : constant String := "/home/root/pump_status.txt";
+
+    -- Mac testing
+    --GPIO_Path : constant String := "/Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/files/";
+    --Status_File_Path : constant String := "/Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/files/pump_status.txt";
+
+    GPIO_Export_File_Path : constant String := GPIO_Path & "export";
+    GPIO_Unexport_File_Path : constant String := GPIO_Path & "unexport";
+    GPIO162_Direction_File_Path : constant String := GPIO_Path & "gpio162/direction";
+    GPIO162_Value_File_Path : constant String := GPIO_Path & "gpio162/value";
+
+    procedure Start_Pumping
+    is
+        F    : Ada.Text_IO.File_Type;
+        Data : Unbounded_String := To_Unbounded_String("pumping");
+        File_Export : Ada.Text_IO.File_Type;
+        File_Direction : Ada.Text_IO.File_Type;
+    begin
+        Create(File_Export, Ada.Text_IO.Out_File, GPIO_Export_File_Path);
+        Put_Line(File_Export, "162");
+        Close(File_Export);
+
+        Create(File_Direction, Ada.Text_IO.Out_File, GPIO162_Direction_File_Path);
+        Put_Line(File_Direction, "out");
+        Close(File_Direction);
+
+        Create(F, Ada.Text_IO.Out_File, Status_File_Path);
+        Unbounded_IO.Put_Line(F, Data);
+        Put_Line("Pumping...");
+        Close(F);
+    end Start_Pumping;
+
+
+    procedure Stop_Pumping is
+        F    : Ada.Text_IO.File_Type;
+        Data : Unbounded_String := To_Unbounded_String("IDLE");
+        File_Unexport : Ada.Text_IO.File_Type;
+    begin
+        Create(File_Unexport, Ada.Text_IO.Out_File, GPIO_Unexport_File_Path);
+        Put_Line(File_Unexport, "162");
+        Close(File_Unexport);
+
+        Create(F, Ada.Text_IO.Out_File, Status_File_Path);
+        Unbounded_IO.Put_Line(F, Data);
+        Put_Line("Idle...");
+        Close(F);
+    end Stop_Pumping;
+
+    procedure Write_Signal(Signal : in Integer) is
+        File : Ada.Text_IO.File_Type;
+        Data : Unbounded_String;
+    begin
+        Ada.Text_IO.Open (File => File,
+                          Mode => Ada.Text_IO.Out_File,
+                          Name => GPIO162_Value_File_Path);
+        if Signal = 1 then
+            Data := To_Unbounded_String("1");
+        else
+            Data := To_Unbounded_String("0");
+        end if;
+        Unbounded_IO.Put_Line(File, Data);
+        Ada.Text_IO.Close(File);
+    end Write_Signal;
+
+    procedure Run_Pumping(Microliters : in Natural)
+    is
+        Interval_High: constant Ada.Real_Time.Time_Span := Ada.Real_Time.Microseconds(9000);
+        Interval_Low: constant Ada.Real_Time.Time_Span := Ada.Real_Time.Microseconds(1000);
+        Next_Time: Ada.Real_Time.Time;
+    begin
+        Next_Time := Ada.Real_Time.Clock;
+        Start_Pumping;
+        for I in Integer range 1 .. (15*Microliters) loop
+            Next_Time := Next_Time + Interval_High;
+            Write_Signal(1);
+            delay until Next_Time;
+            Next_Time := Next_Time + Interval_Low;
+            Write_Signal(0);
+            delay until Next_Time;
+        end loop;
+        Stop_Pumping;
+    end Run_Pumping;
+
+end Pca_Engine;
+\end{lstlisting} 
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Main} procedure}, label={listing:pca_ravenscar:main}]
+with Pca_Operation;
+with Pca_Types;
+with Ice_Types;
+with Ada.Text_IO;
+with Ada.Float_Text_IO;
+--# inherit Pca_Operation,
+--#         Ada.Real_Time,
+--#         Pca_Types,
+--#         Ice_Types;
+--# main_program;
+procedure Main
+is
+    pragma Priority (10);
+    Input : String(1..10) := (others => ' ');
+    Input_Last : Integer;
+    Option : Integer;
+    use Ada.Text_IO;
+begin
+
+    Put_Line("Menu: ");
+    Put_Line("0 - Enter prescription");
+    Put_Line("1 - Start PCA Pump");
+    Put_Line("2 - Stop PCA Pump");
+    Put_Line("3 - Display Volume Infused");
+    Put_Line("4 - Display Prescription");
+    Put_Line("5 - Set Basal Flow Rate");
+    Put_Line("6 - Patient bolus");
+    Put_Line("7 - Clinician bolus");
+    Put_Line("8 - Display Current State");
+    loop
+        Input := (others => ' ');
+        Get_Line(Input, Input_Last);
+        Option := Integer'Value(Input);
+        case Option is
+            when 0 =>
+                Put_Line("Enter Basal Flow Rate (ml/hr): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.Panel_Set_Basal_Flow_Rate(Pca_Types.Flow_Rate(Integer'Value(Input)));
+                Put_Line("Enter Volume to be infused during patient bolus (ml): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.Panel_Set_Vtbi(Pca_Types.Drug_Volume(Integer'Value(Input)));
+                Put_Line("Enter Max Drug Per Hour (ml): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.Panel_Set_Max_Drug_Per_Hour(Pca_Types.Drug_Volume(Integer'Value(Input)));
+                Put_Line("Enter Minimum Time Between Boluses (min.): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.Panel_Set_Minimum_Time_Between_Bolus(Ice_Types.Minute(Integer'Value(Input)));
+            when 1 =>
+                Pca_Operation.StartPump;
+                Put_Line("Pump Started");
+            when 2 =>
+                Pca_Operation.StopPump;
+                Put_Line("Pump Stopped");
+            when 3 =>
+                Put("Volume Infused (ml):");
+                Ada.Float_Text_IO.Put(Float(Pca_Operation.Get_Volume_Infused) / Float(1000), AFT=>2, EXP=>0);
+                Put_Line("");
+            when 4 =>
+                Put_Line("Current Basal Flow Rate (ml/hr): " & Integer'Image(Integer(Pca_Operation.Panel_Get_Basal_Flow_Rate)));
+                Put_Line("Current Volume to be Infused (ml): " & Integer'Image(Integer(Pca_Operation.Panel_Get_Vtbi)));
+                Put_Line("Current Max Drug Per Hour (ml): " & Integer'Image(Integer(Pca_Operation.Panel_Get_Max_Drug_Per_Hour)));
+                Put_Line("Current minimum time between bolus (min): " & Integer'Image(Integer(Pca_Operation.Panel_Get_Minimum_Time_Between_Bolus)));
+            when 5 =>
+                Put_Line("Enter Basal Flow Rate (ml/hr): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.Panel_Set_Basal_Flow_Rate(Pca_Types.Flow_Rate(Integer'Value(Input)));
+            when 6 =>
+                Pca_Operation.PatientBolus;
+            when 7 =>
+                Put_Line("Enter Duration (min): ");
+                Input := (others => ' ');
+                Get_Line(Input, Input_Last);
+                Pca_Operation.ClinicianBolus(Ice_Types.Minute'Value(Input));
+            when 8 =>
+                case Pca_Operation.Get_State is
+                    when Pca_Types.Stopped =>
+                        Put_Line("Stopped");
+                    when Pca_Types.Bolus =>
+                        Put_Line("Bolus");
+                    when Pca_Types.Basal =>
+                        Put_Line("Basal");
+                    when Pca_Types.KVO =>
+                        Put_Line("KVO");
+                    when Pca_Types.Square_Bolus =>
+                        Put_Line("Square Bolus");
+                end case;
+            when others => exit;
+        end case;
+    end loop;
+    Put_Line("Program end");
+end Main;
+\end{lstlisting} 
+\doublespacing

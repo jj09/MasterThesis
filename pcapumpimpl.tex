@@ -14,7 +14,7 @@ This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\r
 
 To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in listing \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={"Hello World" in Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={"Hello World" in Ada}, label={listing:HelloWorld}]
 with Ada.Text_IO;
 
 procedure Main
@@ -23,23 +23,23 @@ begin
     Ada.Text_IO.Put_Line("Hello, World!");    
 end Main;
 \end{lstlisting} 
-\label{listing:HelloWorld}
+
 
 The main file has to be always specified in project file (\lstinline{.gpr}) in order to compile and link application, which can be runnable. It can be done in Project/Edit Project Properties (figure \ref{figure:editprojectproperties}), tab: Main files (figure \ref{figure:mainfiles}) or directly in project file (\lstinline{.gpr}).
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3.2in]{figures/EditProjectProperties.png}
-    	\caption{Edit Project Properties}
+    	\includegraphics[width=3.2in]{figures/EditProjectProperties.png}    	
     \end{center}
+    \caption{Edit Project Properties}
     \label{figure:editprojectproperties}
 \end{figure}
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3.2in]{figures/Properties-MainFiles.png}
-    	\caption{Project Main files}
+    	\includegraphics[width=3.2in]{figures/Properties-MainFiles.png}    	
     \end{center}
+    \caption{Project Main files}
     \label{figure:mainfiles}
 \end{figure}
 
@@ -53,7 +53,7 @@ More complex example, which takes advantage of SPARK contracts is presented in s
 Odometer is a simple SPARK Ada program, which implements basic functions of standard Odometer. Listing \ref{listing:Odometer2005} shows Odometer in SPARK 2005. In addition to \lstinline{Odometer}
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={SPARK 2005 code: Odometer}, label={listing:Odometer2005}]
 	package Odometer
 	--# own
 	--# Trip,        -- number of meters so far on this trip (can be reset to 0).
@@ -108,7 +108,6 @@ Odometer is a simple SPARK Ada program, which implements basic functions of stan
 	    end Inc;
 	end Odometer;
 \end{lstlisting} 
-\label{listing:Odometer2005}
 \doublespacing
 
 There are 4 subprograms (2 procedures and 2 functions), which are globally available (through other packages and program units):
@@ -126,7 +125,7 @@ Annotation \lstinline{global} means that subprogram uses some global variable. P
 In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} procedure has been created. It is presented in listing \ref{listing:main}.
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Main procedure for \lstinline{Odometer} package}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Main procedure for \lstinline{Odometer} package}, label={listing:main}]
 	with Ada.Text_IO;
 	with Odometer;
 	procedure Main
@@ -151,7 +150,6 @@ In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} p
 	    Ada.Text_IO.Put_Line("Total: " &  Natural'Image(Odometer.Read_Total));
 	end Main;
 \end{lstlisting} 
-\label{listing:main}
 \doublespacing
 
 Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014 program, SPARK 2005 annotations has been converted into Ada 2012 contracts. Listing \ref{listing:Odometer2014} presents Odometer in SPARK 2014.
@@ -262,7 +260,7 @@ Listing \ref{listing:HelloTasking} presents a simple multitasking application pr
     \item T (type: \lstinline{Tenth_Seconds}) - simple counter printing numbers from 0.1 to 10 in every 0.1 second
 \end{itemize}
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Simple multitask application in Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Simple multitask application in Ada}, label={listing:HelloTasking}]
 	with Ada.Text_IO;
 	use Ada.Text_IO;
 	with Ada.Float_Text_IO;
@@ -297,7 +295,6 @@ Listing \ref{listing:HelloTasking} presents a simple multitasking application pr
 	    Put_Line("Started");
 	end Main;
 \end{lstlisting} 
-\label{listing:HelloTasking}
 
 The program works as expected on BleagleBoard-xM. This is not valid SPARK program though. As mentioned in section \ref{background:spark:ravenscar}, tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} 
 
@@ -313,7 +310,7 @@ Tested, multitasking application is extended version of Odometer presented in li
 
 The \lstinline{Drive} task increase \lstinline{Total} and \lstinline{Trip} variables by \lstinline{Speed} (m/s) in every second. Extended Odometer is presented in listing \ref{listing:Odometer2005Tasking}. 
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Multitasking Odometer}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Multitasking Odometer}, label={listing:Odometer2005Tasking}]
 	--# inherit Ada.Real_Time;
 	package Odometer
 	--# own Trip : Distance;
@@ -415,7 +412,6 @@ The \lstinline{Drive} task increase \lstinline{Total} and \lstinline{Trip} varia
 	    end Drive;
 	    	end Odometer;
 \end{lstlisting} 
-\label{listing:Odometer2005Tasking}
 
 There are two ways to access protected variable in task body:
 \begin{itemize}
@@ -435,7 +431,7 @@ GPIO ports interact with the BeagleBoard platform through memory maps. This mean
 
 Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Listing \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off in bash}, label={listing:SwitchingPin}]
 	#!/bin/sh
 
 	if [ $# = 0 ]
@@ -463,9 +459,7 @@ Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162
 	done
 
 	cleanup
-
 \end{lstlisting} 
-\label{listing:SwitchingPin}
 
 Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
 
@@ -484,7 +478,7 @@ Once, feeds are set, it is recommended to update list of available packages with
 
 Similar program to bash script presented in listing \ref{listing:SwitchingPin}, but working for 20 seconds and terminating, written in Java is presented in listing \ref{listing:pca_java}. 
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off in Java}, label={listing:pca_java}]
 	import java.io.*;
 
 	public class PcaMain {
@@ -513,11 +507,10 @@ Similar program to bash script presented in listing \ref{listing:SwitchingPin}, 
 		}
 	}
 \end{lstlisting} 
-\label{listing:pca_java}
 
 Extended program from listing \ref{listing:pca_java}, with procedures to start and stop the pump, written in Ada, is presented in listing \ref{listing:pca_basic}.
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Turning pin on and off}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Simple pump in Ada}, label={listing:pca_basic}]
 	with Ada.Real_Time;
 	use type Ada.Real_Time.Time;
 	package Pca_Pump is   
@@ -604,8 +597,7 @@ Extended program from listing \ref{listing:pca_java}, with procedures to start a
 	      Ada.Text_IO.Close(File);
 	   end Write_Signal;
 	end Pca_Pump;
-\end{lstlisting} 
-\label{listing:pca_basic}
+\end{lstlisting}
 
 
 
@@ -666,7 +658,7 @@ Implemented PCA pump prototype is console Ada application with textual interface
 		\end{itemize}
 \end{itemize}
 
-Code listing of implemented PCA pump along with mapped types is attached in appendix \ref{Appendix:pca_ravenscar}
+Code listing of implemented PCA pump along with mapped types is attached in appendix \ref{Appendix:pca_ravenscar}.
 
 
 

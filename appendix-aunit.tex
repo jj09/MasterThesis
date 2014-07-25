@@ -1,0 +1,184 @@
+%!TEX root = JakubJedryszek-MasterThesis.tex
+
+\cleardoublepage
+
+\chapter{AUnit tests for PCA pump dose monitor module}
+\label{Appendix:pcapump:dose_monitor_module:aunit}
+
+This appendix presents AUnit tests for isolated, sequential module for PCA pump dose monitoring.
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={Package \lstinline{Pca_Pump.Test_Data}}, label={listing:pcapump:dose_monitor_module:test_data}]
+with AUnit.Test_Fixtures;
+
+package Pca_Pump.Test_Data is
+
+   type Test is new AUnit.Test_Fixtures.Test_Fixture
+   with null record;
+
+   procedure Set_Up (Gnattest_T : in out Test);
+   procedure Tear_Down (Gnattest_T : in out Test);
+
+end Pca_Pump.Test_Data;
+
+package body Pca_Pump.Test_Data is
+
+   procedure Set_Up (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+   begin
+      null;
+   end Set_Up;
+
+   procedure Tear_Down (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+   begin
+      null;
+   end Tear_Down;
+
+end Pca_Pump.Test_Data;
+\end{lstlisting} 
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={Package \lstinline{Pca_Pump.Test_Data.Tests}}, label={listing:pcapump:dose_monitor_module:test_data_tests}]
+with Gnattest_Generated;
+
+package Pca_Pump.Test_Data.Tests is
+
+   type Test is new GNATtest_Generated.GNATtest_Standard.Pca_Pump.Test_Data.Test
+   with null record;
+
+   procedure Test_Sum_Zero (Gnattest_T : in out Test);
+
+   procedure Test_Sum_100 (Gnattest_T : in out Test);
+
+   procedure Test_Read_Dosed_Zero (Gnattest_T : in out Test);
+
+   procedure Test_Increase_Dosed_By_1 (Gnattest_T : in out Test);
+
+   procedure Test_Move_Dosed_First_Element_Zero (Gnattest_T : in out Test);
+
+   procedure Test_Move_Dosed_First_Element_Not_Zero (Gnattest_T : in out Test);
+
+end Pca_Pump.Test_Data.Tests;
+
+with AUnit.Assertions; use AUnit.Assertions;
+with Pca_Pump;
+
+package body Pca_Pump.Test_Data.Tests is
+
+   procedure Test_Sum_Zero (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Arr : Pca_Pump.Doses_Array := Pca_Pump.Doses_Array'(others => 0);
+      Result : Pca_Pump.Drug_Volume := 0;
+   begin
+      -- Arrange
+
+      -- Act
+      Result := Pca_Pump.Sum(Arr);
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Result = 0,
+         "Sum function result is incorrect.");
+   end Test_Sum_Zero;
+
+   procedure Test_Sum_100 (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Arr : Pca_Pump.Doses_Array := Pca_Pump.Doses_Array'(others => 0);
+      Result : Pca_Pump.Drug_Volume := 0;
+   begin
+      -- Arrange
+      Arr(Pca_Pump.Doses_Array_Index'First) := 51;
+      Arr(Pca_Pump.Doses_Array_Index'Last) := 49;
+
+      -- Act
+      Result := Pca_Pump.Sum(Arr);
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Result = 100,
+         "Sum function result is incorrect:" & Pca_Pump.Drug_Volume'Image(Result) & " /= 100");
+   end Test_Sum_100;
+
+
+   procedure Test_Read_Dosed_Zero (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Result : Pca_Pump.Drug_Volume;
+      Expected  : Pca_Pump.Drug_Volume;
+   begin
+      -- Arrange
+      Expected := 0;
+
+      -- Act
+      Result := Pca_Pump.Read_Dosed;
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Expected = Result,
+         "Readed dose incorrect: " &  Pca_Pump.Drug_Volume'Image(Expected) & " /= " &  Pca_Pump.Drug_Volume'Image(Result));
+
+   end Test_Read_Dosed_Zero;
+
+   procedure Test_Increase_Dosed_By_1 (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Pre_Sum : Pca_Pump.Drug_Volume := 0;
+      Post_Sum : Pca_Pump.Drug_Volume := 0;
+   begin
+      -- Arrange
+      Pre_Sum := Pca_Pump.Read_Dosed;
+
+      -- Act
+      Pca_Pump.Increase_Dosed;
+      Post_Sum := Pca_Pump.Read_Dosed;
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Post_Sum = Pre_Sum + 1,
+         "Total dose not increased properly: " &  Pca_Pump.Drug_Volume'Image(Post_Sum) & " /= " &  Pca_Pump.Drug_Volume'Image(Pre_Sum+1));
+   end Test_Increase_Dosed_By_1;
+
+   procedure Test_Move_Dosed_First_Element_Zero (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Pre_Sum : Pca_Pump.Drug_Volume := 0;
+      Post_Sum : Pca_Pump.Drug_Volume := 0;
+   begin
+      -- Arrange
+      Pre_Sum := Pca_Pump.Read_Dosed;
+
+      -- Act
+      Pca_Pump.Move_Dosed;
+      Post_Sum := Pca_Pump.Read_Dosed;
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Post_Sum = Pre_Sum,
+         "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " /= " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
+   end Test_Move_Dosed_First_Element_Zero;
+
+   procedure Test_Move_Dosed_First_Element_Not_Zero (Gnattest_T : in out Test) is
+      pragma Unreferenced (Gnattest_T);
+      Pre_Sum : Pca_Pump.Drug_Volume := 0;
+      Post_Sum : Pca_Pump.Drug_Volume := 0;
+   begin
+      -- Arrange
+      Pca_Pump.Increase_Dosed;
+      for I in Pca_Pump.Doses_Array_Index range 1 .. Pca_Pump.Doses_Array_Index'Last-1 loop
+         Pca_Pump.Move_Dosed;
+      end loop;
+      Pre_Sum := Pca_Pump.Read_Dosed;
+
+      -- Act
+      Pca_Pump.Move_Dosed;
+      Post_Sum := Pca_Pump.Read_Dosed;
+
+      -- Assert
+      AUnit.Assertions.Assert
+        (Post_Sum < Pre_Sum,
+         "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " should be greater than " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
+   end Test_Move_Dosed_First_Element_Not_Zero;
+
+end Pca_Pump.Test_Data.Tests;
+
+\end{lstlisting} 
+\doublespacing

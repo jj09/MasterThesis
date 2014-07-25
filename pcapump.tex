@@ -124,7 +124,7 @@ In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson create
 AADL model captures structure of device. BLESS - its behavior. Listing \ref{listing:rate_controller} shows \lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation. The thread declaration contains input and output ports. In addition to some of them, BLESS assertions are present. Assertions are defined in BLESS annex in thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered. [TRUNCATE CODE LISTING?]
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={\lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={\lstinline{Rate_Controller} thread from \lstinline{PCA_Operation} component with BLESS assertions}, label={listing:rate_controller}]
   thread Rate_Controller
   features
       Infusion_Flow_Rate: out data port PCA_Types::Flow_Rate
@@ -303,7 +303,6 @@ AADL model captures structure of device. BLESS - its behavior. Listing \ref{list
   **};
   end Rate_Controller.imp;
 \end{lstlisting} 
-\label{listing:rate_controller}
 \doublespacing
 
 \section{BeagleBoard-xM}
@@ -319,7 +318,7 @@ AADL model captures structure of device. BLESS - its behavior. Listing \ref{list
 
 For Research and MDCF purposes, BeagleBoard-xM (an open-source hardware single-board computer produced by Texas Instruments), has been chosen as hardware platform for PCA pump prototyping.
 
-BeagleBoard-xM is Embedded device with AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). Moreover there is PWM support, which enables control of pump actuator.
+BeagleBoard-xM (presented in the Figure \ref{figure:beagleboard_xm}) is Embedded device with AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). Moreover there is PWM support, which enables control of pump actuator.
 
 Pulse-width modulation (PWM) is a technique for controlling analog circuits with a processor's digital outputs. The average value of voltage (and current) fed to the electrical load is controlled by turning the switch between supply and load on and off at a fast pace. The longer the switch is on compared to the off periods, the higher the power supplied to the load. Proportion of on and off periods is called the duty cycle and is expressed in percent. 100\% means all the time on, 0\% - all the time off. Figure \ref{figure:pwm} shows 10\%, 30\%, 50\% and 90\% duty cycles.
 

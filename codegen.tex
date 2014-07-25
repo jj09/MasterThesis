@@ -28,7 +28,7 @@ Mapping of AADL models to SPARK Ada is driven by "Architecture analysis \& Desig
 One of core AADL packages is \lstinline{Base_Types}. It defines fundamental data types for AADL. Its definition is shown in listing \ref{listing:aadl_base_types}.
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL Base\_Types package}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL Base\_Types package}, label={listing:aadl_base_types}]
 	package Base_Types
 	public
 
@@ -130,13 +130,12 @@ One of core AADL packages is \lstinline{Base_Types}. It defines fundamental data
 
 	end Base_Types;
 \end{lstlisting} 
-\label{listing:aadl_base_types}
 \doublespacing
 
 In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which allows for easy mapping of AADL \lstinline{Base_Types} package. Mapping proposed in Annex Document \cite{AnnexDoc} is presented on listing \ref{listing:aadl2spark2014_base_types_mapping}.
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Mapping of Base\_Types for SPARK 2014}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Mapping of Base\_Types for SPARK 2014}, label={listing:aadl2spark2014_base_types_mapping}]
 	with Interfaces;
 
 	package Base_Types is
@@ -157,7 +156,6 @@ In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which
 	  	type AADL_Character is new Standard.Character;
 	end Base_Types;
 \end{lstlisting} 
-\label{listing:aadl2spark2014_base_types_mapping}
 \doublespacing
 
 Target language for this thesis is SPARK 2005. SPARK 2014 tools and especially multitasking capabilities were not ready, during the time when this thesis was written. Types: \lstinline{Float}, \lstinline{Character} and \lstinline{String} are also not part of this thesis, because of verification tools limitation. Thus, only \lstinline{Integer}, \lstinline{Enumeration}, \lstinline{Boolean} and \lstinline{Record} types are taken into account in mappings.
@@ -910,7 +908,7 @@ Mappings of subprograms is also straightforward. However, it is different than m
 In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{lst:nested_packages}. Equivalent child packages are shown in listing \ref{lst:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) '.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{lst:nested_packages} and \ref{lst:child_packages}). However, there is a difference between nested packages and child packages. In nested package, declarations become visible as they are introduced, in textual order. For example, in listing \ref{lst:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Nested packages in SPARK Ada}, label={lst:nested_packages}]
 	package P is
 	   D: Integer;
 
@@ -932,11 +930,10 @@ In SPARK Ada there are nested packages and child packages. Sample nested package
 
 	end P;
 \end{lstlisting}
-\label{lst:nested_packages}
 \doublespacing
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Child packages in SPARK Ada}, label={lst:child_packages}]
 	package P is
 	   D: Integer;
 	   E: Integer;
@@ -956,7 +953,6 @@ In SPARK Ada there are nested packages and child packages. Sample nested package
 	  Bar: Integer;
 	end M;
 \end{lstlisting}
-\label{lst:child_packages}
 \doublespacing
 
 There was an idea to create child package to encapsulate one feature group in it. However, SPARK Ada does not allow to access child packages private part from parent. Thus, it will require to expose feature group internal variable as public. It is definitely not good solution. Thus, feature group is translated with prefix \lstinline{Feature_Group_Name_*}. Feature group mapping is presented in section \ref{codegen:mapping:packages}, in listings \ref{lst:aadl_sample} and \ref{lst:package_mapping}.
@@ -968,7 +964,7 @@ There was an idea to create child package to encapsulate one feature group in it
 On listing \ref{lst:aadl_sample}, there is sample AADL package with system. It contains all types of ports described in section \ref{codegen:mapping:ports} and one feature group with two ports as example of feature group mapping.
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Sample AADL package with system}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Sample AADL package with system}, label={lst:aadl_sample}]
 	package Some_Pkg
 	public
 	with Base_Types;
@@ -993,13 +989,12 @@ On listing \ref{lst:aadl_sample}, there is sample AADL package with system. It c
 
 	end Some_Pkg;
 \end{lstlisting}
-\label{lst:aadl_sample}
 \doublespacing
 
 For now, only single process SPARK Ada application is considered. Thus, ports are exposed only on system level. Communication between threads in process will be realized by protected objects and only SPARK annotations and data types will be needed as described in section \ref{codegen:mapping:threads}. Based on ports mapping, presented in section \ref{codegen:mapping:ports}, translation to SPARK Ada package is shown in listing \ref{lst:package_mapping}. 
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Translation of sample AADL package from listing \ref{lst:aadl_sample}}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Translation of sample AADL package from listing \ref{lst:aadl_sample}}, label={lst:package_mapping}]
 	package Some_Pkg
 	--# own Some_Features_Some_Out_Port : Integer;
 	--#     Some_Features_Some_In_Port : Integer;
@@ -1099,7 +1094,6 @@ For now, only single process SPARK Ada application is considered. Thus, ports ar
 
 	end Some_Pkg;
 \end{lstlisting}
-\label{lst:package_mapping}
 \doublespacing
 
 
@@ -1289,9 +1283,9 @@ Example of communication between threads, in single process is depicted in the f
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=0.6\textwidth]{figures/port-communication-thread.png}
-    	\caption{Example of port communication between threads}
+    	\includegraphics[width=0.6\textwidth]{figures/port-communication-thread.png}    	
     \end{center}
+    \caption{Example of port communication between threads}
     \label{figure:port_communication_thread}
 \end{figure}
 
@@ -1554,14 +1548,14 @@ In the given example, communication is one way: from \lstinline{Pkg1} package to
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=0.3\textwidth]{figures/port-communication-thread-two-way.png}
-    	\caption{Example of two way port communication between threads in different packages}
+    	\includegraphics[width=0.3\textwidth]{figures/port-communication-thread-two-way.png}    	
     \end{center}
+    \caption{Example of two way port communication between threads in different packages}
     \label{figure:port_communication_thread_two_way}
 \end{figure}
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of two way port communication threads in different packages}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of two way port communication threads in different packages}, label={listing:port_communication_thread_two_way}]
 	package Pkg1TwoWay
 	public
 	with Base_Types, Pkg2TwoWay;
@@ -1601,13 +1595,12 @@ In the given example, communication is one way: from \lstinline{Pkg1} package to
 		end Other_Thread.imp;
 	end Pkg2TwoWay;
 \end{lstlisting} 
-\label{listing:port_communication_thread_two_way}
 \doublespacing
 
 This model, translated to SPARK Ada is presented in listing \ref{listing:port_communication_thread_two_way_spark}. It will not compile. GNAT compiler returns \lstinline{circular unit dependency} error. Additionally verification with SPARK Examiner returns error: \lstinline{Semantic Error 135 - The package Pkg2TwoWay is undeclared or not visible, or there is a circularity in the list of inherited packages}. Now, the problem is that two-way communication is allowed in AADL, but not in SPARK, nor even in Ada. This require further investigation, which is omitted in this thesis.
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Two way port communication translated to SPARK Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Two way port communication translated to SPARK Ada}, label={listing:port_communication_thread_two_way_spark}]
 	with Base_Types;
 	with Pkg2TwoWay;
 	--# inherit Base_Types,
@@ -1720,7 +1713,6 @@ This model, translated to SPARK Ada is presented in listing \ref{listing:port_co
 
 	end Pkg2TwoWay;
 \end{lstlisting} 
-\label{listing:port_communication_thread_two_way_spark}
 \doublespacing
 
 
@@ -1731,14 +1723,14 @@ This section is a concept, how communication between different systems can look 
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=0.6\textwidth]{figures/port-communication.png}
-    	\caption{Example of port communication between systems}
+    	\includegraphics[width=0.6\textwidth]{figures/port-communication.png}    	
     \end{center}
+    \caption{Example of port communication between systems}
     \label{figure:port_communication}
 \end{figure}
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of port communication between systems}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of port communication between systems}, label={listing:port_communication}]
 	package Panel
 	public
 	with Base_Types;
@@ -1842,13 +1834,12 @@ This section is a concept, how communication between different systems can look 
 		end main.imp;
 	end Main;
 \end{lstlisting} 
-\label{listing:port_communication}
 \doublespacing
 
 Based on mappings from section \ref{codegen:mapping}, conforming SPARK Ada code is presented in listing \ref{listing:port_communication_spark}. There are two packages: \lstinline{Panel} and \lstinline{Pump}. \lstinline{Main} package is omitted. Both contain procedures representing ports interfaces, according to ports mapping from section \ref{codegen:mapping:ports}. Additionally, both consists of empty thread declarations and bodies, which conforms to translations from section \ref{codegen:mapping:threads}. However, in this case, both packages will work in different systems, thus different processes.  To enable communication between different systems, deployment methodology and the middle-ware layer has to be created. It will allow not only for system to system communication, but also for communication with devices. It is omitted in this thesis.
 
 \singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Port communication translated to SPARK Ada}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Port communication translated to SPARK Ada}, label={listing:port_communication_spark}]
 	with Pump;
 	with Base_Types;
 	--# inherit Pump,
@@ -1946,7 +1937,6 @@ Based on mappings from section \ref{codegen:mapping}, conforming SPARK Ada code 
 	    end Rate_Controller;
 	end Pump;
 \end{lstlisting} 
-\label{listing:port_communication_spark}
 \doublespacing
 
 

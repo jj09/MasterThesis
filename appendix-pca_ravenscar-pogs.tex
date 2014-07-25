@@ -2,11 +2,11 @@
 
 \cleardoublepage
 
-\chapter{PCA pump prototype - simple, implemented, working pump}
+\chapter{PCA pump prototype verification - POGS report}
 \label{Appendix:pca_ravenscar:pogs}
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={POGS report for PCA Pump prototype}]
+\begin{lstlisting}[gobble=0, numbers=left, caption={POGS report for PCA Pump prototype}, label={listing:pca_ravenscar:pogs_full}]
 -------------------------------------------------------------------------------
                           Semantic Analysis Summary                            
                                 POGS GPL 2012                                  
@@ -47,79 +47,19 @@ Summary Dead Path files (.sdp)
 in the directory:
 /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar
 
-Summary produced: 24-JUL-2014 11:40:08.21
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.vcg
-procedure Pca_Engine.Start_Pumping
-
-VCs generated 21-JUL-2014 21:52:42
-
-VCs simplified 24-JUL-2014 11:39:16
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.dpc
-DPCs generated 21-JUL-2014 21:52:42
-
-DPC ZombieScoped 21-JUL-2014  21:54:5
-
-VCs for procedure_start_pumping :
- -----------------------------------------------------------------------------
-| #   | From  | To                  | Proved By          | Dead Path | Status |
-|-----------------------------------------------------------------------------
-| 1   | start |    assert @ finish  | False              | Live      |   FL   |
- -----------------------------------------------------------------------------
-
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.vcg
-procedure Pca_Engine.Stop_Pumping
-
-VCs generated 21-JUL-2014 21:52:42
-
-VCs simplified 24-JUL-2014 11:39:16
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.dpc
-DPCs generated 21-JUL-2014 21:52:42
-
-DPC ZombieScoped 21-JUL-2014  21:54:5
-
-VCs for procedure_stop_pumping :
- -----------------------------------------------------------------------------
-| #   | From  | To                  | Proved By          | Dead Path | Status |
-|-----------------------------------------------------------------------------
-| 1   | start |    assert @ finish  | False              | Live      |   FL   |
- -----------------------------------------------------------------------------
-
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.vcg
-procedure Pca_Engine.Write_Signal
-
-VCs generated 21-JUL-2014 21:52:42
-
-VCs simplified 24-JUL-2014 11:39:16
-
-File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.dpc
-DPCs generated 21-JUL-2014 21:52:42
-
-DPC ZombieScoped 21-JUL-2014  21:54:5
-
-VCs for procedure_write_signal :
- -----------------------------------------------------------------------------
-| #   | From  | To                  | Proved By          | Dead Path | Status |
-|-----------------------------------------------------------------------------
-| 1   | start |    assert @ finish  | False              | Live      |   FL   |
- -----------------------------------------------------------------------------
-
+Summary produced: 25-JUL-2014 14:16:50.13
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/clinicianbolus.vcg
 procedure Pca_Operation.ClinicianBolus
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:16
+VCs simplified 25-JUL-2014 14:16:28
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/clinicianbolus.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for procedure_clinicianbolus :
  -----------------------------------------------------------------------------
@@ -138,14 +78,14 @@ VCs for procedure_clinicianbolus :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_state.vcg
 function Pca_Operation.Get_State
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:16
+VCs simplified 25-JUL-2014 14:16:28
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_state.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for function_get_state :
  -----------------------------------------------------------------------------
@@ -159,14 +99,14 @@ VCs for function_get_state :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.vcg
 function Pca_Operation.Get_Time_Between_Activations
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:16
+VCs simplified 25-JUL-2014 14:16:28
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_time_between_activations.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for function_get_time_between_activations :
  -----------------------------------------------------------------------------
@@ -182,14 +122,14 @@ VCs for function_get_time_between_activations :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_volume_infused.vcg
 function Pca_Operation.Get_Volume_Infused
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:17
+VCs simplified 25-JUL-2014 14:16:29
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/get_volume_infused.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for function_get_volume_infused :
  -----------------------------------------------------------------------------
@@ -202,14 +142,14 @@ VCs for function_get_volume_infused :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.vcg
 function Pca_Operation.Integer_Array_Store.Get
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:17
+VCs simplified 25-JUL-2014 14:16:29
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/get.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for function_get :
  -----------------------------------------------------------------------------
@@ -225,14 +165,14 @@ VCs for function_get :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.vcg
 procedure Pca_Operation.Integer_Array_Store.Inc
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:17
+VCs simplified 25-JUL-2014 14:16:29
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/inc.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for procedure_inc :
  -----------------------------------------------------------------------------
@@ -248,14 +188,14 @@ VCs for procedure_inc :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/pulse.vcg
 procedure Pca_Operation.Integer_Array_Store.Pulse
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:17
+VCs simplified 25-JUL-2014 14:16:29
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/pulse.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for procedure_pulse :
  -----------------------------------------------------------------------------
@@ -278,14 +218,14 @@ VCs for procedure_pulse :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.vcg
 procedure Pca_Operation.Integer_Array_Store.Put
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:18
+VCs simplified 25-JUL-2014 14:16:29
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/put.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:2
 
 VCs for procedure_put :
  -----------------------------------------------------------------------------
@@ -301,14 +241,14 @@ VCs for procedure_put :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.vcg
 function Pca_Operation.Integer_Array_Store.Sum
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:18
+VCs simplified 25-JUL-2014 14:16:30
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/integer_array_store/sum.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for function_sum :
  -----------------------------------------------------------------------------
@@ -326,14 +266,14 @@ VCs for function_sum :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.vcg
 task_type Pca_Operation.Max_Drug_Per_Hour_Watcher
 
-VCs generated 24-JUL-2014 11:39:13
+VCs generated 25-JUL-2014 14:16:25
 
-VCs simplified 24-JUL-2014 11:39:18
+VCs simplified 25-JUL-2014 14:16:30
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/max_drug_per_hour_watcher.dpc
-DPCs generated 24-JUL-2014 11:39:13
+DPCs generated 25-JUL-2014 14:16:25
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for task_type_max_drug_per_hour_watcher :
  -----------------------------------------------------------------------------
@@ -357,14 +297,14 @@ VCs for task_type_max_drug_per_hour_watcher :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_basal_flow_rate.vcg
 function Pca_Operation.Panel_Get_Basal_Flow_Rate
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:30
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_basal_flow_rate.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for function_panel_get_basal_flow_rate :
  -----------------------------------------------------------------------------
@@ -377,14 +317,14 @@ VCs for function_panel_get_basal_flow_rate :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_max_drug_per_hour.vcg
 function Pca_Operation.Panel_Get_Max_Drug_Per_Hour
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:30
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_max_drug_per_hour.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for function_panel_get_max_drug_per_hour :
  -----------------------------------------------------------------------------
@@ -397,14 +337,14 @@ VCs for function_panel_get_max_drug_per_hour :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_minimum_time_between_bolus.vcg
 function Pca_Operation.Panel_Get_Minimum_Time_Between_Bolus
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_minimum_time_between_bolus.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for function_panel_get_minimum_time_between_bolus :
  -----------------------------------------------------------------------------
@@ -417,14 +357,14 @@ VCs for function_panel_get_minimum_time_between_bolus :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_vtbi.vcg
 function Pca_Operation.Panel_Get_Vtbi
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_get_vtbi.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for function_panel_get_vtbi :
  -----------------------------------------------------------------------------
@@ -437,14 +377,14 @@ VCs for function_panel_get_vtbi :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_basal_flow_rate.vcg
 procedure Pca_Operation.Panel_Set_Basal_Flow_Rate
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_basal_flow_rate.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for procedure_panel_set_basal_flow_rate :
  -----------------------------------------------------------------------------
@@ -458,14 +398,14 @@ VCs for procedure_panel_set_basal_flow_rate :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_max_drug_per_hour.vcg
 procedure Pca_Operation.Panel_Set_Max_Drug_Per_Hour
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:19
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_max_drug_per_hour.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for procedure_panel_set_max_drug_per_hour :
  -----------------------------------------------------------------------------
@@ -479,14 +419,14 @@ VCs for procedure_panel_set_max_drug_per_hour :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_minimum_time_between_bolus.vcg
 procedure Pca_Operation.Panel_Set_Minimum_Time_Between_Bolus
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:20
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_minimum_time_between_bolus.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:1
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for procedure_panel_set_minimum_time_between_bolus :
  -----------------------------------------------------------------------------
@@ -500,14 +440,14 @@ VCs for procedure_panel_set_minimum_time_between_bolus :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_vtbi.vcg
 procedure Pca_Operation.Panel_Set_Vtbi
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:20
+VCs simplified 25-JUL-2014 14:16:31
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/panel_set_vtbi.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:2
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for procedure_panel_set_vtbi :
  -----------------------------------------------------------------------------
@@ -521,14 +461,14 @@ VCs for procedure_panel_set_vtbi :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.vcg
 procedure Pca_Operation.PatientBolus
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:20
+VCs simplified 25-JUL-2014 14:16:32
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/patientbolus.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:2
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for procedure_patientbolus :
  -----------------------------------------------------------------------------
@@ -551,14 +491,14 @@ VCs for procedure_patientbolus :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.vcg
 task_type Pca_Operation.Rate_Controller
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:28
+VCs simplified 25-JUL-2014 14:16:39
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/rate_controller.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:2
+DPC ZombieScoped 25-JUL-2014  14:16:3
 
 VCs for task_type_rate_controller :
  -----------------------------------------------------------------------------
@@ -790,14 +730,14 @@ VCs for task_type_rate_controller :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/startpump.vcg
 procedure Pca_Operation.StartPump
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:36
+VCs simplified 25-JUL-2014 14:16:46
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/startpump.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:3
+DPC ZombieScoped 25-JUL-2014  14:16:4
 
 VCs for procedure_startpump :
  -----------------------------------------------------------------------------
@@ -811,14 +751,14 @@ VCs for procedure_startpump :
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/stoppump.vcg
 procedure Pca_Operation.StopPump
 
-VCs generated 24-JUL-2014 11:39:12
+VCs generated 25-JUL-2014 14:16:24
 
-VCs simplified 24-JUL-2014 11:39:36
+VCs simplified 25-JUL-2014 14:16:46
 
 File /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_operation/stoppump.dpc
-DPCs generated 24-JUL-2014 11:39:12
+DPCs generated 25-JUL-2014 14:16:24
 
-DPC ZombieScoped 24-JUL-2014  11:39:3
+DPC ZombieScoped 25-JUL-2014  14:16:4
 
 VCs for procedure_stoppump :
  -----------------------------------------------------------------------------
@@ -831,12 +771,6 @@ VCs for procedure_stoppump :
 
 ===============================================================================
 Summary:
-
-The following subprograms have VCs proved false:
-
-   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/start_pumping.vcg
-   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/stop_pumping.vcg
-   1  /Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/pca_engine/write_signal.vcg
 
 The following subprograms have undischarged VCs (excluding those proved false):
 
@@ -874,14 +808,14 @@ Overall subprogram summary:
 -------------------------------------------------------------------------
 Total subprograms fully proved:                                        14
 Total subprograms with at least one undischarged VC:                    8  <<<
-Total subprograms with at least one false VC:                           3  <<<
+Total subprograms with at least one false VC:                           0
                                                                     -----
-Total subprograms for which VCs have been generated:                   25
+Total subprograms for which VCs have been generated:                   22
 
 
 ZombieScope Summary:
 -------------------------------------------------------------------------
-Total subprograms for which DPCs have been generated:                  25
+Total subprograms for which DPCs have been generated:                  22
 Total number subprograms with dead paths found:                         3
 Total number of dead paths found:                                      32
 
@@ -893,19 +827,17 @@ Note: (User) denotes where the Simplifier has proved VCs using one or
 
 Total VCs by type:
 ------------------
-                    Total   Examiner Simplifier False    Undisc.
-Assert/Post            96         80         12     3          1
-Precondition           12          0         12     0          0
-Check stmnt.            0          0          0     0          0
-Runtime check         187          0        159     0         28
-Refinem. VCs           10         10          0     0          0
-Inherit. VCs            0          0          0     0          0
-================================================================
-Totals:               305         90        183     3         29 <<<
-%Totals:                         30%        60%    1%        10%
+                    Total   Examiner Simplifier    Undisc.
+Assert/Post            93         80         12          1
+Precondition           12          0         12          0
+Check stmnt.            0          0          0          0
+Runtime check         187          0        159         28
+Refinem. VCs           10         10          0          0
+Inherit. VCs            0          0          0          0
+==========================================================
+Totals:               302         90        183         29 <<<
+%Totals:                         30%        61%        10%
 
 ===================== End of Semantic Analysis Summary ========================
-
 \end{lstlisting}
-\label{listing:pca_ravenscar:pogs_full}
 \doublespacing

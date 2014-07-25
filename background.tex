@@ -6,7 +6,7 @@
 \chapter{Background}
 \label{background}
 
-This chapter is a brief introduction of all technologies and tools used in this thesis. There are: AADL modeling language, BLESS (AADL annex language), SPARK Ada programming language and its verification tools. There is also an overview of the context in which this work has been done: Integrated Clinical Environment (ICE) standard and PCA pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
+This chapter is a brief introduction of all technologies and tools used in this thesis. They are: AADL modeling language, BLESS (AADL annex language), SPARK Ada programming language and its verification tools. There is also an overview of the context in which this work has been done: Integrated Clinical Environment (ICE) standard and PCA pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
 
 
 
@@ -14,7 +14,7 @@ This chapter is a brief introduction of all technologies and tools used in this 
 \label{background:ice}
 %http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
 
-Idea of "Integrated Clinical Environment" (ICE) was initiated by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create environment of medical devices network. It will allow clinician and software system to make decisions based not only on output from one device, but from all of them together. ICE purpose is to solve current issues with medical devices, which usually operate independently. It requires more human attention and control through checking output of every device manually and then making decision. ICE will make it easier, e.g. by introducing alarms, which can not only indicate problem but also interact with other devices and make decision automatically. E.g. when PCA Pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA pump shutdown.
+Idea of "Integrated Clinical Environment" (ICE) was initiated by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create environment of medical devices network. It will allow clinician and software system to make decisions based not only on output from one device, but from different devices working together in network. ICE purpose is to solve current issues with medical devices, which usually operate independently. It requires more human attention and control through checking output of every device manually and then making decision. ICE will make it easier, e.g. by introducing alarms, which can not only indicate problem but also interact with other devices and make decision automatically. E.g. when PCA pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA pump shutdown.
 
 Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. Figure \ref{figure:ice} presents high overview of ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system. All of them are monitored and controlled. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Informations in EMR comprises drug library, patient's medical records, monitoring logs etc. ICE can make decisions (such as PCA Pump shutdown) based on that informations.
 
@@ -26,14 +26,12 @@ Moreover, ICE comprises components that may be implemented by different vendors.
     \label{figure:ice}
 \end{figure}
 
-[ADD MORE INFORMATION?]
-
 
 \section{Medical Device Coordination Framework}
 \label{background:mdcf}
 %http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
 
-Medical Device Coordination Framework (MDCF), jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. Project is response to request from Food and Drug Administration (FDA) to build a prototype of ICE. Medical Devices, which are ICE compliant can be connected to MDCF. The framework enables Medical Devices interoperability. MDCF is designed to illustrate by example the issues related to functional concepts, safety, security, verification and certification. 
+Medical Device Coordination Framework (MDCF), jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. This project is a response to request from Food and Drug Administration (FDA), to build a prototype of ICE. Medical Devices, which are ICE compliant can be connected to MDCF. The framework enables Medical Devices interoperability. MDCF is designed to illustrate by example the issues related to functional concepts, safety, security, verification and certification. 
 
 The goals of MDCF project comprises:
 \begin{itemize}
@@ -46,7 +44,7 @@ The goals of MDCF project comprises:
 	\item Illustrate envisioned regulatory oversight and 3rd party certification
 \end{itemize}
 
-In this thesis, part of penultimate point will be illustrated. For now, MDCF use only mock devices, which are Java desktop applications. PCA Pump Prototype aim to be first real-device.
+In this thesis, part of penultimate point will be illustrated. For now, MDCF use only mock devices, which are Java desktop applications. PCA Pump Prototype aim to be the first real-device.
 
 MDCF uses publish-subscribe architecture for communication between components: apps and devices. Figure \ref{figure:mdcf} presents MDCF structure. Devices, like PCA pump, are clients. MDCF Server is integration layer which comprises Core and applications working in top of it. \cite{MDCF:Paper}.
 
@@ -58,14 +56,12 @@ MDCF uses publish-subscribe architecture for communication between components: a
     \label{figure:mdcf}
 \end{figure}
 
-[ADD MORE INFORMATION?]
-
 
 
 \section{AADL}
 \label{background:aadl}
 
-AADL stands for Architecture Analysis \& Design Language. It is used to model embedded and real-time systems. AADL allows for the description of both software and hardware parts of a system. It can be used not only for design phase of software development process, but also for analysis, verification or code generation.
+AADL stands for Architecture Analysis \& Design Language. It is used to model embedded and real-time systems. AADL allows for description of both software and hardware parts of a system. It can be used not only for design phase of software development process, but also for analysis, verification or code generation.
 
 AADL has its roots in DARPA\footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/}. AADL is develop by SAE AADL committee\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page}. AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}.
 
@@ -79,7 +75,7 @@ AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be repres
   \label{figure:aadl_app_software_components}
 \end{wrapfigure}
 
-AADL contains entities for modeling software and hardware components. It allows to create interactions and dependencies between them.
+AADL contains entities for modeling software and hardware components, and allows to create interactions and dependencies between them.
 
 AADL Execution Platform Components and Devices:
 \begin{itemize}
@@ -110,7 +106,7 @@ An example AADL model is shown in graphical representation, in the figure \ref{f
 \end{figure}
 
 \singlespacing
-\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}]
+\begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL model of simple thermometer}, label={listing:patient_thermometer}]
 	package Thermometer
 	public
 	with Base_Types;
@@ -142,11 +138,10 @@ An example AADL model is shown in graphical representation, in the figure \ref{f
 		end thermometer_device.impl;
 	end Thermometer;
 \end{lstlisting} 
-\label{listing:patient_thermometer}
 \doublespacing
 %another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
 
-Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: OSATE (see section \ref{background:aadl:osate}, STOOD\footnote{http://www.ellidiss.com/products/stood}, ADELE\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar\footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector\footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina\footnote{http://www.openaadl.org}.
+Recently AADL becomes a new market standard. There are lots of tools for AADL models analysis, such as: OSATE (see section \ref{background:aadl:osate}, STOOD\footnote{http://www.ellidiss.com/products/stood}, ADELE\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele}, Cheddar\footnote{http://beru.univ-brest.fr/~singhoff/cheddar}, AADLInspector\footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina\footnote{http://www.openaadl.org} (see section \ref{background:codegen:ocarina}).
 
 What is important, AADL is for architectural description. It should not be compared with UML suites, which allows to link with source code.
 
@@ -155,7 +150,7 @@ AADL can be extended with the following methods:
 	\item user-defined properties: user can extend the set of applicable properties and add their own to specify their own requirements
 	\item {language annexes (the core language is enhanced by annex languages that enrich the architecture description. For now, the following annexes have been defined):
 		\begin{itemize}
-			\item Behavior annex: add components behavior with state machines (e.g. BLESS)
+			\item Behavior annex: add components behavior with state machines (e.g. BLESS, see section \ref{background:bless})
 			\item Error-model annex: specifies fault and propagation concerns
 			\item ARINC653 annex: defines modelling patterns for modelling avionics system
 			\item Data-Model annex: describes the modelling of specific data constraint with AADL
@@ -171,7 +166,7 @@ More details about AADL can be found in Peter Feiler's book "Model-Based Enginee
 \subsection{OSATE}
 \label{background:aadl:osate}
 
-Open Source AADL Tool Environment (OSATE) is a set of plug-ins on top of the open-source Eclipse platform. It provides a tool set for front-end processing of AADL models. OSATE is developed mainly by SEI (Software Engineering Institute - Carnegie Mellon University)\footnote{http://www.aadl.info/aadl/currentsite/tool/osate.html}. Latest available version of OSATE in the time when this work was published is OSATE2\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Osate\_2}. 
+Open Source AADL Tool Environment (OSATE) is a set of plug-ins on top of Eclipse platform. It provides a tool set for front-end processing of AADL models. OSATE is developed mainly by SEI (Software Engineering Institute - Carnegie Mellon University)\footnote{http://www.aadl.info/aadl/currentsite/tool/osate.html}. Latest available version of OSATE in the time when this work was published is OSATE2\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Osate\_2}. 
 
 OSATE relies on EMF, UML2 and Xtext\footnote{http://www.eclipse.org/Xtext/}. It comprises e.g. AADL project wizard, AADL Navigator and AADL syntax analyzer. OSATE enables conversion of AADL in textual representation into graphical. There are also plug-ins for OSATE, like BLESS\footnote{http://bless.santoslab.org/node/5} or OCARINA\footnote{http://libre.adacore.com/tools/ocarina/}.
 
@@ -194,8 +189,6 @@ The BLESS tool framework is implemented as a publicly available open source plug
 
 Some BLESS constructs can be translated into SPARK contracts, which is part of this thesis. Additionally, BLESS allows to model behavior of components.
 
-[MORE DETAILS? EXAMPLES?]
-
 
 
 \section{SPARK Ada}
@@ -203,7 +196,7 @@ Some BLESS constructs can be translated into SPARK contracts, which is part of t
 
 %http://www.cs.swan.ac.uk/~csetzer/lectures/critsys/09/critsysfinal2.pdf
 
-First version of Ada programming language - Ada 83 - was designed to meet the US Department of Defense Requirements formalized in "Steelman" document\footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012)\footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing\footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety. Due to this requirements, Ada minimize developer responsibility in comparison to other programming languages (see figure \ref{figure:developer-responsibility-in-ada}). It is achieved not only by language capabilities, but also by tools for verification. 
+Ada programming language was designed to meet the US Department of Defense Requirements. First version, Ada 83, requirements are formalized in "Steelman" document\footnote{http://www.adahome.com/History/Steelman/steelman.htm}. Since that time, Ada evolved. There were Ada 95, Ada 2005 and Ada 2012 (released in December 10, 2012)\footnote{http://www.ada2012.org}. Ada is actively used in many Real-World projects\footnote{http://www.seas.gwu.edu/~mfeldman/ada-project-summary.html}, e.g. Aviation (Boeing\footnote{http://archive.adaic.com/projects/atwork/boeing.html}), Railway Transportation, Commercial Rockets, Satellites and even Banking. One of the main goals of Ada is to ensure software correctness and safety. Due to this requirements, Ada minimize developer responsibility in comparison to other programming languages (see figure \ref{figure:developer-responsibility-in-ada}). It is achieved not only by language capabilities, but also by tools for verification. 
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -214,7 +207,7 @@ First version of Ada programming language - Ada 83 - was designed to meet the US
 \end{figure}
 \footnotetext{http://www.slideshare.net/AdaCore/ada-2012}
 
-SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. It is a "safe" subset of Ada designed to be susceptible to formal methods, accompanied with a set of approaches and tools. SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}. Using SPARK, a developer takes a Z specification and performs a stepwise refinement from the specification to SPARK code. For each refinement step a tool is used to produce verification conditions (VC's), which are mathematical theorems. If the VC's can be proved then the refinement step will be known to be valid. However if the VC's cannot be proved then the refinement step may be erroneous\footnote{http://www.dwheeler.com/lovelace/s17s4.htm}. Sample Verification Condition contains checks for:
+SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. It is a "safe" subset of Ada, designed to be susceptible to formal methods, accompanied with a set of approaches and tools. SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}. Using SPARK, a developer takes a Z specification and performs a stepwise refinement from the specification to SPARK code. For each refinement step a tool is used to produce verification conditions (VC's), which are mathematical theorems. If the VC's can be proved then the refinement step will be known to be valid. However if the VC's cannot be proved then the refinement step may be erroneous\footnote{http://www.dwheeler.com/lovelace/s17s4.htm}. Sample Verification Condition contains checks for:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
     \item array index out of range
     \item type range violation
@@ -229,17 +222,16 @@ SPARK provides a significant degree of automation in proving exception freedom \
 
 First version of SPARK was based on Ada 83. The second version (SPARK 95) - on Ada 95. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). It makes every SPARK 2005 program, valid Ada 2005 program. SPARK annotations contains code contracts, which are analyzed by verification tools, but ignored by Ada compiler.
 
-Listing \ref{listing:SPARK2005Contracts} presents simple procedure with code contracts. It increments variable given as parameter by 1. The \lstinline{derives} clause specify variable dependency. It future value depends on its current value. There is precondition saying that the value has to be lower than maximum value of \lstinline{Integer} type. There is also post condition, which states that the value of variable (given as parameter) after the procedure execution has to be equal to its previous value incremented by 1 ('\lstinline{~}' attached to variable means value of this variable, before procedure execution).
+Listing \ref{listing:SPARK2005Contracts} presents simple procedure with code contracts. It increments variable given as parameter by 1. The \lstinline{derives} clause specify variable dependency. Its future value depends on its current value. There is precondition saying that the value has to be lower than maximum value of \lstinline{Integer} type, to avoid overflow. There is also post condition, which states that the value of variable (given as parameter) after the procedure execution has to be equal to its previous value incremented by 1 ('\lstinline{~}' attached to variable means value of this variable, before procedure execution).
 
-\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sample SPARK procedure with code contracts}]
+\begin{lstlisting}[language=ada, frame=single, gobble=0, caption={Sample SPARK procedure with code contracts}, label={listing:SPARK2005Contracts}]
 procedure Increment (X : in out Integer);
 --# derives X from X;
 --# pre X < Integer'Last;
 --# post X = X~ + 1;
 \end{lstlisting} 
-\label{listing:SPARK2005Contracts}
 
-SPARK 2014\footnote{http://www.spark-2014.org} (based on Ada 2012) is under development. There is partial tool support (in GNAT Programming Studio), but some language features are still not supported. It is worth to mention, that Ada 2012 contains code contracts (which was inspired by previous versions of SPARK). Thus SPARK 2014 is just a subset of Ada 2012. \cite{Spark2014:Paper} It contains all features of Ada 2012 except:
+SPARK 2014\footnote{http://www.spark-2014.org} (based on Ada 2012) is under development. There is partial tool support (in GNAT Programming Studio), but some language features are still not supported. Ada 2012 contains code contracts, which was inspired by previous versions of SPARK. Thus SPARK 2014 is just a subset of Ada 2012. \cite{Spark2014:Paper} It contains all features of Ada 2012 except:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
  	\item Access types (pointers)
  	\item Exceptions
@@ -248,7 +240,7 @@ SPARK 2014\footnote{http://www.spark-2014.org} (based on Ada 2012) is under deve
 	\item Side effects in expressions and functions
 \end{itemize}
 
-Table \ref{table:SparkAnnotations} presents fundamental SPARK 2005 annotations and their equivalents in SPARK 2014 and Ada 2012.
+Table \ref{table:SparkAnnotations} presents fundamental SPARK 2005 annotations and their equivalents in SPARK 2014 (Ada 2012).
 
 \singlespacing
 \begin{center}
@@ -431,19 +423,18 @@ Sample mapping from SPARK 2005 to 2014 is shown in the table \ref{table:spark200
 \end{table}
 \doublespacing
 
-The previous example (listing \ref{listing:SPARK2005Contracts}) translated to SPARK 2014 is shown in figure \ref{listing:SPARK2014Contracts}.
+The previous example (listing \ref{listing:SPARK2005Contracts}) translated to SPARK 2014 is shown in listing \ref{listing:SPARK2014Contracts}.
 
 \singlespacing
-\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sample SPARK 2014 procedure and Code Contracts}]
+\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sample SPARK 2014 procedure and Code Contracts}, label={listing:SPARK2014Contracts}]
 	procedure Increment (X : in out Integer)
 	with Depends => (X => X),
 		Pre => (X < Integer'Last),
 		Post => (X = X'Old + 1);
-\end{lstlisting} 
-\label{listing:SPARK2014Contracts}
+\end{lstlisting}
 \doublespacing
 
-It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. As mentioned before, usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some not safety-critical modules. SPARK 2014 does not contains Examiner like SPARK 2005. Instead, proofs are made by gnatPROVE (see section \ref{verification:gnatprove}).
+It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant will be verified. As mentioned before, usually SPARK is used in the most critical parts of Software Systems \cite{Spark:IndustrialExp}. It means, that some part is written in e.g. Ada or C++ and the rest in SPARK. The reason of that is the SPARK limitation and lack of necessity to verify some not safety-critical modules. SPARK 2014 does not contains Examiner like SPARK 2005. Instead, proofs are made by GNATprove (see section \ref{verification:gnatprove}).
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
 The most popular IDE for SPARK Ada is GNAT Programming Studio\footnote{http://libre.adacore.com/tools/gps} (see section \ref{background:spark:gps}). There is also Ada plug-in for Eclipse - GNATbench\footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
@@ -453,7 +444,7 @@ The most popular IDE for SPARK Ada is GNAT Programming Studio\footnote{http://li
 \subsection{GNAT compiler}
 \label{background:spark:gnat}
 
-GNAT compiler is Ada compiler created by AdaCore\footnote{http://www.adacore.com}. It is part of GNU Compiler Collection (GCC). The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Java, Ada, and Go. It is one of the most popular compiler systems. It is included in all Linux distributions. GNU is open source, published on GNU General Public License. GCC is divided into front end and back end. It allows to create new front end for some language and reuse existing back end.
+GNAT compiler is Ada compiler created by AdaCore\footnote{http://www.adacore.com}. It is part of GNU Compiler Collection (GCC). The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Java, Ada, and Go. It is one of the most popular compiler systems. It is included in all Linux distributions. GCC is open source, published on GNU General Public License. GCC is divided into front end and back end. It allows to create new front end for some language and reuse existing back end.
 
 GNAT supports Ada 2012, Ada 2005, Ada 95 and Ada 83. The front-end and run-time are written in Ada. To make compilation easier, GNAT provides \lstinline{gnatmake} tool. It takes as an argument project file (.gpr) or main program file (file, which contains main procedure) and builds entire program automatically. \lstinline{gnatmake} invokes GCC to perform the actual compilation. It check all dependencies contained in \lstinline{.ali} files. Each invocation of GCC produce object file (\lstinline{.o}) and Ada Library Information file (\lstinline{.ali}). Once compilation is done, \lstinline{gnatmake} invokes \lstinline{gnatbind} tool to check consistency and generate a main program. Then \lstinline{gnatlink} performs linking using binding output and all object files.
 
@@ -464,7 +455,7 @@ GNAT compiler is available for all most popular platforms: Windows, Linux and Ma
 \subsection{GNAT Programming Studio (GPS)}
 \label{background:spark:gps}
 
-GNAT Programming Studio (GPS) is Integrated development environment for SPARK Ada. It allows to easily manage and compile SPARK Ada projects using .gpr file. GPS includes set of verification tools. More precisely GUI for setting up their options, running them and analyze results. Additionally, it enables to create plug-ins using Python and PyGTK\footnote{http://docs.adacore.com/gps-docs/users\_guide/\_build/html/extending.html}. Sireum Bakar (developed by SAnToS lab) is GPS plug-in written in Python and PyGTK. The same with other plug-ins created by AdaCore like SPARK Examiner or GNATprove.
+GNAT Programming Studio (GPS) is Integrated development environment for SPARK Ada. It allows to easily manage and compile SPARK Ada projects, providing Graphical User Interface as front end for underlaying tools, which have command line interface. Additionally, it enables to create plug-ins using Python and PyGTK\footnote{http://docs.adacore.com/gps-docs/users\_guide/\_build/html/extending.html}. Sireum Bakar (developed by SAnToS lab) is GPS plug-in written in Python and PyGTK. The same with other plug-ins created by AdaCore like SPARK Examiner or GNATprove.
 
 There are two versions of GPS: free (GPL) and commercial (Pro). There are version for all most popular platforms: Windows, Linux and MacOS.
 
@@ -473,14 +464,14 @@ There are two versions of GPS: free (GPL) and commercial (Pro). There are versio
 \subsection{Ravenscar Tasking Subset}
 \label{background:spark:ravenscar}
 
-The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs \cite{Ravenscar:Online}. RavenSPARK is SPARK subset of the Ravenscar Profile. The Ravenscar Profile is a subset of the tasking model, restricted to meet the real-time community requirements for determinism, schedulability analysis and memory-boundedness, as well as being suitable for mapping to a small and efficient run-time system that supports task synchronization and communication, and which could be certifiable to the highest integrity levels. The concurrency model promoted by the Ravenscar Profile is consistent with the use of tools that allow the static properties of programs to be verified. Potential verification techniques include information flow analysis, schedulability analysis, execution-order analysis and model checking. These techniques allow analysis of a system to be performed throughout its development life cycle, thus avoiding the common problem of finding only during system integration and testing that the design fails to meet its non-functional requirements. \cite{Ravenscar:Article}
+The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs \cite{Ravenscar:Online}. RavenSPARK is SPARK subset of the Ravenscar Profile. The Ravenscar Profile is a subset of the tasking model, restricted to meet the real-time requirements for determinism, schedulability analysis and memory-boundedness, as well as being suitable for mapping to a small and efficient run-time system that supports task synchronization and communication, and which could be certifiable to the highest integrity levels. The concurrency model promoted by the Ravenscar Profile is consistent with the use of tools that allow the static properties of programs to be verified. Potential verification techniques include information flow analysis, schedulability analysis, execution-order analysis and model checking. These techniques allow analysis of a system to be performed throughout its development life cycle, thus avoiding the common problem of finding only during system integration and testing that the design fails to meet its non-functional requirements. \cite{Ravenscar:Article}
 
 Ravenscar profile is available in SPARK 2005, but not yet in SPARK 2014\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}. Default profile (sequential) does not enable tasking. In other words, SPARK tools cannot analyze and reason about concurrent programs if Ravenscar profile flag is not provided.
 
-To create a task, the task type has to be declared and task variable of this type. Ravenscar does not allows dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. Listing \ref{lst:SampleTask} shows sample package with two tasks.
+To create a task, the task type has to be declared and task variable of this type has to be defined. Ravenscar does not allows dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
 	package Some_Pkg
 	--# own task t1 : Task1;
 	--#     task t2 : Task2;
@@ -498,12 +489,12 @@ To create a task, the task type has to be declared and task variable of this typ
 	end Some_Pkg;
 \end{lstlisting} 
 \doublespacing
-\label{lst:SampleTask}
+
 
 Declared tasks have to be implemented in the package body (listing \ref{lst:SampleTaskBody}).
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks body}, label={lst:SampleTaskBody}]
 	package body Some_Pkg
 	is
 		t1 : Task1;
@@ -527,7 +518,6 @@ Declared tasks have to be implemented in the package body (listing \ref{lst:Samp
 
 	end Some_Pkg;
 \end{lstlisting} 
-\label{lst:SampleTaskBody}
 \doublespacing
 
 There are two ways to access variable in different tasks:
@@ -539,7 +529,7 @@ There are two ways to access variable in different tasks:
 Protected object encapsulate variable, in such a way that it is accessible, only through protected subprograms. This mechanism use locking, to ensure atomicity. Protected type declaration is similar to task: specification and body has to be defined. Listing \ref{lst:SampleTasksWithProtectedType} shows sample tasks with protected type \lstinline{Integer_Store}, which enable to share Integer variable between tasks. What is important, protected type has to be declared before tasks, which will use it. Otherwise, it will be not visible for them.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object}, label={lst:SampleTasksWithProtectedType}]
 	package Some_Pkg
 	--# own protected Shared_Var : Integer_Store (Priority => 11);
 	--#     task t1 : Task1;
@@ -573,13 +563,12 @@ Protected object encapsulate variable, in such a way that it is accessible, only
 
 	end Some_Pkg;
 \end{lstlisting}
-\label{lst:SampleTasksWithProtectedType}
 \doublespacing
 
 Protected type body also has to be defined in package body (listing \ref{lst:SampleTasksWithProtectedTypeBody}).
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with protected object body}, label={lst:SampleTasksWithProtectedTypeBody}]
 	package body Some_Pkg
 	is
 	    Shared_Var : Integer_Store;
@@ -622,17 +611,16 @@ Protected type body also has to be defined in package body (listing \ref{lst:Sam
 
 	end Some_Pkg;
 \end{lstlisting} 
-\label{lst:SampleTasksWithProtectedTypeBody}
 \doublespacing
 
-\lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
+In example given in listings \ref{lst:SampleTasksWithProtectedType} and \ref{lst:SampleTasksWithProtectedTypeBody}, \lstinline{Task1} is writing to \lstinline{Shared_Var} and \lstinline{Task2} is reading \lstinline{Shared_Var}. The highest priority is assigned to protected object, to ensure atomicity during operations on it. The lowest priority is assigned to \lstinline{Task2}, which is reading \lstinline{Shared_Var}. Reading is usually less expensive operation than writing. Thus, to avoid starvation, \lstinline{Task1} has higher priority than \lstinline{Task2}. Notice, that \lstinline{Shared_Var} is declared in package body, but refined in package specification.
 
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns following error: \lstinline{Semantic Error 940 - Variable is a protected own variable. Protected variables may not be used in proof contexts}. Formal reasoning about interactions and especially temporal properties require other techniques such as model checking and lie outside the scope of SPARK \cite{Barnes:Book}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then SPARK Examiner returns semantic error: \lstinline{Semantic Error 940 - Variable is a protected own variable. Protected variables may not be used in proof contexts}. Formal reasoning about interactions and especially temporal properties require other techniques such as model checking and lie outside the scope of SPARK \cite{Barnes:Book}. To preserve opportunity to use pre- and postconditions, atomic types have to be used.
 
 To declare atomic type, \lstinline{pragma Atomic} has to be used. However, there is restriction, that \lstinline{pragma Atomic} cannot be applied to predefined type such as Integer. Thus, custom type has to be defined. It can be just rename of Integer. Then \lstinline{pragma Atomic} can be applied on this type. Listing \ref{lst:SampleTasksWithAtomicType} presents previous example with atomic types instead of protected objects.
 
 \singlespacing
-\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}]
+\begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks with atomic type}, label={lst:SampleTasksWithAtomicType}]
 	package Some_Pkg
 	--# own Shared_Var;
 	--#     task t1 : Task1;
@@ -680,7 +668,6 @@ To declare atomic type, \lstinline{pragma Atomic} has to be used. However, there
 
 	end Some_Pkg;
 \end{lstlisting}
-\label{lst:SampleTasksWithAtomicType}
 \doublespacing
 
 It is important to mention, that \lstinline{pragma Atomic} does not guaranty atomicity. In most cases, atomic types should not be used for tasking. Instead, protected types should be used. When an object is declared as atomic, it just means that it will be read from or written to memory atomically. The compiler will not generate atomic instructions or memory barriers when accessing to that object. \lstinline{pragma Atomic} force compiler only to:
@@ -692,7 +679,7 @@ It is important to mention, that \lstinline{pragma Atomic} does not guaranty ato
 
 Another important thing in tasking is Time library: \lstinline{Ada.Real_Time}. It allows to run task periodically, using \lstinline{delay until} statement, which suspends task until specified time. To use \lstinline{delay} in the task, it has to be declared in \lstinline{declare} annotation: \lstinline{--# declare delay;} \cite{Barnes:Book}.
 
-Details about tasking in SPARK are well described in Chapter 8 of \cite{Barnes:Book}. The "Guide for the use of the Ada Ravenscar profile in high integrity systems" \cite{Ravenscar:Article} and the official Ravenscar Profile documentation (which includes examples) \cite{Ravenscar:Online} is another good source. The limitations of Tasking in SPARK are reviewed in Audsley's and Welllings' paper \cite{IssuesWithRavenscar:Paper}.
+Details about tasking in SPARK are well described in Chapter 8 of \cite{Barnes:Book}. The "Guide for the use of the Ada Ravenscar profile in high integrity systems" \cite{Ravenscar:Article} and the official Ravenscar Profile documentation (which includes examples) \cite{Ravenscar:Online} is another good source. The limitations of Tasking in SPARK are reviewed in \cite{IssuesWithRavenscar:Paper}.
 
 
 
@@ -742,7 +729,7 @@ Relationships between tools and verification flow is presented on figure \ref{fi
 
 
 \subsection{SPARK Examiner}
-\label{verification:examiner}
+\label{background:sparkverification:examiner}
 
 The main SPARK verification tool is Examiner. It supports several levels of analysis:
 \begin{itemize}
@@ -754,9 +741,7 @@ The main SPARK verification tool is Examiner. It supports several levels of anal
 	\item dead path analysis
 \end{itemize}
 
-There is also an option to make the Examiner perform syntax checks only. Using this option on a source file does not require access to any other units on which the file depends, so files can be syntax checked on an individual basis. This allows any syntax errors to be corrected before the file is included in a complex examination. This option must only be used as a pre-processor: the absence of syntax errors does NOT indicate that the source text is a legal SPARK program. \cite{Examiner:Online} [THIS PART IS COPY AND PASTE FROM Examiner doc - is it ok?]
-
-[Put here some examples? E.g.: method without contract, examine, add specification, pass Examiner.]
+There is an option to make the Examiner perform syntax checks only. Using this option on a source file does not require access to any other units on which the file depends, so files can be syntax checked on an individual basis. This allows any syntax errors to be corrected before the file is included in a complex examination. \cite{Examiner:Online}
 
 Examiner can perform data and information analysis of Ravenscar programs in exactly the same manner as for sequential programs \cite{Ravenscar:Online}. Unfortunately it does not allow protected objects in proof annotations (pre- and post-conditions) as mentioned in section \ref{background:spark:ravenscar}.
 
@@ -779,7 +764,7 @@ To use Examiner in GNAT Programming Studio:
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3in]{figures/SPARKMake.png}    	
+    	\includegraphics[width=0.6\textwidth]{figures/SPARKMake.png}    	
     \end{center}
     \caption{Run SPARK Make}
     \label{figure:sparkmake}
@@ -787,7 +772,7 @@ To use Examiner in GNAT Programming Studio:
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3in]{figures/Properties-Switches-Examiner.png}    	
+    	\includegraphics[width=0.6\textwidth]{figures/Properties-Switches-Examiner.png}    	
     \end{center}
     \caption{Examiner Properties}
     \label{figure:examinerproperties}
@@ -798,7 +783,7 @@ In addition to verification conditions, Examiner can check dead path conjectures
 
 
 \subsubsection{Flow analysis}
-\label{verification:examiner:flowanalysis}
+\label{background:sparkverification:examiner:flowanalysis}
 %http://www.cs.swan.ac.uk/~csetzer/lectures/critsys/09/critsysfinal2.pdf
 There are two types of flow analysis:
 \begin{itemize}
@@ -819,7 +804,7 @@ In information flow analysis, dependencies between variables are analyzed. These
 
 
 \subsubsection{Verification conditions}
-\label{verification:examiner:vc}
+\label{background:sparkverification:examiner:vc}
 
 To generate verification conditions, two kinds of annotations are relevant for Examiner:
 \begin{itemize}
@@ -837,7 +822,7 @@ P and Q are assertions. C is a command (action) performed between them. P is pre
 
 Additionally, assertions (\lstinline{--# assert}) and checks (\lstinline{--# check}) can be specified in procedure body. Then additional verification conditions are generated.
 
-Functions does not have side effects (as stated in \ref{verification:examiner:flowanalysis}), thus only precondition can be applied. However, there is annotation \lstinline{--# return}, which specify function return value.
+Functions does not have side effects (as stated in \ref{background:sparkverification:examiner:flowanalysis}), thus only precondition can be applied. However, there is annotation \lstinline{--# return}, which specify function return value.
 
 Verification conditions are generated depended on number of paths in subprogram. Analysis is performed backwards, in other words: we start from post-conditions and consider what must holds before. Flow analysis is well described in chapter 11 of \cite{Barnes:Book}.
 
@@ -846,14 +831,14 @@ If preconditions are not present, then the formula expresses that the post-condi
 
 
 \subsection{SPARK Simplifier}
-\label{verification:simplifier}
+\label{background:sparkverification:simplifier}
 
 Simplifier, simplify verification conditions (VCs) generated by Examiner. It can also discharge (prove correctness) of those VCs, which are not proved by Examiner. \cite{Simplifier:Online} It takes as input \lstinline{.vcg} files, \lstinline{.fdl} files for its data declarations and - if available - proof-rule files (\lstinline{.rls}, \lstinline{.rlu}). Then it generates \lstinline{.siv} files (simplified VCs) and \lstinline{.slg} files (details about simplification, which has been made).
 
 
 
 \subsection{ZombieScope}
-\label{verification:zombiescope}
+\label{background:sparkverification:zombiescope}
 
 ZombieScope is a SPARK tool, that analyze SPARK code to find dead paths, i.e. paths through the code that can never be executed. Program, which contains dead paths may not necessarily be incorrect, but a dead path is an indication of a potential code issue.
 
@@ -862,14 +847,14 @@ ZombieScope reads \lstinline{.dpc} files generated by the Examiner. In order to 
 
 
 \subsection{ViCToR}
-\label{verification:victor}
+\label{background:sparkverification:victor}
 
 ViCToR is a tool to translate SPARK verification conditions (VCs), as generated by the Examiner, into SMT-LIB (file format used to communicate with SMT solvers). \cite{Victor:Online} SMT (Satisfiability Modulo Theories) solver is a tool for verification and proving the correctness of programs. ViCToR is integrated with SPARKSimp and POGS. To invoke ViCToR from SPARKSimp, flag \lstinline{-victor} has to be used.
 
 
 
 \subsection{Proof Checker}
-\label{verification:proofchecker}
+\label{background:sparkverification:proofchecker}
 
 % Barnes' book: 12.12
 Proof Checker is advanced verification tool, which require considerable experience in verification of SPARK programs. It is interactive program, which enables the user to direct the Checker to explore the use of various strategies and rules on the condition to be proved. Proof Checker can keep a log of the progress of a proof in \lstinline{plg} file. It also keep command record in \lstinline{cmd} file. More details about Proof Checker can be found in chapter 12 of \cite{Barnes:Book}.
@@ -877,20 +862,20 @@ Proof Checker is advanced verification tool, which require considerable experien
 
 
 \subsection{SPARKSimp Utility}
-\label{verification:sparksimp}
+\label{background:sparkverification:sparksimp}
 SPARKSimp is a simple "make" style tool for the SPARK analysis tools. Currently, it supports the Simplifier, ZombieScope and ViCToR. It applies the Simplifier (and ViCToR, if requested) to all \lstinline{.vcg} files and ZombieScope to all \lstinline{.dpc} files, which it finds in a directory tree. \cite{SPARKSimp:Online} 
 
 
 
 \subsection{Proof Obligation Summarizer (POGS)}
-\label{verification:pogs}
+\label{background:sparkverification:pogs}
 
 The Proof ObliGation Summarizer tool (POGS) reads and understands the structure of the verification conditions (\lstinline{.vcg} files), their simplified version (\lstinline{.siv} files) and dead path conjectures (\lstinline{.dpc} files). It reports the status of proofs and dead path analyses in a human-readable, text form. \cite{POGS:Online} 
 
 
 
 \subsection{AUnit}
-\label{background:spark:aunit}
+\label{background:sparkverification:aunit}
 
 AUnit is Unit Test Framework for Ada language. It can be also applied for verify SPARK Ada programs. It was created based on Java JUnit (created by Kent Beck, Erich Gamma) and C++ CppUnit (created by M. Feathers, J. Lacoste, E. Sommerlade, B. Lepilleur, B. Bakker, S. Robbins) unit test frameworks \cite{AUnitCookbook:Online}. Similar like mentioned frameworks it enables simple test cases testing, fixtures, suites and provides reporting \cite{AUnitTutorials:Online}. As mentioned at the beginning of section \ref{background:sparkverification} it is used mainly for dynamic verification.
 
@@ -909,13 +894,13 @@ Tests can be also created manually. Then the AUnit distribution has to be refere
 
 
 \subsection{Sireum Bakar}
-\label{background:spark:sireum}
+\label{background:sparkverification:sireum}
 
 Sireum\footnote{http://www.sireum.org/} is a long-term research conducted by SAnToS lab at Kansas State Univeristy. Its goal is to develop an over-arching software analysis platform that incorporates various static analysis techniques such as data-flow framework, model checking, symbolic execution, abstract interpretation, and deductive reasoning techniques (e.g., using weakest precondition calculation). It can be used to build various kinds of software static analyzers for different kinds of properties. 
 
 It uses the Pilar language \cite{Pilar:Paper} as intermediate representation. Any language which can be translated to Pilar can be analyzed by Sireum. For now, there is translator for SPARK and Java.
 
-Bakar is a toolset for analyzing SPARK Ada programs (Bakar means “spark” in Indonesian). Sireum Bakar currently includes:
+Bakar is a toolset for analyzing SPARK Ada programs (Bakar means "spark" in Indonesian). Sireum Bakar currently includes:
 \begin{itemize}
 	\item Kiasan - functional behaviors verification tool
 	\item Alir - information flow analysis tool	
@@ -934,8 +919,8 @@ Bakar Kiasan does not support Ravenscar profile. Thus, it can be used only for s
 \begin{itemize}
 	\item T\# - Test cases (expected behavior)
 	\item E\# - Exception cases (unexpected behavior)
-	\item Instruction coverage - amount of code covered by Kiasan analysis
-	\item Branch coverage - number of branches covered by analysis (0\% in 100\% instruction coverage means, that there is no branches in analyzed unit)
+	\item Instruction coverage - amount of code, which will be executed in execution paths generated by Kiasan analysis
+	\item Branch coverage - number of branches discovered by Kiasan analysis (0\% in 100\% instruction coverage means, that there is no branches in analyzed unit)
 	\item Time in which analysis was performed
 \end{itemize}
 
@@ -950,7 +935,6 @@ After double click on some unit, code which is executed during execution of this
 \end{figure}
 
 Bakar Kiasan is useful especially, for solving verification issues. It can generate counter examples, which help to fix the code.
-[add screenshot with error case and discuss result?]
 
 
 \subsubsection{Bakar Alir}
@@ -958,17 +942,13 @@ Alir is an information flow analysis tool for reasoning about SPARK's derive cla
 
 
 \subsection{GNATprove}
-\label{background:spark:gnatprove}
+\label{background:sparkverification:gnatprove}
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 % https://github.com/openETCS/model-evaluation/wiki/Gnatprove-description
 
 GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It is based on the GNAT compiler. GNATprove interprets SPARK Ada annotations exactly like they are interpreted at run time during tests. It can prove that subprograms respect their contracts, expressed as preconditions and postconditions in the syntax of Ada 2012. The tool automatically discovers the subset of subprograms which can be formally analyzed. GNATprove is currently available for x86 linux, x86 windows and x86-64 linux.
 
-GNATprove consists of two distinct analyses, flow analysis and proof. Flow analysis checks the correctness of aspects related to data flow (\lstinline{Global}, \lstinline{Depends}, \lstinline{Abstract_State}, \lstinline{Initializes}, and refinement versions of these), and verifies the initialization of variables. Proof verifies the absence of runtime errors and the correctness of assertions such as \lstinline{Pre} and \lstinline{Post} aspects. Using the switch \lstinline{--mode=<mode>}, whose possible values are \lstinline{flow}, \lstinline{prove} and \lstinline{all}, only one or both of these analyses can be performed (\lstinline{all} is the default). \cite{Spark2014userGuide:Online}
-
-GNATprove use Alt-Ergo prover for verification.
-
-[Add more details? Some example like in Kiasan section?]
+GNATprove consists of two distinct analyses, flow analysis and proof. Flow analysis checks the correctness of aspects related to data flow (\lstinline{Global}, \lstinline{Depends}, \lstinline{Abstract_State}, \lstinline{Initializes}, and refinement versions of these), and verifies the initialization of variables. Proof verifies the absence of runtime errors and the correctness of assertions such as \lstinline{Pre} and \lstinline{Post} aspects. Using the switch \lstinline{--mode=<mode>}, whose possible values are \lstinline{flow}, \lstinline{prove} and \lstinline{all}, only one or both of these analyses can be performed (\lstinline{all} is the default). \cite{Spark2014userGuide:Online} GNATprove use Alt-Ergo prover for verification.
 
 
 
@@ -992,14 +972,12 @@ There is plug-in for OSATE (see section \ref{background:aadl:osate}), which enab
 
 Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{Ocarina:About:Online}.
 
-[Include some examples and generated code? E.g. prod-cons example?]
+
 
 \subsection{RAMSES}
 \label{background:codegen:ramses}
 % http://penelope.enst.fr/aadl/wiki/Projects
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
 
-RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) is a model transformation and code generation tool. It is written in Java. RAMSES produces C code, but does not generate Ada. It simplify AADL models, in order to generate C code. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
-
-[I didn't find much about RAMSES online...]
+RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) is a model transformation and code generation tool written in Java. Code generation module produces C code, but does not generate Ada. The approach for code generation is to simplify AADL models and generate code based on it. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
 

@@ -7,7 +7,7 @@
 
 This appendix contains simplified AADL/BLESS models. They were created based on AADL/BLESS models of PCA pump, created by Brian Larson.
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Properties} property set}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Properties} property set}, label={listing:aadl:bless_properties}]
 property set BLESS_Properties is
   with AADL_Project;
 
@@ -16,22 +16,20 @@ property set BLESS_Properties is
   Radix : AADL_Project::Size_Units applies to ( data );
 end BLESS_Properties;
 \end{lstlisting} 
-\label{listing:aadl:bless_properties}
 \doublespacing
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS} property set}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS} property set}, label={listing:aadl:bless}]
 property set BLESS is
   Assertion : aadlstring applies to ( all );
   Typed : aadlstring applies to ( all );
   Invariant : aadlstring applies to ( all );
 end BLESS;
 \end{lstlisting} 
-\label{listing:aadl:bless}
 \doublespacing
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Properties} property set}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Properties} property set}, label={listing:aadl:pca_properties}]
 property set PCA_Properties is
   with PCA_Types;  
   
@@ -43,11 +41,10 @@ property set PCA_Properties is
   Max_Rate : constant aadlinteger => 10;     
 end PCA_Properties;
 \end{lstlisting} 
-\label{listing:aadl:pca_properties}
 \doublespacing
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Types} package}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{BLESS_Types} package}, label={listing:aadl:bless_types}]
 package BLESS_Types public
 with Base_Types, BLESS_Properties, Data_Model, Memory_Properties, BLESS;
 
@@ -98,13 +95,12 @@ end Time;
     
 end BLESS_Types;
 \end{lstlisting} 
-\label{listing:aadl:bless_types}
 \doublespacing
 
 \newpage
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{ICE_Types} package}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{ICE_Types} package}, label={listing:aadl:ice_types}]
 package ICE_Types
 public
 with Data_Model;
@@ -162,13 +158,12 @@ with Base_Types;
 
 end ICE_Types;
 \end{lstlisting} 
-\label{listing:aadl:ice_types}
 \doublespacing
 
 \newpage
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Types} package}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Types} package}, label={listing:aadl:pca_types}]
 package PCA_Types
 public
   with Base_Types, Data_Model, PCA_Properties, ICE_Types, BLESS_Types, BLESS;
@@ -421,11 +416,10 @@ end Pump_Fault_Type;
 
 end PCA_Types;
 \end{lstlisting} 
-\label{listing:aadl:pca_types}
 \doublespacing
 
 \singlespacing
-\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Operation} package}]
+\begin{lstlisting}[language=aadl, gobble=0, numbers=left, caption={\lstinline{PCA_Operation} package}, label={listing:aadl:pca_operation}]
 package PCA_Operation
   public
   with PCA_Properties, Base_Types, BLESS, BLESS_Types, ICE_Types, PCA_Types;
@@ -550,5 +544,4 @@ end Patient_Bolus_Checker.imp;
 
 end PCA_Operation;
 \end{lstlisting} 
-\label{listing:aadl:pca_operation}
 \doublespacing

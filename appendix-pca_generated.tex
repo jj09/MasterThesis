@@ -8,7 +8,7 @@
 This appendinx presents PCA pump prototype, which was created by direct translation from simplified AADL/BLESS models presented in appendix \ref{Appendix:AADL}.
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Base_Types} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Base_Types} package}, label={listing:pca_generated:base_types}]
 package Base_Types
 is
     protected type Boolean_Store
@@ -343,13 +343,12 @@ is
 
 end Base_Types;
 \end{lstlisting} 
-\label{listing:pca_generated:base_types}
 \doublespacing
 
 \newpage
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Bless_Types} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Bless_Types} package}, label={listing:pca_generated:bless_types}]
 with Base_Types;
 --# inherit Base_Types;
 package Bless_Types
@@ -412,12 +411,11 @@ is
     end Time_Store;
 end Bless_Types;
 \end{lstlisting} 
-\label{listing:pca_generated:bless_types}
 \doublespacing
 
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Ice_Types} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Ice_Types} package}, label={listing:pca_generated:ice_types}]
 with Base_Types;
 --# inherit Base_Types;
 package Ice_Types
@@ -698,12 +696,11 @@ is
 
 end Ice_Types;
 \end{lstlisting} 
-\label{listing:pca_generated:ice_types}
 \doublespacing
 
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Types} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Types} package}, label={listing:pca_generated:pca_types}]
 with Base_Types;
 with Bless_Types;
 with Ice_Types;
@@ -1369,12 +1366,11 @@ is
 
 end Pca_Types;
 \end{lstlisting} 
-\label{listing:pca_generated:pca_types}
 \doublespacing
 
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Properties} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Properties} package}, label={listing:pca_generated:pca_properties}]
 package Pca_Properties
 is
     Drug_Library_Size : constant Integer := 500;
@@ -1385,13 +1381,12 @@ is
     Max_Rate : constant Integer := 10;
 end Pca_Properties;
 \end{lstlisting} 
-\label{listing:pca_generated:pca_properties}
 \doublespacing
 
 \newpage
 
 \singlespacing
-\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Operation} package}]
+\begin{lstlisting}[language=ada, gobble=0, numbers=left, caption={\lstinline{Pca_Operation} package}, label={listing:pca_generated:pca_operation}]
 with Pca_Properties,
     Base_Types,
     Bless_Types,
@@ -1574,6 +1569,5 @@ is
 
 end Pca_Operation;
 \end{lstlisting} 
-\label{listing:pca_generated:pca_operation}
 \doublespacing
 
