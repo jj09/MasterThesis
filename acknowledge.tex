@@ -1,3 +1,4 @@
+%!TEX root = JakubJedryszek-MasterThesis.tex
 % +--------------------------------------------------------------------+
 % | Acknowledgements Page (Optional)                                   |
 % +--------------------------------------------------------------------+
@@ -12,9 +13,14 @@
 
 %\pdfbookmark[0]{Acknowledgements}{PDF_Acknowledgements}
 
-% +--------------------------------------------------------------------+
-% | Enter text for your acknowledgements in the space below this box.  |
-% |                                                                    |
-% +--------------------------------------------------------------------+
+\setlength\epigraphwidth{1.0\textwidth}
+\setlength\epigraphrule{0pt}
+\makeatletter
+\patchcmd{\epigraph}{\@epitext{#1}}{\itshape\@epitext{#1}}{}{}
+\makeatother
 
-Say thank you for everybody involved directly and indirectly.
+\epigraph{"Showing gratitude is one of the simplest yet most powerful things humans can do for each other."}{--- \textup{Randy Pausch}, Last Lecture}
+
+
+
+Say thank you to: Andrew Rys, John Hatcliff, Robby, Jason, Brian, Eugene, Venkatesh(?).

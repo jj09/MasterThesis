@@ -5,17 +5,18 @@
 \chapter{Summary}
 \label{summary}
 
-What I have done.
+All work done in this thesis targets SPARK 2005. SPARK 2014 and its tools (such as GNATprove) were not ready at the time, when this thesis was written. However, some examples were presented.
 
-The work is done for SPARK 2005. SPARK 2014 and its tools (such as gnatPROVE) were not ready at the time, when this thesis was written.
+% lack of resources
+% no access to real-live examples
+The biggest challenge during PCA pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it is required to isolate some functionalities or implement them in different way. Another issue was lack of many resources and SPARK code samples. Especially industry code, which is in this case, keep secretly as intellectual property. Available resources are usually small examples used in research or reference manuals, which were created couple years age. Although still valid, not updated for years.
 
-The biggest challenge during PCA pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it is required to isolate some functionalities or implement them in different way. Another issue was lack of many resources and SPARK code samples. Most of them are used in research or are protected by intelectual property laws. 
+% everything 'under development'
+Furthermore, all technologies (AADL, BLESS, SPARK) were under development. Thus, it was very hard to take advantage of all desirable capabilities (most of features are not yet implemented). An example may be lack of support for pre- and post conditions in RavenSPARK.
 
-Issues:
+% small community
+In addition to that, community working with above technologies is very small. On StackOverflow there is 728 question related to Ada\footnote{http://stackoverflow.com/questions/tagged/ada} and only 3 to SPARK\footnote{http://stackoverflow.com/questions/tagged/spark-ada}. In the same time, C\# has 673,721 questions\footnote{http://stackoverflow.com/questions/tagged/c\%23} and Java - 682,308\footnote{http://stackoverflow.com/questions/tagged/java}.
 
-- not many online resources
-- no access to industry code
-- everything (AADL, SPARK2014, BLESS, tools) is under development
-- hard to create running application
-- need to rely on some resources, which are not nessesarly up to date
-- AADL models don't contains subprograms, which would be useful in AADL2SPARK translator creation
+% proposed mapping is probably wrong
+% no consultancy with industry expert/programmer
+Proposed mapping from AADL to SPARK Ada is not consulted with industry engineers. Thus, it would be first thing to do to continue this research. Lot of work can be done in this topic. It is described in chapter \ref{future_work}.

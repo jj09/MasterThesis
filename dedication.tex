@@ -1,4 +1,4 @@
-%!TEX root = etdrtemplate.tex
+%!TEX root = JakubJedryszek-MasterThesis.tex
 % +--------------------------------------------------------------------+
 % | Dedication Page (Optional)
 % +--------------------------------------------------------------------+
@@ -9,8 +9,31 @@
 {\bf \Huge Dedication}
 \end{center}
 
+
 \setlength{\baselineskip}{0.8cm}
 
-%\pdfbookmark[0]{Dedication}{PDF_Dedication}
+\pdfbookmark[0]{Dedication}{PDF_Dedication}
 
-For my family, mentors and all people who inspired me directly or indirectly in things I am doing. I also dedicate this thesis to everyone who have supported me throughout the process.
+\newenvironment{dedication}
+  {%\clearpage           % we want a new page
+   %\thispagestyle{empty}% no header and footer
+   \vspace*{\stretch{1}}% some space at the top
+   \itshape             % the text is in italics
+   \raggedleft          % flush to the right margin`'
+  }
+  {\par % end the paragraph
+   \vspace{\stretch{3}} % space at bottom is three times that at the top
+   \clearpage           % finish off the page
+  }
+
+\begin{dedication}
+	\begin{adjustwidth}{8em}{8em}
+		\begin{center}
+			For my family, mentors, friends and all people \\
+			who inspired me directly or indirectly \\
+			in things I do.
+		\end{center}
+	\end{adjustwidth}
+\end{dedication}
+
+
