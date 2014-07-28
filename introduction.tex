@@ -16,29 +16,29 @@ The most important part of safety-critical systems design is hazard analysis, wh
 \label{introduction:motivation}
 
 Nowadays, medical devices work rather independently. This leads to many accidents, which could have been avoided by their interoperability. For example a drug (e.g. morphine) delivered by the patient-controlled analgesia (PCA) pump after surgery can cause a low oxygen level or even lack of pulse. That can lead to patient's death. The PCA pump does not monitor an oxygen level, but oxygen monitoring device does. If these two devices are organized in centralized system, which implements safety interlock mechanism to shutdown the pump when low oxygen level is detected, accident can be avoided. 
-[REVIEWED TILL HERE]
-In order to communicate, devices have to use compatible interfaces and protocols. There is a concept of "Integrated Clinical Environment" (ICE). It is series of standards, which describes medical device integration and interoperability. SAnToS lab created Medical Device Coordination Framework (MDCF), which is prototype implementation of ICE. Standards are captured not only as requirement documents, but also in software and hardware models form. It allows different medical devices, created by different vendors, to be connected and work under supervision of centralized system.
 
-Model-driven development approach proposed in this thesis is a response for need to creating code from models. PCA pump prototype created in this thesis is as an example of Medical Device, which ultimately will work under MDCF.
+In order to communicate, devices have to use compatible interfaces and protocols. There is a concept of "Integrated Clinical Environment" (ICE). It is series of standards, which describe medical device integration and interoperability. The "Laboratory for Specification, Analysis, and Transformation of Software" (SAnToS) created "Medical Device Coordination Framework" (MDCF), which is prototype implementation of ICE. Standards are captured not only as requirement documents, but also as software and hardware models. It allows different medical devices, created by different vendors, to be connected and work under supervision of a centralized system.
+
+The model-driven development approach proposed in this thesis is a response for the need to create code from models. The PCA pump prototype created in this thesis is as an example of a medical device, which ultimately will work under MDCF.
 
 
 \section{Technologies}
 \label{introduction:technologies}
 
-AADL (Architecture Analysis \& Design Language) is modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems. AADL allows for the description of both software and hardware parts of a system. It is used to describe architecture, but AADL allows to add behavioral extensions through annex languages. BLESS (Behavior Language for Embedded Systems with Software) is AADL annex sub language defining behavior of components. The goal of BLESS is automatically-checked correctness proofs of AADL models of embedded electronic systems with software.
+AADL (Architecture Analysis \& Design Language) is a modeling language for representing hardware and software. It is used for real-time, safety critical and embedded systems. AADL allows for the description of both software and hardware parts of a system. It is used to describe architecture, but AADL allows to add behavioral extensions through annex languages. BLESS (Behavior Language for Embedded Systems with Software) is an AADL annex sub language defining behavior of components. The goal of BLESS is to automatically check the correctness of AADL models.
 
-Ada is one of the most popular (along with C/C++) programming language targeted at embedded and real-time systems. SPARK Ada is subset of Ada, designed for the development of safety and security critical systems. It contains subset, which allows to reason about and prove correctness of program and its entities. There are also SPARK tools for software verification.
+Ada is one of the most popular programming languages (along with C/C++) targeted at embedded and real-time systems. SPARK Ada is a subset of Ada, designed for the development of safety and security critical systems. It contains subset, which allows to reason about and prove correctness of programs and their entities. There are also SPARK tools for software verification.
 
 \section{Goals}
 \label{introduction:goals}
-The initial goals, which most of them is accomplished are as follows:
+The initial goals of this research, which most of them are accomplished, are as follows:
 \begin{itemize}
-	\item identify PCA Pump and Infusion pumps properties and internals required for implementation
-	\item SPARK Ada cross-compilation for ARM-device (BeagleBoard-xM)
-	\item implement PCA Pump based on Brian Larson's Requirement Document \cite{OpenSourcePCAPump:Paper}
-	\item develop AADL/BLESS to SPARK Ada mapping
-	\item translate PCA pump AADL/BLESS models to SPARK Ada (based on created mapping and implementation)
-	\item propose requirements and design for AADL/BLESS to SPARK Ada translator
+	\item Identify PCA pump and Infusion pumps properties and internals required for implementation.
+	\item Investigate SPARK Ada cross-compilation for ARM-device (BeagleBoard-xM).
+	\item Implement PCA Pump based on Brian Larson's Requirement Document \cite{OpenSourcePCAPump:Paper}.
+	\item Develop AADL/BLESS to SPARK Ada mapping.
+	\item Translate PCA pump AADL/BLESS models to SPARK Ada (based on created mapping and implementation).
+	\item Propose requirements and design for AADL/BLESS to SPARK Ada translator.
 	\item Use SPARK tool set for software verification:
 		\begin{itemize}
 			\item SPARK Examiner
@@ -54,20 +54,20 @@ The initial goals, which most of them is accomplished are as follows:
 \label{introduction:contribution}
 This thesis demonstrates mapping of AADL/BLESS models to code in SPARK Ada. Additionally it presents current possibilities and limitations of SPARK Ada language, Ravenscar profile and SPARK verification tools. The main contributions of this thesis are as follows:
 \begin{itemize}
-	\item Review of PCA pump requirements document \cite{OpenSourcePCAPump:Paper}
-	\item Cross-compilation and testing of SPARK Ada 2005 and 2014 programs on BeagleBoard-xM platform
-	\item Implementation of PCA pump based on Requirements document \cite{OpenSourcePCAPump:Paper} and AADL/BLESS models
-	\item Analysis of different PCA pump implementation possibilities
-	\item AADL/BLESS to SPARK Ada translation schemes
-	\item Practical demonstration of SPARK 2005 and SPARK 2014 verification tools: its capabilities and limitations
+	\item Review of "Integrated Clinical Environment Patient-Controlled Analgesia Infusion Pump System Requirements" \cite{PcaReq}.
+	\item Cross-compilation and testing of SPARK Ada 2005 and 2014 programs on BeagleBoard-xM platform.
+	\item Implementation of PCA pump based on Requirements Document \cite{PcaReq} and AADL/BLESS models.
+	\item Analysis of different PCA pump implementation possibilities.
+	\item AADL/BLESS to SPARK Ada translation schemes.
+	\item Practical demonstration of SPARK 2005 and SPARK 2014 verification tools: its capabilities and limitations.
 \end{itemize}
 
 
 \section{Organization}
 \label{introduction:organization}
-The thesis is organized in \ref{future_work} [fix this: how to count all chapters?] chapters:
+This thesis is organized in \ref{future_work} [fix this: how to count all chapters?] chapters:
 \begin{itemize}
-	\item Chapter \ref{introduction} is the problem description and summary of contribution which has been made. 
+	%\item Chapter \ref{introduction} is the problem description and summary of contribution which has been made.
 	\item Chapter \ref{background} is Background that gives details about ICE, MDCF, Model-Driven Development, AADL, BLESS, SPARK Ada and available tools for such environment. 
 	\item Chapter \ref{pcapump} describes Patient-Controlled Analgesia (PCA) pump.
 	\item Chapter \ref{codegen} presents mappings from AADL/BLESS to SPARK Ada. 

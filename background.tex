@@ -16,7 +16,7 @@ This chapter is a brief introduction of all technologies and tools used in this 
 
 Idea of "Integrated Clinical Environment" (ICE) was initiated by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create environment of medical devices network. It will allow clinician and software system to make decisions based not only on output from one device, but from different devices working together in network. ICE purpose is to solve current issues with medical devices, which usually operate independently. It requires more human attention and control through checking output of every device manually and then making decision. ICE will make it easier, e.g. by introducing alarms, which can not only indicate problem but also interact with other devices and make decision automatically. E.g. when PCA pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA pump shutdown.
 
-Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. Figure \ref{figure:ice} presents high overview of ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system. All of them are monitored and controlled. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Informations in EMR comprises drug library, patient's medical records, monitoring logs etc. ICE can make decisions (such as PCA Pump shutdown) based on that informations.
+Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. Figure \ref{figure:ice} presents high overview of ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system. All of them are monitored and controlled. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Data in EMR comprises drug library, patient's medical records, monitoring logs etc. ICE can make decisions (such as PCA Pump shutdown) based on them.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -33,7 +33,7 @@ Moreover, ICE comprises components that may be implemented by different vendors.
 
 Medical Device Coordination Framework (MDCF), jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. This project is a response to request from Food and Drug Administration (FDA), to build a prototype of ICE. Medical Devices, which are ICE compliant can be connected to MDCF. The framework enables Medical Devices interoperability. MDCF is designed to illustrate by example the issues related to functional concepts, safety, security, verification and certification. 
 
-The goals of MDCF project comprises:
+The following comprise the goals of the MDCF project:
 \begin{itemize}
 	\item Open source infrastructure
 	\item Meet performance requirements of realistic clinical scenarios

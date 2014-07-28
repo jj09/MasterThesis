@@ -787,6 +787,7 @@ Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitori
 
 Both test cases are presented in listing \ref{listing:pca_pump_move_dosed_unit_tests}. All Aunit tests can be found in appendix \ref{Appendix:pcapump:dose_monitor_module:aunit}.
 
+\singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0, caption={AUnit tests for Move\_Dosed procedure}, label={listing:pca_pump_move_dosed_unit_tests}]
 procedure Test_Move_Dosed_First_Element_Zero (Gnattest_T : in out Test) is
   pragma Unreferenced (Gnattest_T);
@@ -828,18 +829,295 @@ begin
      "Total dose changed: " &  Pca_Pump.Drug_Volume'Image(Pre_Sum) & " should be greater than " &  Pca_Pump.Drug_Volume'Image(Post_Sum));
 end Test_Move_Dosed_First_Element_Not_Zero;
 \end{lstlisting}
+\doublespacing
 
 
-\section{gnatPROVE}
+\section{GNATprove}
 \label{verification:gnatprove}
 
-The sequential module for monitoring dosed amount verification presented in section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in listing .... 
+The sequential module for monitoring dosed amount verification presented in section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in listing \ref{listing:pca_pump_move_dosed_unit_spark2014}.
 
-In SPARK 2014, the \lstinline{Standard.ads} file with type ranges is not necessary, because it is handled by language. SPARK 2014 introduces notion of ghost functions. They are used to declare functions that are needed only in annotations. Proof function \lstinline{Sum} is defined as ghost function. In order to use private, global variables in package specification, abstract refinement and ghost functions \lstinline{Dosed_State} and \lstinline{Dose_Volume_State} have been used. 
+\singlespacing
+\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sequential module for dose monitoring in SPARK 2014}, label={listing:pca_pump_move_dosed_unit_spark2014}]
+package Pca_Pump
+with SPARK_Mode,
+  Abstract_State => (Dosed_State, Dose_Volume_State),
+  Initializes    => (Dosed_State, Dose_Volume_State)
+is
+   type Drug_Volume is range 0 .. 2**15-1;
 
-%listing-initial code
+   subtype Doses_Array_Index is Integer range 1 .. 60;
+   type Doses_Array is array (Doses_Array_Index) of Drug_Volume;
 
-Code presented in listing ... passes flow analysis. 
+   function Dosed_State return Doses_Array
+     with Convention => Ghost,
+     Global => (Input => Dosed_State);
 
+   function Dose_Volume_State return Drug_Volume
+     with Convention => Ghost,
+     Global => (Input => Dose_Volume_State);
 
+   function Sum(Arr : Doses_Array) return Drug_Volume
+     with Convention => Ghost;
 
+   function Read_Dosed return Drug_Volume
+     with Global  => (Input => (Dosed_State)),
+     Pre     => Sum(Dosed_State) <= Drug_Volume'Last;
+
+   procedure Increase_Dosed
+     with Global  => (Input  => Dose_Volume_State, In_Out => Dosed_State),
+     Depends => (Dosed_State => (Dosed_State, Dose_Volume_State)),
+     Pre     => Read_Dosed <= Drug_Volume'Last - Dose_Volume_State;
+
+   pragma Unevaluated_Use_Of_Old (Allow);
+
+   procedure Move_Dosed
+     with Global  => (In_Out => Dosed_State),
+     Depends => (Dosed_State => Dosed_State),
+     Post => (Dosed_State (Doses_Array_Index'Last) = 0),
+     Contract_Cases => (Dosed_State(Doses_Array_Index'First) = 0 => Read_Dosed'Old = Read_Dosed,
+                        Dosed_State(Doses_Array_Index'First) > 0 => Read_Dosed'Old > Read_Dosed);
+     --Post    => (Dosed_State (Doses_Array_Index'Last) = 0) and (if Dosed_State'Old(Doses_Array_Index'First) = 0 then Read_Dosed'Old = Read_Dosed) and (if Dosed_State'Old(Doses_Array_Index'First) > 0 then Read_Dosed'Old > Read_Dosed);
+
+end Pca_Pump;
+
+package body Pca_Pump
+with SPARK_Mode,
+  Refined_State => (Dosed_State => Dosed, Dose_Volume_State => Dose_Volume)
+is
+   Dosed : Doses_Array := Doses_Array'(others => 0);
+   Dose_Volume : Drug_Volume := 1;
+
+   function Dosed_State return Doses_Array
+     with Refined_Global => (Input => Dosed)
+   is
+   begin
+      return Dosed;
+   end Dosed_State;
+
+   function Dose_Volume_State return Drug_Volume
+     with Refined_Global => (Input => Dose_Volume)
+   is
+   begin
+      return Dose_Volume;
+   end Dose_Volume_State;
+
+   function Sum(Arr : Doses_Array) return Drug_Volume
+   is
+      Result : Drug_Volume := 0;
+   begin
+      for I in Doses_Array_Index loop
+         pragma Loop_Invariant (true);
+         Result := Result + Arr(I);
+      end loop;
+      return Result;
+   end Sum;
+
+   procedure Increase_Dosed
+     with Refined_Global => (Input => Dose_Volume, In_Out => Dosed),
+     Refined_Depends => (Dosed => (Dosed, Dose_Volume))
+   is
+   begin
+      Dosed(Doses_Array_Index'Last) := Dosed(Doses_Array_Index'Last) + Dose_Volume;
+   end Increase_Dosed;
+
+   function Read_Dosed return Drug_Volume
+     with Refined_Global => (Input => (Dosed))
+   is
+      Result : Drug_Volume := 0;
+   begin
+      for I in Doses_Array_Index loop
+         pragma Loop_Invariant (if I > 1 then Result >= Dosed (I-1));
+         Result := Result + Dosed(I);
+      end loop;
+      return Result;
+   end Read_Dosed;
+
+   procedure Move_Dosed
+     with Refined_Global => (In_Out => (Dosed)), --, Proof_In => Dose_Volume),
+     Refined_Depends => (Dosed => Dosed)
+   is
+   begin
+      for I in Doses_Array_Index range 1 .. Doses_Array_Index'Last-1 loop
+         pragma Loop_Invariant (if I > 1 then Dosed (I-1) = Dosed (I));
+         Dosed(I) := Dosed(I+1);
+      end loop;
+      Dosed(Doses_Array_Index'Last) := 0;
+   end Move_Dosed;
+
+end Pca_Pump;
+\end{lstlisting}
+\doublespacing
+
+In SPARK 2014, the \lstinline{Standard.ads} file with type ranges is not necessary, because it is handled by language. SPARK 2014 introduces notion of ghost functions. They are used to declare functions that are needed only in annotations. Proof function \lstinline{Sum} is defined as ghost function. In order to use private, global variables in package specification, abstract refinement and ghost functions (\lstinline{Dosed_State} and \lstinline{Dose_Volume_State}) have been used. The \lstinline{Pragma Unevaluated_Use_Of_Old} is used in order to avoid error: \lstinline{prefix of attribute "Old" that is potentially unevaluated must denote an entity}.
+
+Above code has been verified with GNATprove tool. Data and information flow analysis did not return any warnings nor errors. Proof analysis was performed with the following parameters:
+\begin{itemize}
+    \item Proof strategy: One proof per path
+    \item Prover timeout: 60
+    \item Do not treat warnings as errors: \lstinline{--warnings=continue} flag
+    \item Report checks proved
+\end{itemize}
+
+All above parameters gives following command: \lstinline{gnatprove -P\%PP --ide-progress-bar -U --proof=per_path --timeout=60 --warnings=continue --report=all} (where \lstinline{\%PP} is path of verified project file \lstinline{.gpr}).
+
+Proof analysis can be run from GPS (menu: SPARK 2014 / Prove All). There is GUI for options customization (see Figure \ref{figure:gnatprove-settings}).
+
+\begin{figure}[ht]%t=top, b=bottom, h=here
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{figures/gnatprove-settings.png}        
+    \end{center}
+    \caption{GNATprove settings}
+    \label{figure:gnatprove-settings}
+\end{figure}
+
+Summary of proof analysis is presented in listing \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove}. Proof analysis returned three warnings: \lstinline{overflow check might fail} and one warning: \lstinline{contract case might fail}. It indicates the same problem like in verification with SPARK 2005 tools: overflow hazard. Additionally, there is a warning (\lstinline{postcondition might fail}) caused by tools limitations. If state refinement is not used (i.e. refined variables are defined in package specification), this warning does not occur. The same program without abstract state is presented in listing \ref{listing:pca_pump_move_dosed_unit_spark2014_no_refinement}. Its verification summary is shown in listing \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove_no_refinement}. 
+
+%http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#abstract-state-refined-state-and-initializes
+
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={GNATprove verification summary of module for dose monitoring in SPARK 2014}, label={listing:pca_pump_move_dosed_unit_spark2014_gnatprove}]
+analyzing Pca_Pump, 1 checks
+analyzing Pca_Pump.Dosed_State, 0 checks
+analyzing Pca_Pump.Dose_Volume_State, 0 checks
+analyzing Pca_Pump.Sum, 3 checks
+analyzing Pca_Pump.Read_Dosed, 4 checks
+analyzing Pca_Pump.Increase_Dosed, 3 checks
+analyzing Pca_Pump.Move_Dosed, 12 checks
+pca_pump.adb:5:39: info: length check proved
+pca_pump.adb:27:10: info: loop invariant initialization proved
+pca_pump.adb:27:10: info: loop invariant preservation proved
+pca_pump.adb:28:27: warning: overflow check might fail
+pca_pump.adb:38:70: warning: overflow check might fail
+pca_pump.adb:47:10: info: loop invariant initialization proved
+pca_pump.adb:47:10: info: loop invariant preservation proved
+pca_pump.adb:47:65: info: index check proved
+pca_pump.adb:48:27: warning: overflow check might fail
+pca_pump.adb:59:10: info: loop invariant initialization proved
+pca_pump.adb:59:10: info: loop invariant preservation proved
+pca_pump.adb:59:55: info: index check proved
+pca_pump.ads:29:17: info: precondition proved
+pca_pump.ads:29:48: info: overflow check proved
+pca_pump.ads:36:14: warning: postcondition might fail, requires Dosed_State (Doses_Array_Index'Last) = 0
+pca_pump.ads:37:6: info: disjoint contract cases proved
+pca_pump.ads:37:6: info: complete contract cases proved
+pca_pump.ads:37:66: warning: contract case might fail
+pca_pump.ads:37:69: info: precondition proved
+pca_pump.ads:37:86: info: precondition proved
+pca_pump.ads:38:66: warning: contract case might fail
+pca_pump.ads:38:69: info: precondition proved
+pca_pump.ads:38:86: info: precondition proved
+\end{lstlisting}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[language=ada2012, frame=single, gobble=0, caption={Sequential module for dose monitoring in SPARK 2014 without variable refinement}, label={listing:pca_pump_move_dosed_unit_spark2014_no_refinement}]
+package Pca_Pump_No_Refinement
+  with SPARK_Mode
+is
+   type Drug_Volume is range 0 .. 2**15-1;
+
+   subtype Doses_Array_Index is Integer range 1 .. 60;
+   type Doses_Array is array (Doses_Array_Index) of Drug_Volume;
+
+   Dosed : Doses_Array := Doses_Array'(others => 0);
+   Dose_Volume : Drug_Volume := 1;
+
+   function Sum(Arr : Doses_Array) return Drug_Volume
+     with Convention => Ghost;
+
+   function Read_Dosed return Drug_Volume
+     with Global  => (Input => (Dosed)),
+     Pre     => Sum(Dosed) <= Drug_Volume'Last;
+
+   procedure Increase_Dosed
+     with Global  => (Input  => Dose_Volume, In_Out => Dosed),
+     Depends => (Dosed => (Dosed, Dose_Volume)),
+     Pre     => Read_Dosed <= Drug_Volume'Last - Dose_Volume;
+
+   pragma Unevaluated_Use_Of_Old (Allow);
+
+   procedure Move_Dosed
+     with Global  => (In_Out => Dosed),
+     Depends => (Dosed => Dosed),
+     Post => (Dosed(Doses_Array_Index'Last) = 0),
+     Contract_Cases => (Dosed(Doses_Array_Index'First) = 0 => Read_Dosed'Old = Read_Dosed,
+                        Dosed(Doses_Array_Index'First) > 0 => Read_Dosed'Old > Read_Dosed);
+end Pca_Pump_No_Refinement;
+
+package body Pca_Pump_No_Refinement
+  with SPARK_Mode
+is
+   function Sum(Arr : Doses_Array) return Drug_Volume
+   is
+      Result : Drug_Volume := 0;
+   begin
+      for I in Doses_Array_Index loop
+         pragma Loop_Invariant (true);
+         Result := Result + Arr(I);
+      end loop;
+      return Result;
+   end Sum;
+
+   procedure Increase_Dosed
+   is
+   begin
+      Dosed(Doses_Array_Index'Last) := Dosed(Doses_Array_Index'Last) + Dose_Volume;
+   end Increase_Dosed;
+
+   function Read_Dosed return Drug_Volume
+   is
+      Result : Drug_Volume := 0;
+   begin
+      for I in Doses_Array_Index loop
+         pragma Loop_Invariant (if I > 1 then Result >= Dosed (I-1));
+         Result := Result + Dosed(I);
+      end loop;
+      return Result;
+   end Read_Dosed;
+
+   procedure Move_Dosed
+   is
+   begin
+      for I in Doses_Array_Index range 1 .. Doses_Array_Index'Last-1 loop
+         pragma Loop_Invariant (if I > 1 then Dosed (I-1) = Dosed (I));
+         Dosed(I) := Dosed(I+1);
+      end loop;
+      Dosed(Doses_Array_Index'Last) := 0;
+   end Move_Dosed;
+end Pca_Pump_No_Refinement;
+\end{lstlisting}
+\doublespacing
+
+\singlespacing
+\begin{lstlisting}[frame=single, gobble=0, caption={GNATprove verification summary of module for dose monitoring in SPARK 2014 without variable refinement}, label={listing:pca_pump_move_dosed_unit_spark2014_gnatprove_no_refinement}]
+analyzing Pca_Pump_No_Refinement, 1 checks
+analyzing Pca_Pump_No_Refinement.Sum, 3 checks
+analyzing Pca_Pump_No_Refinement.Read_Dosed, 4 checks
+analyzing Pca_Pump_No_Refinement.Increase_Dosed, 3 checks
+analyzing Pca_Pump_No_Refinement.Move_Dosed, 12 checks
+pca_pump_no_refinement.adb:9:10: info: loop invariant initialization proved
+pca_pump_no_refinement.adb:9:10: info: loop invariant preservation proved
+pca_pump_no_refinement.adb:10:27: warning: overflow check might fail
+pca_pump_no_refinement.adb:18:70: warning: overflow check might fail
+pca_pump_no_refinement.adb:26:10: info: loop invariant initialization proved
+pca_pump_no_refinement.adb:26:10: info: loop invariant preservation proved
+pca_pump_no_refinement.adb:26:65: info: index check proved
+pca_pump_no_refinement.adb:27:27: warning: overflow check might fail
+pca_pump_no_refinement.adb:36:10: info: loop invariant initialization proved
+pca_pump_no_refinement.adb:36:10: info: loop invariant preservation proved
+pca_pump_no_refinement.adb:36:55: info: index check proved
+pca_pump_no_refinement.ads:9:39: info: length check proved
+pca_pump_no_refinement.ads:22:17: info: precondition proved
+pca_pump_no_refinement.ads:22:48: info: overflow check proved
+pca_pump_no_refinement.ads:29:14: info: postcondition proved
+pca_pump_no_refinement.ads:30:6: info: disjoint contract cases proved
+pca_pump_no_refinement.ads:30:6: info: complete contract cases proved
+pca_pump_no_refinement.ads:30:60: warning: contract case might fail
+pca_pump_no_refinement.ads:30:63: info: precondition proved
+pca_pump_no_refinement.ads:30:80: info: precondition proved
+pca_pump_no_refinement.ads:31:60: warning: contract case might fail
+pca_pump_no_refinement.ads:31:63: info: precondition proved
+pca_pump_no_refinement.ads:31:80: info: precondition proved
+\end{lstlisting}
+\doublespacing
