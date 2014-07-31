@@ -3,13 +3,13 @@
 \cleardoublepage
 
 
-\chapter{PCA pump prototype implementation and code generation}
+\chapter{PCA Pump Prototype Implementation and Code Generation}
 \label{pcapumpimpl}
 
 This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})) and code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}). All programs presented in this section works the same on Intel processor (PC or MacBook) and on BeagleBoard-xM (ARM device).
 
 
-\section{Running SPARK Ada programs on BeagleBoard-xM}
+\section{Running SPARK Ada Programs on BeagleBoard-xM}
 \label{pcapumpimpl:beagleboard}
 
 To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in listing \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
@@ -120,7 +120,7 @@ There are 4 subprograms (2 procedures and 2 functions), which are globally avail
 
 Given program contains code contracts. Tough it does not matter in compilation phase, it shows that SPARK verification tools can be used for given example. 
 
-Annotation \lstinline{global} means that subprogram uses some global variable. Postfix in, out or in out means that particular variable is read, write or read and write respectively. Annotation \lstinline{derives} says that some variable value depends on other variables. E.g. in procedure \lstinline{Inc} variable \lstinline{Trip} is dependent on its current value (before procedure call). Annotations \lstinline{pre} and \lstinline{post} define pre- and postconditions of procedure. We can see, that in \lstinline{Zero_Trip} procedure postcondition requires that variable \lstinline{Trip} is equal to 0. In procedure \lstinline{Inc}, postconditions requires that variables \lstinline{Trip} and \lstinline{Total} are incremented by 1 ('\lstinline{~}' is the value of variable before procedure call). Annotation \lstinline{own} expose private variables for use in public methods specification. Annotation \lstinline{initializes} ensures that given variables are initializes. 
+Annotation \lstinline{global} means that subprogram uses some global variable. Postfix in, out or in out means that particular variable is read, write or read and write respectively. Annotation \lstinline{derives} says that some variable value depends on other variables. E.g. in procedure \lstinline{Inc} variable \lstinline{Trip} is dependent on its current value (before procedure call). Annotations \lstinline{pre} and \lstinline{post} define pre- and postconditions of procedure. We can see, that in \lstinline{Zero_Trip} procedure postcondition requires that variable \lstinline{Trip} is equal to 0. In procedure \lstinline{Inc}, postconditions requires that variables \lstinline{Trip} and \lstinline{Total} are incremented by 1 ("\lstinline{~}" is the value of variable before procedure call). Annotation \lstinline{own} expose private variables for use in public methods specification. Annotation \lstinline{initializes} ensures that given variables are initializes. 
 
 In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} procedure has been created. It is presented in listing \ref{listing:main}.
 
@@ -246,12 +246,12 @@ Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014
 Odometer example was created to check possible limitations and issues related to different platform (ARM-based). No limitations were found.
 
 
-\subsection{Multitasking applications}
+\subsection{Multitasking Applications}
 \label{pcapumpimpl:beagleboard:multitasking}
 
 In Ada World, concurrency is referred as tasking and the task is the same construct as the thread in other programming languages. In section \ref{pcapumpimpl:beagleboard:odometer}, single-tasking application was tested. This section presents simple Ada multitasking application and multitasking version of Odometer in SPARK 2005 from section \ref{pcapumpimpl:beagleboard:odometer}. Both applications compiles correctly and works as expected on BeagleBoard-xM platform.
 
-\subsubsection{Ada multitasking application}
+\subsubsection{Ada Multitasking Application}
 
 Listing \ref{listing:HelloTasking} presents a simple multitasking application printing numbers in different time intervals, in Ada 2005. It is also valid code for Ada 2012. There are 3 tasks:
 \begin{itemize}
@@ -422,7 +422,7 @@ There are two ways to access protected variable in task body:
 Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then we get semantic error: \lstinline{Trip is a protected own variable}. To preserve pre- and postconditions from original Odometer, atomic types (\lstinline{Distance} and \lstinline{Meters_Per_Second}) has been used. The capability to specify pre- and postconditions has been preserved, but now application is not thread safe.
 
 
-\subsection{Controlling PCA pump actuator}
+\subsection{Controlling PCA Pump Actuator}
 \label{pcapumpimpl:beagleboard:pcapumpmotor}
 
 PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins. Three of them are PWM enable (pin 4 - mapped as \lstinline{GPIO_144}, pin 6 - \lstinline{GPIO_146} and pin 10 - \lstinline{GPIO_145}). All of these pins allow to control external device by specifying frequency and duty cycle. However it requires PWM driver\footnote{http://beagleboard.org/project/PWM+driver+for+Beagle+Board/}. PWM can be also simulated manually. To run the pump, pin has to be turned on and off with specified frequency. In order to do that, \lstinline{sleep} function can be used. 
@@ -601,7 +601,7 @@ Extended program from listing \ref{listing:pca_java}, with procedures to start a
 
 
 
-\section{Implementation based on Requirements Document and AADL models}
+\section{Implementation Based on Requirements Document and AADL Models}
 \label{pcapumpimpl:manual}
 
 In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, simple PCA pump prototype has been created. Implemented prototype is multitasking application (using Ravenscar profile) running on BeagleBoard-xM. The base for implementation was \lstinline{Pca_Operation} package. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}. Thus, pump has three tasks in total:
@@ -662,7 +662,7 @@ Code listing of implemented PCA pump along with mapped types is attached in appe
 
 
 
-\section{Code generation from AADL/BLESS models}
+\section{Code Translation from AADL/BLESS Models}
 \label{pcapumpimpl:codegen}
 
 The original AADL/BLESS models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. Simplified AADL/BLESS models can be found in appendix \ref{Appendix:AADL}. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_generated} contains translated PCA pump code. 

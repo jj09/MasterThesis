@@ -3,7 +3,7 @@
 \cleardoublepage
 
 
-\chapter{AADL/BLESS to SPARK Ada translation}
+\chapter{AADL/BLESS to SPARK Ada Translation}
 \label{codegen}
 
 This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{codegen:mapping}), proposed port communication (\ref{codegen:port_communication}) and discuss design of automatic translator, which can be created based on translation schemes (\ref{codegen:translator}). Related work in code generation from AADL, but to Java has been done in \cite{MAP:Paper}. 
@@ -22,113 +22,113 @@ Mapping of AADL models to SPARK Ada is driven by "Architecture analysis \& Desig
 %Only high level mapping is done. No implementation (thread interactions) like Ocarina does. 
 
 
-\subsection{Data types mapping}
+\subsection{Data Types Mapping}
 \label{codegen:mapping:data}
 
 One of core AADL packages is \lstinline{Base_Types}. It defines fundamental data types for AADL. Its definition is shown in listing \ref{listing:aadl_base_types}.
 
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={AADL Base\_Types package}, label={listing:aadl_base_types}]
-	package Base_Types
-	public
+package Base_Types
+public
 
-	  with Data_Model;
+  with Data_Model;
 
-	  data Boolean
-	  properties 
-	    Data_Model::Data_Representation => Boolean;
-	  end Boolean;
+  data Boolean
+  properties 
+    Data_Model::Data_Representation => Boolean;
+  end Boolean;
 
-	  data Integer
-	  properties
-	    Data_Model::Data_Representation => Integer;
-	  end Integer;
+  data Integer
+  properties
+    Data_Model::Data_Representation => Integer;
+  end Integer;
 
-	  -- Signed integer of various byte sizes
+  -- Signed integer of various byte sizes
 
-	  data Integer_8 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Signed;
-	    Source_Data_Size => 1 Bytes;
-	  end Integer_8;
+  data Integer_8 extends Integer
+  properties
+    Data_Model::Number_Representation => Signed;
+    Source_Data_Size => 1 Bytes;
+  end Integer_8;
 
-	  data Integer_16 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Signed;
-	    Source_Data_Size => 2 Bytes;
-	  end Integer_16;
+  data Integer_16 extends Integer
+  properties
+    Data_Model::Number_Representation => Signed;
+    Source_Data_Size => 2 Bytes;
+  end Integer_16;
 
-	  data Integer_32 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Signed;
-	    Source_Data_Size => 4 Bytes;
-	  end Integer_32;
+  data Integer_32 extends Integer
+  properties
+    Data_Model::Number_Representation => Signed;
+    Source_Data_Size => 4 Bytes;
+  end Integer_32;
 
-	  data Integer_64 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Signed;
-	    Source_Data_Size => 8 Bytes;
-	  end Integer_64;
+  data Integer_64 extends Integer
+  properties
+    Data_Model::Number_Representation => Signed;
+    Source_Data_Size => 8 Bytes;
+  end Integer_64;
 
-	  -- Unsigned integer of various byte sizes
+  -- Unsigned integer of various byte sizes
 
-	  data Unsigned_8 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Unsigned;
-	    Source_Data_Size => 1 Bytes;
-	  end Unsigned_8;
+  data Unsigned_8 extends Integer
+  properties
+    Data_Model::Number_Representation => Unsigned;
+    Source_Data_Size => 1 Bytes;
+  end Unsigned_8;
 
-	  data Unsigned_16 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Unsigned;
-	    Source_Data_Size => 2 Bytes;
-	  end Unsigned_16;
+  data Unsigned_16 extends Integer
+  properties
+    Data_Model::Number_Representation => Unsigned;
+    Source_Data_Size => 2 Bytes;
+  end Unsigned_16;
 
-	  data Unsigned_32 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Unsigned;
-	    Source_Data_Size => 4 Bytes;
-	  end Unsigned_32;
+  data Unsigned_32 extends Integer
+  properties
+    Data_Model::Number_Representation => Unsigned;
+    Source_Data_Size => 4 Bytes;
+  end Unsigned_32;
 
-	  data Unsigned_64 extends Integer
-	  properties
-	    Data_Model::Number_Representation => Unsigned;
-	    Source_Data_Size => 8 Bytes;
-	  end Unsigned_64;
+  data Unsigned_64 extends Integer
+  properties
+    Data_Model::Number_Representation => Unsigned;
+    Source_Data_Size => 8 Bytes;
+  end Unsigned_64;
 
-	  data Natural extends Integer
-	  properties 
-	    Data_Model::Integer_Range => 0 .. Max_Target_Integer;
-	  end Natural;
+  data Natural extends Integer
+  properties 
+    Data_Model::Integer_Range => 0 .. Max_Target_Integer;
+  end Natural;
 
-	  data Float 
-	  properties
-	    Data_Model::Data_Representation => Float;
-	  end Float;
+  data Float 
+  properties
+    Data_Model::Data_Representation => Float;
+  end Float;
 
-	  data Float_32 extends Float 
-	  properties 
-	    Data_Model::IEEE754_Precision => Simple; 
-	    Source_Data_Size => 4 Bytes; 
-	  end Float_32; 
+  data Float_32 extends Float 
+  properties 
+    Data_Model::IEEE754_Precision => Simple; 
+    Source_Data_Size => 4 Bytes; 
+  end Float_32; 
 
-	  data Float_64 extends Float 
-	  properties 
-	    Data_Model::IEEE754_Precision => Double; 
-	    Source_Data_Size => 8 Bytes; 
-	  end Float_64;
+  data Float_64 extends Float 
+  properties 
+    Data_Model::IEEE754_Precision => Double; 
+    Source_Data_Size => 8 Bytes; 
+  end Float_64;
 
-	  data Character
-	  properties
-	    Data_Model::Data_Representation => Character;
-	  end Character;
+  data Character
+  properties
+    Data_Model::Data_Representation => Character;
+  end Character;
 
-	  data String
-	  properties
-	    Data_Model::Data_Representation => String;
-	  end String;
+  data String
+  properties
+    Data_Model::Data_Representation => String;
+  end String;
 
-	end Base_Types;
+end Base_Types;
 \end{lstlisting} 
 \doublespacing
 
@@ -136,25 +136,25 @@ In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which
 
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0, caption={Mapping of Base\_Types for SPARK 2014}, label={listing:aadl2spark2014_base_types_mapping}]
-	with Interfaces;
+with Interfaces;
 
-	package Base_Types is
-		type AADL_Boolean is new Standard.Boolean;
-		type AADL_Integer is new Standard.Integer;
-	 	type Integer_8 is new Interfaces.Integer_8;
-	 	type Integer_16 is new Interfaces.Integer_16;
-		type Integer_32 is new Interfaces.Integer_32;
-		type Integer_64 is new Interfaces.Integer_64;
-		type Unsigned_8 is new Interfaces.Unsigned_8;
-		type Unsigned_16 is new Interfaces.Unsigned_16;
-		type Unsigned_32 is new Interfaces.Unsigned_32;
-		type Unsigned_64 is new Interfaces.Unsigned_64;
-		type AADL_Natural is new Standard.Integer; -- XXX incomplete range? 
-		type AADL_Float is new Standard.Float;
-		type Float_32 is new Interfaces.IEEE_Float_32;
-		type Float_64 is new Interfaces.IEEE_Float_64;
-	  	type AADL_Character is new Standard.Character;
-	end Base_Types;
+package Base_Types is
+	type AADL_Boolean is new Standard.Boolean;
+	type AADL_Integer is new Standard.Integer;
+ 	type Integer_8 is new Interfaces.Integer_8;
+ 	type Integer_16 is new Interfaces.Integer_16;
+	type Integer_32 is new Interfaces.Integer_32;
+	type Integer_64 is new Interfaces.Integer_64;
+	type Unsigned_8 is new Interfaces.Unsigned_8;
+	type Unsigned_16 is new Interfaces.Unsigned_16;
+	type Unsigned_32 is new Interfaces.Unsigned_32;
+	type Unsigned_64 is new Interfaces.Unsigned_64;
+	type AADL_Natural is new Standard.Integer; -- XXX incomplete range? 
+	type AADL_Float is new Standard.Float;
+	type Float_32 is new Interfaces.IEEE_Float_32;
+	type Float_64 is new Interfaces.IEEE_Float_64;
+  	type AADL_Character is new Standard.Character;
+end Base_Types;
 \end{lstlisting} 
 \doublespacing
 
@@ -631,7 +631,7 @@ AADL v2 allows to create struct data types, using \lstinline{Data_Model::Data_Re
 Data types translations are created based on Brian Larson's AADL/BLESS models of PCA Pump. They are syntacticly verified with SPARK Examiner. During development of types mapping, SPARK Examiner was helpful also for detecting inconsistencies in AADL models. Eg. it detected redundancy in enumerators. Both \lstinline{Alarm_Type} and \lstinline{Warning_Type} contained \lstinline{No_Alarm} enumerator, which was a bug. All enumerators, for all types have to be unique. Thus \lstinline{Warning_Type} should have \lstinline{No_Warning} enumerator instead.
 
 
-\subsection{AADL ports mapping}
+\subsection{AADL Ports Mapping}
 \label{codegen:mapping:ports}
 
 Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on AADL runtime services from Annex 2 to "Programming Language Annex Document" \cite{AnnexDoc}. Additionally, the mapping contains SPARK 2005 contracts. Data types used by ports has to be defined earlier, to be visible. Moreover, for port communication, protected types are used, to enable concurrency.
@@ -805,7 +805,7 @@ Proposed ports mapping shown in table \ref{table:aadl2spark_ports} is based on A
 \doublespacing
 
 
-\subsection{Thread to task mapping}
+\subsection{Thread to Task Mapping}
 \label{codegen:mapping:threads}
 
 AADL Threads are mapped into SPARK Ada tasks according to table \ref{table:threads2tasks}. Communication between threads is described in section \ref{codegen:port_communication:thread}.
@@ -863,7 +863,7 @@ AADL Threads are mapped into SPARK Ada tasks according to table \ref{table:threa
 \doublespacing
 
 
-\subsection{Subprograms mapping}
+\subsection{Subprograms Mapping}
 \label{codegen:mapping:subprograms}
 
 Mappings of subprograms is also straightforward. However, it is different than mapping proposed in "AADL Code Generation Annex" \cite{AnnexDoc}. It does not use \lstinline{renames} clause, but mapping directly to subprogram specification and body. For now, body is empty, because behavior (implementation) is not captured. Subprogram mapping should be revised and consulted with AADL committee members, in order to understand their design decisions.
@@ -902,7 +902,7 @@ Mappings of subprograms is also straightforward. However, it is different than m
 \doublespacing
 
 
-\subsection{Feature groups mapping}
+\subsection{Feature Groups Mapping}
 \label{codegen:mapping:feature_groups}
 
 In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in listing \ref{lst:nested_packages}. Equivalent child packages are shown in listing \ref{lst:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) '.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in listings \ref{lst:nested_packages} and \ref{lst:child_packages}). However, there is a difference between nested packages and child packages. In nested package, declarations become visible as they are introduced, in textual order. For example, in listing \ref{lst:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
@@ -958,7 +958,7 @@ In SPARK Ada there are nested packages and child packages. Sample nested package
 There was an idea to create child package to encapsulate one feature group in it. However, SPARK Ada does not allow to access child packages private part from parent. Thus, it will require to expose feature group internal variable as public. It is definitely not good solution. Thus, feature group is translated with prefix \lstinline{Feature_Group_Name_*}. Feature group mapping is presented in section \ref{codegen:mapping:packages}, in listings \ref{lst:aadl_sample} and \ref{lst:package_mapping}.
 
 
-\subsection{AADL package to SPARK Ada package mapping}
+\subsection{AADL Package to SPARK Ada Package Mapping}
 \label{codegen:mapping:packages}
 
 On listing \ref{lst:aadl_sample}, there is sample AADL package with system. It contains all types of ports described in section \ref{codegen:mapping:ports} and one feature group with two ports as example of feature group mapping.
@@ -1098,7 +1098,7 @@ For now, only single process SPARK Ada application is considered. Thus, ports ar
 
 
 
-\subsection{AADL property set to SPARK Ada package mapping}
+\subsection{AADL Property Set to SPARK Ada Package Mapping}
 \label{codegen:mapping:propertyset}
 
 There is no equivalent construct for AADL property set in SPARK Ada. Thus property set is mapped to SPARK Ada package. In this thesis, only properties of type \lstinline{constant aadlinteger} are considered. There are issues with using non-constant types in SPARK Ada package (e.g. when using them in some type definition). Table \ref{table:propertyset_mapping} shows sample property set mapping to SPARK Ada package.
@@ -1138,7 +1138,7 @@ There is no equivalent construct for AADL property set in SPARK Ada. Thus proper
 In AADL, all declarations must have an \lstinline{applies to} clause. It is ignored in resulted SPARK Ada translation. However, it can be used in the future e.g. for automatic generation of \lstinline{with} clauses.
 
 
-\subsection{BLESS mapping}
+\subsection{BLESS Mapping}
 \label{codegen:mapping:bless}
 
 In cooperation with Brian Larson, translations for BLESS assertions, invariant, pre- and postconditions were created. Table \ref{table:bless2spark} presents their mapping to SPARK Ada. Generated (translated) code may not be complete. Then developer's effort to implement missing parts will be required. E.g. when assertion is specified in AADL/BLESS model, but not defined, it has to be implemented.
@@ -1179,7 +1179,7 @@ In cooperation with Brian Larson, translations for BLESS assertions, invariant, 
 			thread Some_Thread
 			features
 				Some_Port : out event port
-				{BLESS:Assertion => "<<(Var1 < Var2 and COND2())>>";};
+				{BLESS::Assertion => "<<(Var1 < Var2 and COND2())>>";};
 			end Some_Thread;
 		\end{lstlisting} 
 		& 
@@ -1270,13 +1270,13 @@ In cooperation with Brian Larson, translations for BLESS assertions, invariant, 
 \doublespacing
 
 
-\section{Port-based communication}
+\section{Port-based Communication}
 \label{codegen:port_communication}
 
 Communication between AADL components is realized by ports. AADL ports can be declared in subprograms, threads, processes, systems and other entities. In this section communication between threads in single-process SPARK Ada application (\ref{codegen:port_communication:thread}) and concept of communication between two systems (\ref{codegen:port_communication:system}) are presented. 
 
 
-\subsection{Threads communication}
+\subsection{Threads Communication}
 \label{codegen:port_communication:thread}
 
 Example of communication between threads, in single process is depicted in the figure \ref{figure:port_communication_thread}. There are two threads (\lstinline{some_thread} and \lstinline{other_thread}) in one process. AADL model and its translation to SPARK Ada is presented in the table \ref{table:port_communication_thread}. Connection between threads has to be specified in process implementation. Based on mappings from section \ref{codegen:mapping}, protected object is defined, but subprograms are skipped, because communication takes place only internally. The result of translation consists of two tasks and private global protected object, which enable communication between them. Additionally, both tasks has global annotation (one with \lstinline{out} mode, other with \lstinline{in} mode), which announce use of protected object in their bodies.
@@ -1716,7 +1716,7 @@ This model, translated to SPARK Ada is presented in listing \ref{listing:port_co
 \doublespacing
 
 
-\subsection{Systems communication}
+\subsection{Systems Communication}
 \label{codegen:port_communication:system}
 
 This section is a concept, how communication between different systems can look like. AADL system consists of process(es) and process consists of threads. Ports would be exposed by package if they are specified in system entity. Communication between two systems cab be described by another system. Figure \ref{figure:port_communication} presents communication between two systems: panel and pump. AADL model of this system comprises 3 packages: \lstinline{Main}, \lstinline{Panel} and \lstinline{Pump}. They are presented in listing \ref{listing:port_communication}. \lstinline{Panel} package has one thread \lstinline{Panel_Thread} with two \lstinline{out} ports: \lstinline{event port} and \lstinline{event data port}. Both ports are exposed by process \lstinline{panel_process} and then by system \lstinline{panel}. \lstinline{Pump} package has similar structure, but two \lstinline{in} ports. Both are also exposed by process (\lstinline{pump_process}) and system (\lstinline{pump}). Connection between these two packages are defined in \lstinline{Main} package.
@@ -1940,7 +1940,7 @@ Based on mappings from section \ref{codegen:mapping}, conforming SPARK Ada code 
 \doublespacing
 
 
-\section{Automatic translator}
+\section{Towards an Automatic Translator}
 \label{codegen:translator}
 
 The ultimate goal is to create translator, which performs translations described in \ref{codegen:mapping} and \ref{codegen:port_communication} automatically. Automatic translator should enable translation of entire model and parts of the model. Initially, translator should support only subset of AADL entities: the system, process, thread, subprogram and port communication. The following functions should be supported:

@@ -17,7 +17,7 @@ The strategy for Software Verification using SPARK tools is as follows. First, E
     \label{figure:sparkverificationstrategy}
 \end{figure}
 
-\section{Verification of implemented prototype}
+\section{Verification of Implemented Prototype}
 \label{verification:prototype}
 
 During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of POGS report summary, is presented in listing \ref{listing:pca_ravenscar:pogs}. Full report can be found in appendix \ref{Appendix:pca_ravenscar:pogs}.
@@ -100,7 +100,7 @@ Totals:               302         90        183         29 <<<
 
 
 
-\section{Monitoring dosed amount}
+\section{Monitoring Dosed Amount}
 \label{verification:pcapump:monitoring}
 
 This section is case study of verification of module responsible for tracking dosed amount of drug. The module was created with sequential profile, based on implemented PCA prototype presented in appendix \ref{Appendix:pca_ravenscar}. Isolated module is presented in listing \ref{listing:pcapump_dosemonitor}.
@@ -741,7 +741,7 @@ Unfortunately, introduced changes (pre- and postconditions) cannot be applied to
 
 
 
-\section{Verification of generated code}
+\section{Verification of Generated Code}
 \label{verification:generated}
 
 Code translated from AADL models is presented in appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. It means, that discriminants or task annotation are expected here. In order to pass Examiner syntax check at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used. Complete task declaration is presented in listing \ref{listing:verification:pca_generated:patient_bolus_checker}.
@@ -776,7 +776,7 @@ pca_operation.adb:101:9: Flow Error  35 - Importation of the initial value of va
 This is nice indication what has to be implemented in particular parts of the program. It is recommended to not use VC and DPC generation until there are some syntax errors. When all errors are fixed, program can be initially verified as described in previous sections.
 
 
-\section{AUnit tests}
+\section{AUnit Tests}
 \label{verification:aunit}
 
 Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module, presented in section \ref{verification:pcapump:monitoring}, is to create AUnit tests. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
@@ -877,8 +877,7 @@ is
      Post => (Dosed_State (Doses_Array_Index'Last) = 0),
      Contract_Cases => (Dosed_State(Doses_Array_Index'First) = 0 => Read_Dosed'Old = Read_Dosed,
                         Dosed_State(Doses_Array_Index'First) > 0 => Read_Dosed'Old > Read_Dosed);
-     --Post    => (Dosed_State (Doses_Array_Index'Last) = 0) and (if Dosed_State'Old(Doses_Array_Index'First) = 0 then Read_Dosed'Old = Read_Dosed) and (if Dosed_State'Old(Doses_Array_Index'First) > 0 then Read_Dosed'Old > Read_Dosed);
-
+     
 end Pca_Pump;
 
 package body Pca_Pump

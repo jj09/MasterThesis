@@ -441,7 +441,7 @@ The most popular IDE for SPARK Ada is GNAT Programming Studio\footnote{http://li
 
 
 
-\subsection{GNAT compiler}
+\subsection{GNAT Compiler}
 \label{background:spark:gnat}
 
 GNAT compiler is Ada compiler created by AdaCore\footnote{http://www.adacore.com}. It is part of GNU Compiler Collection (GCC). The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Java, Ada, and Go. It is one of the most popular compiler systems. It is included in all Linux distributions. GCC is open source, published on GNU General Public License. GCC is divided into front end and back end. It allows to create new front end for some language and reuse existing back end.
@@ -468,7 +468,7 @@ The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and A
 
 Ravenscar profile is available in SPARK 2005, but not yet in SPARK 2014\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}. Default profile (sequential) does not enable tasking. In other words, SPARK tools cannot analyze and reason about concurrent programs if Ravenscar profile flag is not provided.
 
-To create a task, the task type has to be declared and task variable of this type has to be defined. Ravenscar does not allows dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. Listing \ref{lst:SampleTask} shows sample package with two tasks.
+To create a task, the task type has to be declared and task variable of this type has to be defined. Ravenscar does not allows dynamic task creation. Thus, all tasks have to exists for the full lifetime of the program. \cite{IssuesWithRavenscar:Paper} Tasks can be declared only in packages. Not in subprograms or in other tasks. \cite{Barnes:Book} The priority of each tasks has to be specified by \lstinline{pragma Priority}. The range of available priority values is specified in the \lstinline{System} package. The default range is 1 to 63. A lower value indicates lower priority. Listing \ref{lst:SampleTask} shows sample package with two tasks.
 
 \singlespacing
 \begin{lstlisting}[frame=single, gobble=0, caption={Sample tasks}, label={lst:SampleTask}]
@@ -946,7 +946,7 @@ Alir is an information flow analysis tool for reasoning about SPARK's derive cla
 % http://docs.adacore.com/spark2014-docs/html/ug/gnatprove.html
 % https://github.com/openETCS/model-evaluation/wiki/Gnatprove-description
 
-GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It is based on the GNAT compiler. GNATprove interprets SPARK Ada annotations exactly like they are interpreted at run time during tests. It can prove that subprograms respect their contracts, expressed as preconditions and postconditions in the syntax of Ada 2012. The tool automatically discovers the subset of subprograms which can be formally analyzed. GNATprove is currently available for x86 linux, x86 windows and x86-64 linux.
+GNATprove \footnote{http://www.open-do.org/projects/hi-lite/gnatprove/} is a formal verification tool for SPARK 2014 programs. It is based on the GNAT compiler. GNATprove interprets SPARK Ada annotations exactly like they are interpreted at run time during tests. It can prove that subprograms respect their contracts, expressed as preconditions and postconditions in the syntax of Ada 2012. The tool automatically discovers the subset of subprograms which can be formally analyzed. GNATprove is currently available for Linux x86, Windows x86 and Linux x86-64.
 
 GNATprove consists of two distinct analyses, flow analysis and proof. Flow analysis checks the correctness of aspects related to data flow (\lstinline{Global}, \lstinline{Depends}, \lstinline{Abstract_State}, \lstinline{Initializes}, and refinement versions of these), and verifies the initialization of variables. Proof verifies the absence of runtime errors and the correctness of assertions such as \lstinline{Pre} and \lstinline{Post} aspects. Using the switch \lstinline{--mode=<mode>}, whose possible values are \lstinline{flow}, \lstinline{prove} and \lstinline{all}, only one or both of these analyses can be performed (\lstinline{all} is the default). \cite{Spark2014userGuide:Online} GNATprove use Alt-Ergo prover for verification.
 

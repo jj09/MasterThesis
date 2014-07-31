@@ -509,6 +509,9 @@ is
     procedure Stop_Pumping;
 
     procedure Run_Pumping(Microliters : in Natural);
+    --# global in Ada.Real_Time.ClockTime;
+    --# derives null from Microliters, Ada.Real_Time.ClockTime;
+    --# pre Microliters > 0;
 
 end Pca_Engine;
 
