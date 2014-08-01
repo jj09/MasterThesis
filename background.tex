@@ -14,9 +14,9 @@ This chapter is a brief introduction of all technologies and tools used in this 
 \label{background:ice}
 %http://santos.cis.ksu.edu/MDCF/doc/ICE-Motivation.pdf
 
-Idea of "Integrated Clinical Environment" (ICE) was initiated by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create environment of medical devices network. It will allow clinician and software system to make decisions based not only on output from one device, but from different devices working together in network. ICE purpose is to solve current issues with medical devices, which usually operate independently. It requires more human attention and control through checking output of every device manually and then making decision. ICE will make it easier, e.g. by introducing alarms, which can not only indicate problem but also interact with other devices and make decision automatically. E.g. when PCA pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA pump shutdown.
+The concept of the "Integrated Clinical Environment" (ICE) was initiated and championed by Dr. Julian Goldman from Center for Integration of Medicine \& Innovative Technology. The main idea is to create a platform for integrating medical devices in a local area network. ICE will enable clinicians and software system to make decisions based not only on output from one device, but from different devices working together in network. Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. The purpose of ICE is to solve current issues with medical devices, which usually operate independently and requires more human attention and control through checking output of every device manually and then making decisions. ICE will make it easier, e.g. by introducing alarms, which can not only indicate problem but also interact with other devices and make decision automatically. For example when PCA pump infuse some drug to patient's vein and Pulse Oximeter detects low oxygen level, ICE can coordinate PCA pump shutdown. 
 
-Moreover, ICE comprises components that may be implemented by different vendors. Such components are medical devices and applications to supervise them. Figure \ref{figure:ice} presents high overview of ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system. All of them are monitored and controlled. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Data in EMR comprises drug library, patient's medical records, monitoring logs etc. ICE can make decisions (such as PCA Pump shutdown) based on them.
+Figure \ref{figure:ice} presents high-level overview of one particular application of an ICE system. Medical devices (PCA Pump, Respiratory Rate Monitor and Pulse Oximeter) are connected to the system, which monitors or controls them. There is communication between devices and ICE, in order to exchange data between them and Electronic Medical Record (EMR) Database. Data in EMR comprises drug library, patient's medical records, monitoring logs etc. ICE can make decisions (such as PCA Pump shutdown) based on them.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -970,7 +970,7 @@ Ocarina \cite{Ocarina:Paper} is a tool suite, which contains plug-ins for code g
 
 There is plug-in for OSATE (see section \ref{background:aadl:osate}), which enables code generation. Example AADL models, suitable for being an input of Ocarina are available on github repository: \lstinline{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2}.
 
-Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{Ocarina:About:Online}.
+Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{RAMSES:Paper}.
 
 
 
@@ -979,5 +979,5 @@ Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is devel
 % http://penelope.enst.fr/aadl/wiki/Projects
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
 
-RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) is a model transformation and code generation tool written in Java. Code generation module produces C code, but does not generate Ada. The approach for code generation is to simplify AADL models and generate code based on it. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
+RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) \cite{RAMSES:Paper} is a model transformation and code generation tool written in Java. Code generation module produces C code, but does not generate Ada. The approach for code generation is to simplify AADL models and generate code based on it. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
 
