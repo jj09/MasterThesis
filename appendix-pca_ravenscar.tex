@@ -1,4 +1,4 @@
-%!TEX root = JakubJedryszek-MasterThesis.tex
+%!TEX root = JakubJedryszek2014.tex
 
 \cleardoublepage
 
@@ -523,13 +523,8 @@ use Ada.Text_IO;
 package body Pca_Engine
 --# hide Pca_Engine
 is
-    -- BeagleBoard
     GPIO_Path : constant String := "/sys/class/gpio/";
     Status_File_Path : constant String := "/home/root/pump_status.txt";
-
-    -- Mac testing
-    --GPIO_Path : constant String := "/Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/files/";
-    --Status_File_Path : constant String := "/Users/jj/aadl-medical/pca-pump-beagleboard/pca_ravenscar/files/pump_status.txt";
 
     GPIO_Export_File_Path : constant String := GPIO_Path & "export";
     GPIO_Unexport_File_Path : constant String := GPIO_Path & "unexport";

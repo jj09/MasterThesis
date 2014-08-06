@@ -1,4 +1,4 @@
-%!TEX root = JakubJedryszek-MasterThesis.tex
+%!TEX root = JakubJedryszek2014.tex
 
 \cleardoublepage
 
@@ -17,7 +17,7 @@
   \label{figure:pca-pump}
 \end{wrapfigure}
 
-Patient Controlled Analgesia (PCA) pump is a medical device, which allows the patient to self-administer small doses of narcotics (usually Morphine, Dilaudid, Demerol, or Fentanyl). PCA pumps are commonly used after surgery to provide a more effective method of pain control than periodic injections of narcotics. A continuous infusion (called a basal rate) permits the patient to receive a continuous infusion of pain medication. There is no need for a clinician to administer it. Patient can also request additional boluses, but only in specified intervals. It prevents from over infusion. In addition to basal and patient bolus, clinician can also request bolus called clinician bolus or square bolus. 
+A Patient Controlled Analgesia (PCA) pump\footnote{http://ppahs.org/2012/05/30/patient-controlled-analgesia-pca-pumps-the-basics/} is a medical device that allows a patient to self-administer small doses of narcotics (usually Morphine, Dilaudid, Demerol, or Fentanyl). PCA pumps are commonly used after surgery to provide a more effective method of pain control than periodic injections of narcotics administered by a clinician. A continuous infusion mode of the pump (called a basal rate) permits the patient to receive a continuous infusion of pain medication. There is no need for a clinician to administer it. A patient can also request additional boluses, but only in specified intervals to avoid infusion. In addition to basal and patient bolus, clinician can also request a bolus called clinician bolus or square bolus. 
 
 Figure \ref{figure:pca-pump} shows LifeCare PCA pump. On the left hand side, there is drug reservoir. On the right -  clinician panel, which allows to control the pump. Figure \ref{figure:alaris-pump} shows PCA Pump, made by company Alaris. 
 
@@ -29,7 +29,7 @@ Figure \ref{figure:pca-pump} shows LifeCare PCA pump. On the left hand side, the
   \label{figure:alaris-pump}
 \end{wrapfigure}
 
-PCA Pump is safety-critical device which works in standard process control loop depicted in the Figure \ref{figure:control-loop}. The controller obtains information about (observes) the process state from measured variables (feedback) and uses this information to initiate action by manipulating controlled variables to keep the process operating within predefined limits or set points (the goal) despite disturbances to the process. Such as different air pressure or device position (gravity impact). In general, the maintenance of any open-system hierarchy (either biological or man-made) will require a set of processes in which there is communication of information for regulation or control \cite{SaferWorld}.
+A PCA pump is safety-critical device which works in standard process control loop depicted in the Figure \ref{figure:control-loop}. The controller obtains information about (observes) the process state from measured variables (feedback) and uses this information to initiate action by manipulating controlled variables to keep the process operating within predefined limits or set points (the goal) despite disturbances to the process, such as different air pressure or device position (gravity impact). In general, the maintenance of any open-system hierarchy (either biological or man-made) will require a set of processes in which there is communication of information for regulation or control \cite{SaferWorld}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -39,7 +39,7 @@ PCA Pump is safety-critical device which works in standard process control loop 
     \label{figure:control-loop}
 \end{figure}
 
-PCA Pump actuator is motor, which pump drug to the patient's vein. Controlled process is dosing the drug. Sensors measure amount of dosed drug. They might be used for double-check if ordered (by controller) amount of drug was appropriately delivered. Sometimes there might be some distrubances caused by mechanical issues and environmental conditions. Controller issues appropriate actions based on information from sensors and clinician or patient's commands. High level overview of PCA Pump is depicted in the Figure \ref{figure:pca-pump-system}.
+The PCA pump actuator is a motor that pumps a drug to the patient's vein. The controlled process is dosing the drug. Sensors measure amount of dosed drug. They might be used to double-check if ordered (by controller) that the amount of drug was appropriately delivered. Sometimes there might be some disturbances caused by mechanical issues and environmental conditions. The controller issues appropriate actions based on information from sensors and clinician or patient's commands. A high level overview of PCA Pump is depicted in the Figure \ref{figure:pca-pump-system}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -49,20 +49,20 @@ PCA Pump actuator is motor, which pump drug to the patient's vein. Controlled pr
     \label{figure:pca-pump-system}
 \end{figure}
 
-One of the hazards of using PCA pumps, is that there is inadequate monitoring of patient's levels of oxygen and carbon dioxide. Nursing staff on general medical units typically track respiration rate and other vital signs every four hours, which is not enough. There should be a way to monitor levels continuously. Additionally, it can be hard to tell if a person's breathing rate is dangerously low in certain circumstances. There are cases, where lack of monitoring carbon dioxide level caused death.\footnote{http://abcnews.go.com/Health/parents-warn-pca-pumps-daughters-death/story?id=16796805} 
+One of the problems of using PCA pumps, is that there is inadequate monitoring of patient's blood oxygenation. Nursing staff on general medical units typically track blood oxygenation ($SpO_2$), heart rate and other vital signs every four hours, which is not enough \cite{RespiratoryDepression:Article}. There should be a way to monitor levels continuously. Additionally, it can be hard to tell if a person's breathing rate is dangerously low in certain circumstances. There are cases where lack of monitoring carbon dioxide level caused death.\footnote{http://abcnews.go.com/Health/parents-warn-pca-pumps-daughters-death/story?id=16796805} 
 
-Another hazard is human mistake. For example, there is a case when nurse used a 5 mg/mL morphine cassette because a 1 mg/mL cassette was not available, but she programmed PCA Pump like for 1 mg/mL concentration. In addition to lack of monitoring of the pulse, patient died.\footnote{http://webmm.ahrq.gov/case.aspx?caseID=291}
+Another problem is not adequate resistance to human errors. For example, there is a case when nurse used a 5 mg/mL morphine cassette because a 1 mg/mL cassette was not available, but she programmed PCA Pump like for 1 mg/mL concentration. This caused over infusion that in addition to lack of pulse monitoring resulted in  patient's death.\footnote{http://webmm.ahrq.gov/case.aspx?caseID=291}
 
-As mentioned in chapter \ref{background}, the solution to that problem is medical devices interoperability. In addition, less human error-prone device is needed. It can be assured by using more than one system for their detection.
+As mentioned in chapter \ref{background}, one way to address these problems is through medical devices interoperability. An integrated system can receive input from monitoring devices and disable the pump. In addition, less human error-prone device is needed. It can be assured by using more than one system for their detection.
 
 
 
 \section{PCA Pump Requirements Document}
 \label{pcapump:requirements-doc}
 
-Requirements of "Open Source PCA Pump" \cite{OpenSourcePCAPump:Paper} are captured in "Open Patient-Controlled Analgesia Infusion Pump System Requirements" document \cite{PcaReq} created by Brian Larson. It is formalized set of capabilities, which Open PCA Pump should have, based on consultations with domain experts, FDA and Brian Larson's expertise gained while he was working in the medical device industry.
+Requirements of "Open Source PCA Pump" \cite{OpenSourcePCAPump:Paper}, on which the work in this thesis is based, are captured in "Open Patient-Controlled Analgesia Infusion Pump System Requirements" document \cite{PcaReq} created by Brian Larson. The requirements are a rigorously defined set of capabilities, which Open PCA Pump should have, based on consultations with domain experts, FDA, and Brian Larson's expertise gained while he was working in the medical device industry.
 
-Conceptual model of Open PCA pump is depicted in the Figure \ref{figure:ice-pca-pump}. As mentioned earlier, the pump is connected to ICE so it may be integrated with ICE apps and displays. The interface must provide prescription and patient information, current status to be displayed remotely on a supervisor user interface, and a means to stop infusing upon human command, or determination of an ICE app. Such an ICE app could monitor a patient's blood oxygenation and pulse rate, stopping the pump if depressed respiratory function is indicated \cite{PcaReq}.
+The conceptual model of Open PCA pump is depicted in the Figure \ref{figure:ice-pca-pump}. As mentioned earlier, the pump is connected to ICE so it may be integrated with ICE apps and displays. The interface must provide prescription and patient information, current status to be displayed remotely on a supervisor user interface, and a means to stop infusing upon human command, or request from ICE app (based on data from monitoring devices). Such an ICE app could monitor a patient's blood oxygenation and pulse rate, stopping the pump if depressed respiratory function is indicated \cite{PcaReq}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -72,7 +72,7 @@ Conceptual model of Open PCA pump is depicted in the Figure \ref{figure:ice-pca-
     \label{figure:ice-pca-pump}
 \end{figure}
 
-Additionally, it cooperates with Drug Library, which contains information about drugs and its properties (like concentration). Data needed for pump operation, are captured on electronic prescription, which contains:
+Additionally, it cooperates with Drug Library, which contains information about drugs and their properties (like concentration). Data needed for pump operation, are captured on electronic prescription, which contains:
 \begin{itemize}
     \item Patient's name
     \item Drug name
@@ -90,9 +90,9 @@ Additionally, it cooperates with Drug Library, which contains information about 
 
 Pain medication is prescribed by a licensed physician, which is dispensed by the hospital's pharmacy. The drug is placed into a vial labeled with the name of the drug, its concentration, the prescription, and the intended patient. A clinician loads the drug into the pump, and attaches it to the patient. The pump infuses a prescribed basal flow rate which may be augmented by a patient-requested bolus or a clinician-requested bolus. This allows additional pain medication in response to patient need within safe limits \cite{PcaReq}.
 
-Prescription captures all data needed for basal infusion and patient requested boluses (referred as bolus). In addition to that, Open PCA Pump allows Clinician Requested Bolus (refereed as square bolus). In order to do that, clinician has to enter the time (through PCA Pump panel) in which VTBI, specified in prescription, will be infused.
+The prescription captures all data needed for basal infusion and patient requested boluses (referred as bolus). In addition to that, Open PCA Pump allows Clinician Requested Bolus (refereed as square bolus). In order to do that, clinician has to enter the time (through PCA Pump panel) in which additional dose, equal to VTBI (Volume To Be Infused) specified in prescription, will be infused.
 
-There can occur situations in which the maximum drug amount infused may exceed the allowed limit. E.g. when clinician issues too many square boluses. In such case, pump is switched to Keep Vein Open (KVO) mode, which has 1 ml/hr drug rate. Pump switches to KVO rate also when ICE interface request it. It may happen e.g. if patient's oxygen level is low. To recover from KVO state, pump has to be restarted by clinician in order to continue operation. In Summary, Open PCA Pump has following modes:
+There can occur situations in which the maximum drug amount infused may exceed the allowed limit. E.g. when clinician issues too many square boluses. In such case, pump is switched to Keep Vein Open (KVO) mode, which has 1 ml/hr drug rate. KVO is standard mode used in infusion pumps to prevent the vein from closing. Pump switches to KVO rate also when ICE interface requests it. It may happen e.g. if patient's oxygen level is low. To recover from KVO state, pump has to be restarted by clinician in order to continue operation. In Summary, Open PCA Pump has following modes:
 \begin{itemize}
     \item Stopped
     \item Basal rate
@@ -105,11 +105,10 @@ There are also other scenarios, which are captured by Requirements Document \cit
 
 
 
-
 \section{PCA Pump AADL/BLESS Models}
 \label{pcapump:aadl-bless-models}
 
-In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson created AADL model with formal behavioral specifications written in his BLESS framework. AADL model, graphical representation is depicted in the Figure \ref{figure:pca-pump-aadl-model}. 
+In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson created an AADL model with formal behavioral specifications written in his BLESS framework. The graphical representation of the AADL model is depicted in the Figure \ref{figure:pca-pump-aadl-model}. 
 
 \begin{figure}%[h]%t=top, b=bottom, h=here
     \begin{center}
@@ -119,7 +118,7 @@ In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson create
     \label{figure:pca-pump-aadl-model}
 \end{figure}
 
-AADL model captures structure of device. BLESS - its behavior. In appendix \ref{Appendix:AADL:RateController}, thread \lstinline{Rate_Controller} from \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation, is presented. The thread declaration contains input and output ports. In addition to some of them, BLESS assertions are present. Assertions are defined in BLESS annex in thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered.
+The AADL model captures the internal architecture of the device, while BLESS specifications capture its behavior. In appendix \ref{Appendix:AADL:RateController}, thread \lstinline{Rate_Controller} from the \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation, is presented. The thread declaration contains input and output ports. Some of them have BLESS assertions attached. These assertions are defined using the BLESS annex in the thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into a working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered.
 
 
 \section{BeagleBoard-xM}
@@ -133,9 +132,9 @@ AADL model captures structure of device. BLESS - its behavior. In appendix \ref{
   \label{figure:beagleboard_xm}
 \end{wrapfigure}
 
-For Research and MDCF purposes, BeagleBoard-xM (an open-source hardware single-board computer produced by Texas Instruments), has been chosen as hardware platform for PCA pump prototyping.
+For research on the MDCF project, BeagleBoard-xM (an open-source hardware single-board computer produced by Texas Instruments), has been chosen as hardware platform for PCA pump prototyping.
 
-BeagleBoard-xM (presented in the Figure \ref{figure:beagleboard_xm}) is Embedded device with AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). Moreover there is PWM support, which enables control of pump actuator.
+BeagleBoard-xM (presented in the Figure \ref{figure:beagleboard_xm}) is an embedded device with an AM37x 1GHz ARM processor (Cortex-A8 compatible). It has 512 MB RAM, 4 USB 2.0 ports, HDMI port, 28 General-purpose input/output (GPIO) ports and Linux Operating System (on microSD card). Moreover, there is PWM support, which enables control of pump actuator.
 
 Pulse-width modulation (PWM) is a technique for controlling analog circuits with a processor's digital outputs. The average value of voltage (and current) fed to the electrical load is controlled by turning the switch between supply and load on and off at a fast pace. The longer the switch is on compared to the off periods, the higher the power supplied to the load. Proportion of on and off periods is called the duty cycle and is expressed in percent. 100\% means all the time on, 0\% - all the time off. Figure \ref{figure:pwm} shows 10\%, 30\%, 50\% and 90\% duty cycles.
 
@@ -147,6 +146,6 @@ Pulse-width modulation (PWM) is a technique for controlling analog circuits with
     \label{figure:pwm}
 \end{figure}
 
-There is no existing SPARK Ada compiler running on ARM system. Hence, to compile SPARK Ada program for ARM device, cross-compiler is needed. There is GNAT compiler \cite{Horn:Thesis} created by AdaCore, but there was no cross-compiler for ARM. However, AdaCore was actively developing cross-compiler. They had working version in 2013, but tested only on their target Android-based device. In cooperation with AdaCore, cross-compiler for ARM was bundled and tested on BeagleBoard-xM. For now, GNAT cross-compiler works only on Linux 32-bit operating system.
+There is no existing SPARK Ada compiler running on ARM system. Hence, to compile SPARK Ada program for ARM device, cross-compiler is needed. There is GNAT compiler \cite{Horn:Thesis} created by AdaCore, but there was no cross-compiler for ARM. However, AdaCore was actively developing cross-compiler. They had a working version in 2013, but tested only on their target Android-based device. Cooperation with AdaCore (during work on this thesis) involved bundling and testing a cross compiler for ARM to produce code for the BeagleBoard-xM resulted in working cross-compiler. For now, the GNAT cross-compiler works only on Linux 32-bit operating system.
 
-In addition to USB ports, BeagleBoard-xM has also serial port and Ethernet port. It allows to copy programs compiled on Linux, using all three types of ports. 
+In addition to USB ports, BeagleBoard-xM has also a serial port and an Ethernet port. It allows to copy programs compiled on Linux, using all three types of ports. 

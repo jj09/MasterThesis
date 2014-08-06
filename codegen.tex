@@ -1,4 +1,4 @@
-%!TEX root = JakubJedryszek-MasterThesis.tex
+%!TEX root = JakubJedryszek2014.tex
 
 \cleardoublepage
 
@@ -6,7 +6,7 @@
 \chapter{AADL/BLESS to SPARK Ada Translation}
 \label{codegen}
 
-This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{codegen:mapping}), proposed port communication (\ref{codegen:port_communication}) and discuss design of automatic translator, which can be created based on translation schemes (\ref{codegen:translator}). Related work in code generation from AADL, but for Java programming language has been done in \cite{MAP:Paper}. 
+This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{codegen:mapping}), proposed port communication (\ref{codegen:port_communication}) and discusses design of an automatic translator, which can be created based on translation schemes (\ref{codegen:translator}). Related work in code generation from AADL, but for Java programming language has been done in \cite{MAP:Paper}. 
 
 
 
@@ -16,7 +16,7 @@ This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{
 %https://wiki.sei.cmu.edu/aadl/images/4/40/13_04_24-AADL-Code_Generation.pdf
 %https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 35: port connections)
 
-Mapping of AADL models to SPARK Ada is driven by "Architecture analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc}. This document was discussed during AADL User Days in Valencia (February 2013)\footnote{http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/13\_02\_04-AADL-Code\%20Generation.pdf} and in Jacksonville, FL (April 2013).\footnote{https://wiki.sei.cmu.edu/aadl/images/8/8a/Constraint\_Annex\_April22.v3.pdf} Ocarina tool suite (based on older AADL annex documents \cite{Ocarina:Article}) and its examples\footnote{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2} was also helpful in understanding of AADL to Ada translation. Mapping of BLESS assertions was created in consultation with Brian Larson (BLESS creator).
+Mapping of AADL models to SPARK Ada is driven by "Architecture Analysis \& Design Language (AADL) V2 Programming Language Annex Document" \cite{AnnexDoc}. This document was discussed during AADL User Days in Valencia (February 2013)\footnote{http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/13\_02\_04-AADL-Code\%20Generation.pdf} and in Jacksonville, FL (April 2013).\footnote{https://wiki.sei.cmu.edu/aadl/images/8/8a/Constraint\_Annex\_April22.v3.pdf} Ocarina tool suite (based on older AADL annex documents \cite{Ocarina:Article}) and its examples\footnote{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2} were also helpful in understanding of AADL to Ada translation. Mapping of BLESS assertions was created in consultation with Brian Larson (BLESS creator).
  
 
 

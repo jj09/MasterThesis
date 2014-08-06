@@ -1,4 +1,4 @@
-%!TEX root = JakubJedryszek-MasterThesis.tex
+%!TEX root = JakubJedryszek2014.tex
 
 \cleardoublepage
 
@@ -31,7 +31,7 @@ Figure \ref{figure:ice} presents high-level overview of one particular applicati
 \label{background:mdcf}
 %http://santos.cis.ksu.edu/MDCF/doc/MDCF-Tutorial-Overview.pdf
 
-Medical Device Coordination Framework (MDCF) \cite{MDCF:Paper}, jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. This project is a response to a request from Food and Drug Administration (FDA) to build a prototype of ICE. There is a vision of different medical devices, created by different vendors connected and working under MDCF. MDCF is designed to illustrate by example issues related to functional concepts, safety, security, verification and certification. 
+Medical Device Coordination Framework (MDCF) \cite{MedicalApplicationPlatforms:Paper}, jointly developed by SAnToS lab (Kansas State University) and University of Pennsylvania is prototype implementation of ICE. It is an open, experimental platform to bring together academic researchers, industry vendors, and government regulators. This project is a response to a request from Food and Drug Administration (FDA) to build a prototype of ICE. There is a vision of different medical devices, created by different vendors connected and working under MDCF. MDCF is designed to illustrate by example issues related to functional concepts, safety, security, verification and certification. 
 
 The following comprise the goals of the MDCF project:
 \begin{itemize}
@@ -43,10 +43,10 @@ The following comprise the goals of the MDCF project:
 	\item Illustrate how to support real and mock devices
 	\item Illustrate envisioned regulatory oversight and 3rd party certification
 \end{itemize}
-
+00
 Currently, MDCF use only mock devices, which are Java desktop applications. PCA Pump Prototype, developed in this thesis, aims to be the realistic hardware device targeted specifically for the MDCF.
 
-MDCF uses a publish-subscribe architecture for communication between components: apps and devices. Figure \ref{figure:mdcf} presents MDCF structure. Devices, such as PCA pump, are connected to Message Bus, which along with Device Manager and Device Database ensures communication with Application Manager \cite{MDCF:Paper}.
+MDCF uses a publish-subscribe architecture for communication between components: apps and devices. Figure \ref{figure:mdcf} presents MDCF structure. Devices, such as PCA pump, are connected to Message Bus, which along with Device Manager and Device Database ensures communication with Application Manager \cite{MedicalApplicationPlatforms:Paper}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -472,7 +472,10 @@ There are two versions of GPS: free (GPL) and commercial (Pro). There are versio
 \subsection{Ravenscar Tasking Subset}
 \label{background:spark:ravenscar}
 
-The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs \cite{Ravenscar:Online}. RavenSPARK is SPARK subset of the Ravenscar Profile. The Ravenscar Profile is a subset of Ada tasking model, restricted to meet the real-time requirements for safety critical applications such as determinism, schedulability analysis and memory-boundedness, as well as being suitable for mapping to a small and efficient run-time system that supports task synchronization and communication. The concurrency model promoted by the Ravenscar Profile is consistent with the use of tools that allow the static properties of programs to be verified. Potential verification techniques include information flow analysis, schedulability analysis, execution-order analysis and model checking. These techniques allow analysis of a system to be performed throughout its development life cycle, thus avoiding the common problem of finding only during system integration and testing that the design fails to meet its non-functional requirements \cite{Ravenscar:Article}. 
+The Ravenscar Profile provides a subset of the tasking facilities of Ada95 and Ada 2005 suitable for the construction of high-integrity concurrent programs \cite{Ravenscar:Online}. RavenSPARK is SPARK subset of the Ravenscar Profile. Burns, Dobbing, and Vardanega gives the following Ravenscar profile description:
+\begin{quote}
+The Ravenscar Profile is a subset of Ada tasking model, restricted to meet the real-time requirements for safety critical applications such as determinism, schedulability analysis and memory-boundedness, as well as being suitable for mapping to a small and efficient run-time system that supports task synchronization and communication. The concurrency model promoted by the Ravenscar Profile is consistent with the use of tools that allow the static properties of programs to be verified. Potential verification techniques include information flow analysis, schedulability analysis, execution-order analysis and model checking. These techniques allow analysis of a system to be performed throughout its development life cycle, thus avoiding the common problem of finding only during system integration and testing that the design fails to meet its non-functional requirements \cite{Ravenscar:Article}. 
+\end{quote}
 
 Ravenscar profile is available in SPARK 2005, but not yet in SPARK 2014\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/tasks-and-synchronization.html} \cite{Spark2014refManual:Online}. The default SPARK 2005 profile (sequential) does not enable tasking. In other words, SPARK 2005 tools cannot analyze and reason about concurrent programs if Ravenscar profile flag (\lstinline{-profile=ravenscar}) is not provided.
 
@@ -743,8 +746,8 @@ Techniques for Static Verification:
 SPARK includes a development and of a verification tool-set with the following components:
 \begin{itemize}
 	\item SPARKMake - generates index file (.idx) and meta file (.smf)
-	\item Examiner - checks syntax, generates Verification Conditions (VCs) and Dead Path Conjectures (DPCs), and discharges (proves) some of them
-	\item Simplifier - simplifies and discharges VCs, which are not discharged by Examiner
+	\item Examiner - checks syntax, generates Verification Conditions (VCs) and Dead Path Conjectures (DPCs), and discharges (proves) some of them (some might be impossible to discharge)
+	\item Simplifier - simplifies VCs (not discharged by Examiner) and tries to discharge them after simplification process in similar fashion like Examiner
 	\item ZombieScope - finds dead paths
 	\item ViCToR - translates VCs and DPCs to format acceptable by SMT solver and proves correctness using specified SMT solver
 	\item SPARKSimp - runs Simplifier or/and ZombieScope
@@ -846,13 +849,13 @@ The notions of pre- and postconditions are based on Hoare logic \cite{HoareLogic
 	\{P\} C \{Q\}
 \end{equation}
 
-P and Q are assertions. C is a command (action) performed between them. P is precondition and Q is post-condition.
+\lstinline{C} is a program that starts in a state satisfying precondition \lstinline{P}. Program terminates in stat satisfying postcondition \lstinline{Q}. Thus \lstinline{P} and \lstinline{Q} are assertions, and \lstinline{C} is a command (action) performed between them.
 
 Additionally, assertions (\lstinline{--# assert}) and checks (\lstinline{--# check}) can be specified in procedure body. Then additional verification conditions are generated.
 
-SPARK functions do not have side effects (as stated in \ref{background:sparkverification:examiner:flowanalysis}), thus only preconditions are relevant. However, there is annotation \lstinline{--# return}, which specify function return value.
+SPARK functions do not have side effects (as stated in \ref{background:sparkverification:examiner:flowanalysis}), thus only preconditions are relevant. However, there is annotation \lstinline{--# return}, which specifies function return value.
 
-Verification conditions are generated depending on commands appearing in the subprogram along path segments. Analysis is performed backwards, in other words: we start from post-conditions and consider what must holds before. Flow analysis is well described in chapter 11 of \cite{Barnes:Book}.
+Verification Conditions (VCs) are generated depending on commands appearing in the subprogram along path segments. VC generation is performed backwards, in other words: we start from post-conditions and consider what must holds before. Flow analysis is well described in chapter 11 of \cite{Barnes:Book}.
 
 If preconditions are not present, then the formula expresses that the post-condition holds always.
 
@@ -1007,5 +1010,5 @@ Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is devel
 % http://penelope.enst.fr/aadl/wiki/Projects
 % http://www.aadl.info/aadl/downloads/committee/feb2013/presentations/RAMSES_status_2013_06_02_format.pdf
 
-RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) \cite{RAMSES:Paper} is a model transformation and code generation tool written in Java. Code generation module produces C code, but does not generate Ada. The approach for code generation is to simplify AADL models using a rule-based transformation framework and generate code based on it. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
+RAMSES (Refinement of AADL Models for Synthesis of Embedded Systems) \cite{RAMSES:Paper} is a model transformation and code generation tool written in Java. Code generation module produces C code, but does not generate Ada. The approach for code generation is to transform AADL models using a rule-based transformation framework and generate code from transformed (simplified) models. Simplified AADL models contain behavior annex subclauses. RAMSES can be used as OSATE plug-in or standalone application.
 
