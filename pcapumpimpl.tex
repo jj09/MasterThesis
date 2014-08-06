@@ -12,7 +12,7 @@ This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\r
 \section{Running SPARK Ada Programs on BeagleBoard-xM}
 \label{pcapumpimpl:beagleboard}
 
-To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in the Figure \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
+To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see Section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in the Figure \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
 
 \begin{figure}
 \singlespacing
@@ -51,7 +51,7 @@ The main file has to be always specified in project file (\lstinline{.gpr}) in o
 
 To enable cross-compilation, for current version of cross-compiler, environmental variable \lstinline{\$ENV_PREFIX} has to be set to directory, which contains \lstinline{/lib} and \lstinline{/usr} directories. Latter should also contains \lstinline{/usr/lib} and \lstinline{/usr/include} subdirectories. After mentioned directories has been copied into \lstinline{/home/super/angstrom-arm} directory, \lstinline{\$ENV_PREFIX} has been exported with following command: \lstinline{export ENV_PREFIX=/home/super/angstrom-arm}. Entire project can be compiled and linked with following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (where \lstinline{helloworld.gpr} is GNAT Programming Studio project file). Additional flags can be specified in command line or directly in project file (manually or through GNAT Programming Studio Interface).
 
-More complex example, which takes advantage of SPARK contracts is presented in section \ref{pcapumpimpl:beagleboard:odometer}.
+More complex example, which takes advantage of SPARK contracts is presented in Section \ref{pcapumpimpl:beagleboard:odometer}.
 
 \subsection{Odometer}
 \label{pcapumpimpl:beagleboard:odometer}
@@ -283,7 +283,7 @@ Odometer example was created to check possible limitations and issues related to
 \subsection{Multitasking Applications}
 \label{pcapumpimpl:beagleboard:multitasking}
 
-In Ada World, concurrency is referred as tasking and the task is the same construct as the thread in other programming languages. In section \ref{pcapumpimpl:beagleboard:odometer}, single-tasking application was tested. This section presents simple Ada multitasking application and multitasking version of Odometer in SPARK 2005 from section \ref{pcapumpimpl:beagleboard:odometer}. Both applications compiles correctly and works as expected on BeagleBoard-xM platform.
+In Ada World, concurrency is referred as tasking and the task is the same construct as the thread in other programming languages. In Section \ref{pcapumpimpl:beagleboard:odometer}, single-tasking application was tested. This section presents simple Ada multitasking application and multitasking version of Odometer in SPARK 2005 from Section \ref{pcapumpimpl:beagleboard:odometer}. Both applications compiles correctly and works as expected on BeagleBoard-xM platform.
 
 \subsubsection{Ada Multitasking Application}
 
@@ -336,11 +336,11 @@ end Main;
 \label{listing:HelloTasking}
 \end{figure}
 
-The program works as expected on BleagleBoard-xM. This is not valid SPARK program though. As mentioned in section \ref{background:spark:ravenscar}, tasks can be declared only in packages. Not in subprograms or in other tasks \cite{Barnes:Book}.
+The program works as expected on BleagleBoard-xM. This is not valid SPARK program though. As mentioned in Section \ref{background:spark:ravenscar}, tasks can be declared only in packages. Not in subprograms or in other tasks \cite{Barnes:Book}.
 
 \subsubsection{SPARK Ada multitasking application}
 
-As mentioned in section \ref{background:spark:ravenscar}, in SPARK 2005 multitasking is possible with Ravenscar Profile. Default profile - sequential -  does not enable tasking. In other words, SPARK tools cannot analyze and reason about programs if Ravenscar profile flag is not provided. In SPARK 2014 - for now tasking is not possible. It's part of SPARK 2014 road map to include support for tasking in the future. Thus, only SPARK 2005 application was tested.
+As mentioned in Section \ref{background:spark:ravenscar}, in SPARK 2005 multitasking is possible with Ravenscar Profile. Default profile - sequential -  does not enable tasking. In other words, SPARK tools cannot analyze and reason about programs if Ravenscar profile flag is not provided. In SPARK 2014 - for now tasking is not possible. It's part of SPARK 2014 road map to include support for tasking in the future. Thus, only SPARK 2005 application was tested.
 
 Tested, multitasking application is extended version of Odometer (presented in the figures \ref{listing:Odometer2005_spec} and \ref{listing:Odometer2005_body}). It has additional variable \lstinline{Speed}, procedure \lstinline{Set_Speed} and new task: \lstinline{Drive}. Thus, in total it has two tasks:
 \begin{itemize}

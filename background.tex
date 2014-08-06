@@ -65,7 +65,7 @@ AADL stands for Architecture Analysis \& Design Language. It is used to model em
 
 AADL has its roots in DARPA\footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler.\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/} AADL is develop by SAE AADL standard committee.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page} AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}
 
-AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools, like OSATE (see section \ref{background:aadl:osate}) that enable transformation of textual representation into graphical or XML. 
+AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools, like OSATE (see Section \ref{background:aadl:osate}) that enable transformation of textual representation into graphical or XML. 
 
 \begin{wrapfigure}{r}{0.3\textwidth}
   \begin{center}
@@ -145,22 +145,20 @@ end Thermometer;
 \end{figure}
 %another example: https://wiki.sei.cmu.edu/aadl/images/7/73/AADLV2Overview-AADLUserDay-Feb_2010.pdf (slide 16)
 
-There are several tools for AADL model support, such as: OSATE (see section \ref{background:aadl:osate}), STOOD (AADL design tool),\footnote{http://www.ellidiss.com/products/stood} ADELE (graphical editor),\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele} Cheddar (real time scheduling tool),\footnote{http://beru.univ-brest.fr/~singhoff/cheddar} AADLInspector (model processing framework),\footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina (see section \ref{background:codegen:ocarina}).
+There are several tools for AADL model support, such as: OSATE (see Section \ref{background:aadl:osate}), STOOD (AADL design tool),\footnote{http://www.ellidiss.com/products/stood} ADELE (graphical editor),\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Adele} Cheddar (real time scheduling tool),\footnote{http://beru.univ-brest.fr/~singhoff/cheddar} AADLInspector (model processing framework),\footnote{http://www.ellidiss.com/products/aadl-inspector} or Ocarina (see Section \ref{background:codegen:ocarina}).
 
 AADL focuses on architectural modeling, but it can be extended via the following methods:
 \begin{itemize}
 	\item user-defined properties: user can extend the set of applicable properties and add their own to specify their own requirements
 	\item {language annexes (the core language is enhanced by annex languages that enrich the architecture description. For now, the following annexes have been defined):
 		\begin{itemize}
-			\item Behavior annex: add components behavior with state machines (e.g. BLESS, see section \ref{background:bless})
+			\item Behavior annex: add components behavior with state machines (e.g. BLESS, see Section \ref{background:bless})
 			\item Error-model annex: specifies fault and propagation concerns
 			\item ARINC653 annex: defines modeling patterns for modeling avionics systems
 			\item Data-Model annex: describes the modeling of specific data types and structures with AADL
 		\end{itemize}
 		}
 \end{itemize}
-
-%BLESS (described in section \ref{background:bless}) is AADL behavior annex language.
 
 More details about AADL can be found in Peter Feiler's book "Model-Based Engineering with AADL" \cite{AadlBook}.
 
@@ -187,7 +185,7 @@ BLESS contains three AADL annex sub-languages:
 	\item BLESS - it can be attached to AADL thread, device or system components; it contains states, transitions, timeouts, actions, events and Assertions with time expressions
 \end{itemize}
 
-The BLESS tool framework is implemented as a publicly available open source plug-in for OSATE (mentioned in section \ref{background:aadl:osate}). It includes an editor for BLESS specifications and an environment operating the BLESS proof engine \cite{Bless:Paper}.
+The BLESS tool framework is implemented as a publicly available open source plug-in for OSATE (mentioned in Section \ref{background:aadl:osate}). It includes an editor for BLESS specifications and an environment operating the BLESS proof engine \cite{Bless:Paper}.
 
 In the work for this thesis, subset of BLESS is translated into SPARK contracts.
 
@@ -209,7 +207,7 @@ The Ada programming language was originally designed to meet the US Department o
 \end{figure}
 \footnotetext{http://www.slideshare.net/AdaCore/ada-2012}
 
-SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. It is a "safe" subset of Ada, designed to be amenable to state analysis and formal methods, by collection of analysis and verification tools. Some Ada constructs are excluded from SPARK to make static analysis feasible \cite{Spark:Article}. SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}. Verification tools (see section \ref{background:sparkverification}) produce Verification Conditions (VCs) to check program correctness. Sample Verification Condition contains checks for:
+SPARK is a programming language and static verification technology designed specifically for the development of high integrity software. It is a "safe" subset of Ada, designed to be amenable to state analysis and formal methods, by collection of analysis and verification tools. Some Ada constructs are excluded from SPARK to make static analysis feasible \cite{Spark:Article}. SPARK 2005 does not include constructs such as pointers, dynamic memory allocation or recursion \cite{Spark:Article}. Verification tools (see Section \ref{background:sparkverification}) produce Verification Conditions (VCs) to check program correctness. Sample Verification Condition contains checks for:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
     \item array index out of range
     \item type range violation
@@ -219,7 +217,7 @@ SPARK is a programming language and static verification technology designed spec
 
 SPARK is used not only for research, but also in industry: aerospace (e.g., EuroFighter Typhoon aircraft,\footnote{http://www.eurofighter.com/} The Lockheed Martin C130J\footnote{http://www.lockheedmartin.com/us/products/c130/c-130j-variants/c-130j-30.html} and standard DO-178B\footnote{http://www.adacore.com/gnatpro-safety-critical/avionics/do178b/}), security (e.g., MULTi-application Operating System\footnote{http://www.cardwerk.com/smartcards/MULTOS/}), air traffic management (e.g., iFACTS system\footnote{http://www.adacore.com/customers/uks-next-generation-atc-system/}) \cite{Barnes:Book}. In practice, because the features of SPARK are limited and because the use of SPARK can be labor intensive, the embedded critical components are written in SPARK while the non-critical components are written in Ada \cite{Spark:IndustrialExp}.
 
-First version of SPARK was based on Ada 83. The second version (SPARK 95) - on Ada 95. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). The approach allows every SPARK 2005 program to be a valid Ada 2005 program. SPARK annotations contains code contracts (see table \ref{table:SparkAnnotations}), which are analyzed by verification tools, but ignored by Ada compiler.
+First version of SPARK was based on Ada 83. The second version (SPARK 95) - on Ada 95. SPARK 2005 is based on Ada 2005. It is a subset of Ada 2005 with annotations. The annotation language support flow analysis and formal verification. Annotations are encoded in Ada comments (via the prefix \lstinline{--#}). The approach allows every SPARK 2005 program to be a valid Ada 2005 program. SPARK annotations contains code contracts (see Table \ref{table:SparkAnnotations}), which are analyzed by verification tools, but ignored by Ada compiler.
 
 Figure \ref{listing:SPARK2005Contracts} presents simple procedure with code contracts. It increments variable given as parameter by 1. The \lstinline{derives} clause specify variable dependency. Its future value depends on its current value. There is precondition saying that the value has to be lower than maximum value of \lstinline{Integer} type, to avoid overflow. There is also post condition, which states that the value of variable (given as parameter) after the procedure execution has to be equal to its previous value incremented by 1 ('\lstinline{~}' attached to variable means value of this variable, before procedure execution).
 
@@ -369,7 +367,7 @@ Table \ref{table:SparkAnnotations} presents fundamental SPARK 2005 annotations a
 \end{center}
 \doublespacing
 
-A sample mapping from SPARK 2005 to 2014 is shown in the table \ref{table:spark2005and2014mapping}. A complete mapping can be found in SPARK 2014 documentation\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/mapping-spec.html} \cite{Spark2014refManual:Online}.
+A sample mapping from SPARK 2005 to 2014 is shown in the Table \ref{table:spark2005and2014mapping}. A complete mapping can be found in SPARK 2014 documentation\footnote{http://docs.adacore.com/spark2014-docs/html/lrm/mapping-spec.html} \cite{Spark2014refManual:Online}.
 
 \singlespacing
 \begin{table}[!ht]
@@ -444,10 +442,10 @@ with Depends => (X => X),
 \label{listing:SPARK2014Contracts}
 \end{figure}
 
-It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant can be verified by SPARK 2014 tools. SPARK 2014 does not contains Examiner like SPARK 2005. Instead, proofs are made by GNATprove (see section \ref{verification:gnatprove}).
+It is possible to mix SPARK 2014 with Ada 2012. However, only the part which is SPARK 2014 compliant can be verified by SPARK 2014 tools. SPARK 2014 does not contains Examiner like SPARK 2005. Instead, proofs are made by GNATprove (see Section \ref{verification:gnatprove}).
 % http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#mixing-spark-code-and-ada-code
 
-The most popular IDE for SPARK Ada is GNAT Programming Studio\footnote{http://libre.adacore.com/tools/gps} (see section \ref{background:spark:gps}). There is also Ada plug-in for Eclipse - GNATbench\footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
+The most popular IDE for SPARK Ada is GNAT Programming Studio\footnote{http://libre.adacore.com/tools/gps} (see Section \ref{background:spark:gps}). There is also Ada plug-in for Eclipse - GNATbench\footnote{https://www.adacore.com/gnatpro/toolsuite/gnatbench/} created by AdaCore. 
 
 
 
@@ -465,7 +463,7 @@ GNAT compiler is available for all most popular platforms: Windows, Linux and Ma
 \subsection{GNAT Programming Studio (GPS)}
 \label{background:spark:gps}
 
-GNAT Programming Studio (GPS) is an Integrated Development Environment (IDE) for Ada. It allows to easily manage and compile Ada projects, providing Graphical User Interface as front end for underlaying tools, which have command line interface. Additionally, it enables to create plug-ins using Python and PyGTK.\footnote{http://docs.adacore.com/gps-docs/users\_guide/\_build/html/extending.html} GPS has a plug-ins for SPARK Ada. There is also Sireum Bakar (see section \ref{background:sparkverification:sireum}) plug-in for GPS (developed by SAnToS Laboratory).
+GNAT Programming Studio (GPS) is an Integrated Development Environment (IDE) for Ada. It allows to easily manage and compile Ada projects, providing Graphical User Interface as front end for underlaying tools, which have command line interface. Additionally, it enables to create plug-ins using Python and PyGTK.\footnote{http://docs.adacore.com/gps-docs/users\_guide/\_build/html/extending.html} GPS has a plug-ins for SPARK Ada. There is also Sireum Bakar (see Section \ref{background:sparkverification:sireum}) plug-in for GPS (developed by SAnToS Laboratory).
 
 There are two versions of GPS: free (GPL) and commercial (Pro). There are version for all most popular platforms: Windows, Linux and MacOS.
 
@@ -773,7 +771,7 @@ The main SPARK verification tool is Examiner. It supports several levels of anal
 
 There is an option to make the Examiner perform syntax checks only. Using this option on a source file does not require access to any other units on which the file depends, so files can be syntax checked on an individual basis. This allows any syntax errors to be corrected before the file is included in a complex examination \cite{Examiner:Online}.
 
-Examiner can perform data and information analysis of Ravenscar programs in exactly the same manner as for sequential programs \cite{Ravenscar:Online}. Unfortunately it does not allow protected objects in proof annotations (pre- and post-conditions) as mentioned in section \ref{background:spark:ravenscar}.
+Examiner can perform data and information analysis of Ravenscar programs in exactly the same manner as for sequential programs \cite{Ravenscar:Online}. Unfortunately it does not allow protected objects in proof annotations (pre- and post-conditions) as mentioned in Section \ref{background:spark:ravenscar}.
 
 When some parts of the system are written in full Ada (with non-valid SPARK constructs), then Examiner returns error. Ada parts can be excluded from Examiner analysis using \lstinline{--# hide} annotation. Then, only a warning is returned by Examiner: \lstinline{10 - The body of subprogram Main is hidden - hidden text is ignored by the Examiner}.
 
@@ -998,7 +996,7 @@ The ultimate goal of the long term research of which this thesis is part is to b
 
 Ocarina \cite{Ocarina:Paper} is a tool suite that contains plug-ins for code generation, model checking and analysis. The code generation plug-in generates code from an AADL architecture model to an Ada or C application running on top of PolyORB framework. In this context, PolyORB acts as both the distribution middleware and execution runtime on all targets supported by PolyORB. Ocarina is written in Ada.
 
-There is plug-in for OSATE (see section \ref{background:aadl:osate}) that supports code generation. Example AADL models, suitable for being an input of Ocarina are available on github repository: \lstinline{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2}.
+There is plug-in for OSATE (see Section \ref{background:aadl:osate}) that supports code generation. Example AADL models, suitable for being an input of Ocarina are available on github repository: \lstinline{https://github.com/yoogx/polyorb-hi-ada/tree/master/examples/aadlv2}.
 
 Since mid-2009, Telecom ParisTech is no longer involved in Ocarina, and is developing another AADL tool-chain, based on Eclipse, codenamed RAMSES \cite{RAMSES:Paper}.
 

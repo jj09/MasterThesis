@@ -22,7 +22,7 @@ The strategy for Software Verification using SPARK tools is as follows. First, E
 
 During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of POGS report summary, is presented in the Figure \ref{listing:pca_ravenscar:pogs}. Full report can be found in appendix \ref{Appendix:pca_ravenscar:pogs}.
 
-POGS report shows that 30\% (90) of VCs were discharged by Examiner and 61\% (183) by Simplifier. There are 29 undischarged VCs. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:sparkverification:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate, sequential module was created. Verification process of this module is described in section \ref{verification:pcapump:monitoring}.
+POGS report shows that 30\% (90) of VCs were discharged by Examiner and 61\% (183) by Simplifier. There are 29 undischarged VCs. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:sparkverification:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate, sequential module was created. Verification process of this module is described in Section \ref{verification:pcapump:monitoring}.
 
 \begin{figure}
 \singlespacing
@@ -345,7 +345,7 @@ The last thing which was improved by code contracts is checking if \lstinline{Mo
 
 After adding these postconditions Kiasan generates 2 test cases to check both mentioned scenarios. There is no error cases, which means that procedure works as expected. 
 
-Better way to validate such requirements is Unit testing. In section \ref{verification:aunit}, there is overview of unit tests created to test behavior described above.
+Better way to validate such requirements is Unit testing. In Section \ref{verification:aunit}, there is overview of unit tests created to test behavior described above.
 
 To validate changes made, while working with Kiasan, SPARK Examiner and SPARKSimp were rerun again. POGS report is presented in the Figure \ref{listing:pcapump_dosemonitor_pogs3}.
 
@@ -701,7 +701,7 @@ This is nice indication what has to be implemented in particular parts of the pr
 \section{AUnit Tests}
 \label{verification:aunit}
 
-Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module, presented in section \ref{verification:pcapump:monitoring}, is to create AUnit tests. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
+Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module, presented in Section \ref{verification:pcapump:monitoring}, is to create AUnit tests. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
 \begin{itemize}
     \item \lstinline{Test_Move_Dosed_First_Element_Zero} - first element is 0, then after execution of the procedure dosed amount of drug should be not changed
     \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
@@ -761,7 +761,7 @@ end Test_Move_Dosed_First_Element_Not_Zero;
 \section{GNATprove}
 \label{verification:gnatprove}
 
-The sequential module for monitoring dosed amount verification presented in section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in the figures \ref{listing:pca_pump_move_dosed_unit_spark2014_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_body}.
+The sequential module for monitoring dosed amount verification presented in Section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in the figures \ref{listing:pca_pump_move_dosed_unit_spark2014_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_body}.
 
 \begin{figure}
 \singlespacing
