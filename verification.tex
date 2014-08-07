@@ -20,7 +20,7 @@ The strategy for Software Verification using SPARK tools is as follows. First, E
 \section{Verification of Implemented Prototype}
 \label{verification:prototype}
 
-During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of POGS report summary, is presented in the Figure \ref{listing:pca_ravenscar:pogs}. Full report can be found in appendix \ref{Appendix:pca_ravenscar:pogs}.
+During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in Appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of POGS report summary, is presented in the Figure \ref{listing:pca_ravenscar:pogs}. Full report can be found in Appendix \ref{Appendix:pca_ravenscar:pogs}.
 
 POGS report shows that 30\% (90) of VCs were discharged by Examiner and 61\% (183) by Simplifier. There are 29 undischarged VCs. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:sparkverification:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate, sequential module was created. Verification process of this module is described in Section \ref{verification:pcapump:monitoring}.
 
@@ -96,7 +96,7 @@ Totals:               302         90        183         29 <<<
 \section{Monitoring Dosed Amount}
 \label{verification:pcapump:monitoring}
 
-This section is case study of verification of module responsible for tracking dosed amount of drug. The module was created with sequential profile, based on implemented PCA prototype presented in appendix \ref{Appendix:pca_ravenscar}. Isolated module is presented in the Figure \ref{listing:pcapump_dosemonitor}.
+This section is case study of verification of module responsible for tracking dosed amount of drug. The module was created with sequential profile, based on implemented PCA prototype presented in Appendix \ref{Appendix:pca_ravenscar}. Isolated module is presented in the Figure \ref{listing:pcapump_dosemonitor}.
 
 \begin{figure}
 \singlespacing
@@ -519,7 +519,7 @@ C1:    result + element(arr, [loop__1__i]) <= 32767 .
 
 In \lstinline{Move_Dosed} procedure, tools cannot prove implications in post conditions. Fortunately, it is already proved by Bakar Kiasan. The problem in \lstinline{Increase_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} is the same. Tools cannot verify, that adding \lstinline{Result} and some element of \lstinline{Dosed} array will not cause overflow. Bakar Kiasan can prove correctness of \lstinline{Increase_Dosed} and \lstinline{Read_Dosed}. However only, with assumption that \lstinline{Sum} is correct. \lstinline{Sum} cannot be proved by Bakar Kiasan. Four exception cases indicating possible overflow are generated. Thus, the only way to prove correctness of this module is to assume, that proof function \lstinline{Sum} is correct.
 
-In procedure \lstinline{Move_Dosed}, there is one dead path found. POGS report gives only information where dead path exists, but not in which circumstances. The information about conditions, in which dead path occurs is stored in \lstinline{.dpc} file. The file path to concrete file is given in the POGS report just before summary table for procedure \lstinline{Move_Dosed}. In this case it is \lstinline{move_dosed.dpc} file. Figure \ref{listing:pcapump_dosemonitor_pogs3} presents truncated POGS report, but as an example, full POGS report of implemented PCA prototype can be found in appendix \ref{Appendix:pca_ravenscar:pogs} (e.g. see line 50, which contains DPC analysis for \lstinline{Start_Pumping} procedure). 
+In procedure \lstinline{Move_Dosed}, there is one dead path found. POGS report gives only information where dead path exists, but not in which circumstances. The information about conditions, in which dead path occurs is stored in \lstinline{.dpc} file. The file path to concrete file is given in the POGS report just before summary table for procedure \lstinline{Move_Dosed}. In this case it is \lstinline{move_dosed.dpc} file. Figure \ref{listing:pcapump_dosemonitor_pogs3} presents truncated POGS report, but as an example, full POGS report of implemented PCA prototype can be found in Appendix \ref{Appendix:pca_ravenscar:pogs} (e.g. see line 50, which contains DPC analysis for \lstinline{Start_Pumping} procedure). 
 
 Relevant fragment, which applies to found dead path is presented in the Figure \ref{listing:pcapump_dosemonitor:dead_path}. It is a list of hypothesis, in which hypothesis 10 (H10) states that number of elements in \lstinline{Doses_Array} is 1 or less. In this case (or more precisely: in this path), \lstinline{for loop} will not be visited. \lstinline{Doses_Array} has always 60 elements, thus this path is impossible (dead). It does not mean something bad, because dead path indicate possible issues. In this case it is not issue. It is expected behavior.
 
@@ -658,7 +658,7 @@ Unfortunately, introduced changes (pre- and postconditions) cannot be applied to
 \section{Verification of Generated Code}
 \label{verification:generated}
 
-Code translated from AADL models is presented in appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. It means, that discriminants or task annotation are expected here. In order to pass Examiner syntax check at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used. Complete task declaration is presented in the Figure \ref{listing:verification:pca_generated:patient_bolus_checker}.
+Code translated from AADL models is presented in Appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. It means, that discriminants or task annotation are expected here. In order to pass Examiner syntax check at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used. Complete task declaration is presented in the Figure \ref{listing:verification:pca_generated:patient_bolus_checker}.
 
 \begin{figure}
 \singlespacing
@@ -707,7 +707,7 @@ Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitori
     \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
 \end{itemize}
 
-Both test cases are presented in the Figure \ref{listing:pca_pump_move_dosed_unit_tests}. All AUnit tests can be found in appendix \ref{Appendix:pcapump:dose_monitor_module:aunit}.
+Both test cases are presented in the Figure \ref{listing:pca_pump_move_dosed_unit_tests}. All AUnit tests can be found in Appendix \ref{Appendix:pcapump:dose_monitor_module:aunit}.
 
 \begin{figure}
 \singlespacing

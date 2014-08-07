@@ -14,15 +14,16 @@ This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\r
 
 To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see Section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in the Figure \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Text_IO;
+use Ada.Text_IO;
 
 procedure Main
 is
 begin
-    Ada.Text_IO.Put_Line("Hello, World!");    
+    Put_Line("Hello, World!");    
 end Main;
 \end{lstlisting} 
 \doublespacing
@@ -56,9 +57,9 @@ More complex example, which takes advantage of SPARK contracts is presented in S
 \subsection{Odometer}
 \label{pcapumpimpl:beagleboard:odometer}
 
-Odometer is a simple SPARK Ada program, which implements basic functions of standard Odometer. Figure \ref{listing:Odometer2005_spec} and Figure \ref{listing:Odometer2005_body} show Odometer in SPARK 2005.
+Odometer is a simple SPARK Ada program, which implements basic functions of standard Odometer. Figure \ref{listing:Odometer2005} shows Odometer in SPARK 2005.
 
-\begin{figure}
+\begin{figure} %[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 package Odometer
@@ -88,15 +89,7 @@ is
     --# pre Trip < Integer'Last and Total < Integer'Last;
     --# post Trip = Trip~ + 1 and Total = Total~ + 1;	    
 end Odometer;
-\end{lstlisting} 
-\doublespacing
-\caption{SPARK 2005 code: Odometer specification}
-\label{listing:Odometer2005_spec}
-\end{figure}
 
-\begin{figure}
-\singlespacing
-\begin{lstlisting}[language=ada, frame=single, gobble=0]
 package body Odometer is
     Trip : Natural := 0;
     Total : Natural := 0;
@@ -124,8 +117,8 @@ package body Odometer is
 end Odometer;
 \end{lstlisting} 
 \doublespacing
-\caption{SPARK 2005 code: Odometer body}
-\label{listing:Odometer2005_body}
+\caption{SPARK 2005 code: Odometer}
+\label{listing:Odometer2005}
 \end{figure}
 
 There are 4 subprograms (2 procedures and 2 functions), which are globally available (through other packages and program units):
@@ -142,11 +135,12 @@ Annotation \lstinline{global} means that subprogram uses some global variable. P
 
 In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} procedure has been created. It is presented in the Figure \ref{listing:main}.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Text_IO;
 with Odometer;
+
 procedure Main
 is
 begin
@@ -174,107 +168,69 @@ end Main;
 \label{listing:main}
 \end{figure}
 
-Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014 program, SPARK 2005 annotations has been converted into Ada 2012 contracts. Figures \ref{listing:Odometer2014_spec} and \ref{listing:Odometer2014_body} present Odometer in SPARK 2014.
+Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014 program, SPARK 2005 annotations has been converted into Ada 2012 contracts. Figure \ref{listing:Odometer2014} presents Odometer in SPARK 2014.
 
-\begin{figure}
+\begin{figure}%[ht]
 \singlespacing
 \begin{lstlisting}[language=ada2012, frame=single, gobble=0]
 package Odometer
 with Abstract_State => (Trip_State, Total_State)
 is
-   function Trip_State return Integer
-     with Convention => Ghost,
-     Global => (Input => Trip_State);
-
-   function Total_State return Integer
-     with Convention => Ghost,
-     Global => (Input => Total_State);
-
-   procedure Zero_Trip -- sets Trip to 0
-     with Global => (Output => (Trip_State)),
-     Depends => (Trip_State => null),
-     Post => Trip_State = 0;
-
-   function Read_Trip return Natural -- returns value of Trip.
-     with Global => (Input => Trip_State),
-     Post => Read_Trip'Result = Trip_State;
-
-   function Read_Total return Natural -- returns value of Total
-     with Global => (Input => Total_State),
-     Post => Read_Total'Result = Total_State;
-
-   procedure Inc -- increments each of Trip and Total by 1.
-     with Global => (In_Out => (Trip_State, Total_State)),
-     Depends => (Trip_State => Trip_State, Total_State => Total_State),
-     Pre => Trip_State < Integer'Last and Total_State < Integer'Last,
-     Post => Trip_State = Trip_State'Old + 1 and Total_State = Total_State'Old + 1;
+   function Trip_State return Integer with Convention => Ghost, Global => (Input => Trip_State);
+   function Total_State return Integer with Convention => Ghost, Global => (Input => Total_State);
+   procedure Zero_Trip with Global => (Output => (Trip_State)), Depends => (Trip_State => null), Post => Trip_State = 0;
+   function Read_Trip return Natural  with Global => (Input => Trip_State), 
+   		Post => Read_Trip'Result = Trip_State;
+   function Read_Total return Natural with Global => (Input => Total_State), 
+   		Post => Read_Total'Result = Total_State;
+   procedure Inc with Global => (In_Out => (Trip_State, Total_State)), 
+   		Depends => (Trip_State => Trip_State, Total_State => Total_State), 
+   		Pre => Trip_State < Integer'Last and Total_State < Integer'Last, 
+   		Post => Trip_State = Trip_State'Old + 1 and Total_State = Total_State'Old + 1;
 end Odometer;
-\end{lstlisting}
-\doublespacing
-\caption{SPARK 2014 code: Odometer specification}
-\label{listing:Odometer2014_spec}
-\end{figure}
 
-\begin{figure}
-\singlespacing
-\begin{lstlisting}[language=ada2012, frame=single, gobble=0]
 package body Odometer
-with
-  Refined_State => (Trip_State => (Trip),
-                    Total_State => (Total))
+with Refined_State => (Trip_State => (Trip), Total_State => (Total))
 is
    Trip : Natural;
    Total : Natural;
 
    function Trip_State return Integer
-     with Refined_Global => (Input => Trip)
-   is
-   begin
+     with Refined_Global => (Input => Trip) is begin
       return Trip;
    end Trip_State;
 
    function Total_State return Integer
-     with Refined_Global => (Input => Total)
-   is
-   begin
+     with Refined_Global => (Input => Total) is begin
       return Total;
    end Total_State;
 
    procedure Zero_Trip
-     with Refined_Global => (Output => Trip),
-     Refined_Depends => (Trip => null)
-   is
-   begin
+     with Refined_Global => (Output => Trip), Refined_Depends => (Trip => null) is begin
       Trip := 0;
    end Zero_Trip;
 
    function Read_Trip return Natural
-     with Refined_Global => (Input => Trip)
-   is
-   begin
+     with Refined_Global => (Input => Trip) is begin
       return Trip;
     end Read_Trip;
 
    function Read_Total return Natural
-     with Refined_Global => (Input => Total)
-   is
-   begin
+     with Refined_Global => (Input => Total) is begin
       return Total;
    end Read_Total;
 
    procedure Inc
-     with Refined_Global => (In_Out => (Trip, Total)),
-     Refined_Depends => (Trip => Trip, Total => Total)
-   is
-   begin
+     with Refined_Global => (In_Out => (Trip, Total)), Refined_Depends => (Trip => Trip, Total => Total)
+   is begin
       Trip := Trip + 1;
       Total := Total + 1;
    end Inc;
 end Odometer;
 \end{lstlisting}
 \doublespacing
-\caption{SPARK 2014 code: Odometer body}
-\label{listing:Odometer2014_body}
+\caption{SPARK 2014 code: Odometer}
+\label{listing:Odometer2014}
 \end{figure}
 
 Odometer example was created to check possible limitations and issues related to different platform (ARM-based). No limitations were found.
@@ -294,7 +250,7 @@ Figure \ref{listing:HelloTasking} presents a simple multitasking application pri
     \item T (type: \lstinline{Tenth_Seconds}) - simple counter printing numbers from 0.1 to 10 in every 0.1 second
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Text_IO;
@@ -332,7 +288,7 @@ begin
 end Main;
 \end{lstlisting} 
 \doublespacing
-\caption{Simple multitask application in Ada}
+\caption{Simple multitasking application in Ada}
 \label{listing:HelloTasking}
 \end{figure}
 
@@ -342,7 +298,7 @@ The program works as expected on BleagleBoard-xM. This is not valid SPARK progra
 
 As mentioned in Section \ref{background:spark:ravenscar}, in SPARK 2005 multitasking is possible with Ravenscar Profile. Default profile - sequential -  does not enable tasking. In other words, SPARK tools cannot analyze and reason about programs if Ravenscar profile flag is not provided. In SPARK 2014 - for now tasking is not possible. It's part of SPARK 2014 road map to include support for tasking in the future. Thus, only SPARK 2005 application was tested.
 
-Tested, multitasking application is extended version of Odometer (presented in the figures \ref{listing:Odometer2005_spec} and \ref{listing:Odometer2005_body}). It has additional variable \lstinline{Speed}, procedure \lstinline{Set_Speed} and new task: \lstinline{Drive}. Thus, in total it has two tasks:
+Tested, multitasking application is extended version of Odometer (presented in the Figure \ref{listing:Odometer2005}). It has additional variable \lstinline{Speed}, procedure \lstinline{Set_Speed} and new task: \lstinline{Drive}. Thus, in total it has two tasks:
 \begin{itemize}
     \item Main
     \item Drive
@@ -350,7 +306,7 @@ Tested, multitasking application is extended version of Odometer (presented in t
 
 The \lstinline{Drive} task increase \lstinline{Total} and \lstinline{Trip} variables by \lstinline{Speed} (m/s) in every second. Extended Odometer is presented in the figures \ref{listing:Odometer2005Tasking_spec} and \ref{listing:Odometer2005Tasking_body}. 
 
-\begin{figure}
+\begin{figure}%[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 --# inherit Ada.Real_Time;
@@ -408,7 +364,7 @@ end Odometer;
 \label{listing:Odometer2005Tasking_spec}
 \end{figure}
 
-\begin{figure}
+\begin{figure}%[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Real_Time;
@@ -485,7 +441,7 @@ GPIO ports interact with the BeagleBoard platform through memory maps. This mean
 
 Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Figure \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 #!/bin/sh
@@ -538,7 +494,7 @@ Once, feeds are set, it is recommended to update list of available packages with
 
 Similar program to bash script presented in the Figure \ref{listing:SwitchingPin}, but working for 20 seconds and terminating, written in Java is presented in the Figure \ref{listing:pca_java}. 
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 import java.io.*;
@@ -576,7 +532,7 @@ public class PcaMain {
 
 Extended program from Figure \ref{listing:pca_java}, with procedures to start and stop the pump, written in Ada, is presented in the figures \ref{listing:pca_basic_spec} and \ref{listing:pca_basic_body}.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Real_Time; use type Ada.Real_Time.Time;
@@ -592,7 +548,7 @@ end Pca_Pump;
 \label{listing:pca_basic_spec}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Strings.Unbounded; use type Ada.Strings.Unbounded;
@@ -716,16 +672,14 @@ Implemented PCA pump prototype is console Ada application with textual interface
 		\end{itemize}
 \end{itemize}
 
-The code of implemented PCA pump, along with mapped types, is attached in appendix \ref{Appendix:pca_ravenscar}.
+The code of implemented PCA Pump Prototype, along with mapped types, is attached in Appendix \ref{Appendix:pca_ravenscar}.
 
 
 
 \section{Code Translation from AADL/BLESS Models}
 \label{pcapumpimpl:codegen}
 
-The original AADL/BLESS models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. Simplified AADL/BLESS models can be found in appendix \ref{Appendix:AADL}. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_generated} contains translated PCA pump code. 
+The original AADL/BLESS models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. Simplified AADL/BLESS models can be found in Appendix \ref{Appendix:AADL}. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_generated} contains translated PCA pump code. 
 
 Raw, translated code cannot be verified with SPARK tools, because it contains not implemented parts. E.g. translated from BLESS assertions, which are defined but not implemented in models. Once, these missing parts will be implemented, code can be verified.
-
-[ADD SOME LISTINGS HERE? SHOW WHICH PARTS HAVE TO BE IMPLEMENTED?]
 

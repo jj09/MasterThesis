@@ -6,7 +6,7 @@
 \chapter{AADL/BLESS to SPARK Ada Translation}
 \label{codegen}
 
-This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{codegen:mapping}), proposed port communication (\ref{codegen:port_communication}) and discusses design of an automatic translator, which can be created based on translation schemes (\ref{codegen:translator}). Related work in code generation from AADL, but for Java programming language has been done in \cite{MAP:Paper}. 
+This chapter presents created AADL/BLESS to SPARK Ada translation schemes (\ref{codegen:mapping}), proposed port communication (\ref{codegen:port_communication}) and discusses design of an automatic translator, which can be created based on translation schemes (\ref{codegen:translator}).
 
 
 
@@ -25,7 +25,7 @@ Mapping of AADL models to SPARK Ada is driven by "Architecture Analysis \& Desig
 
 One of core AADL packages is \lstinline{Base_Types}. It defines fundamental data types for AADL. Its definition, without floating and text types, is shown in the Figure \ref{listing:aadl_base_types}.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Base_Types
@@ -91,9 +91,9 @@ end Base_Types;
 \label{listing:aadl_base_types}
 \end{figure}
 
-In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which allows for easy mapping of AADL \lstinline{Base_Types} package. Mapping proposed in Annex Document \cite{AnnexDoc} is presented in the Figure \ref{listing:aadl2spark2014_base_types_mapping}.
+In Ada 2012, and thus SPARK 2014, there is package \lstinline{Interfaces}, which allows for easy mapping of AADL \lstinline{Base_Types} package. The mapping proposed in Annex Document \cite{AnnexDoc} is presented in the Figure \ref{listing:aadl2spark2014_base_types_mapping}.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 with Interfaces;
@@ -117,9 +117,9 @@ end Base_Types;
 \label{listing:aadl2spark2014_base_types_mapping}
 \end{figure}
 
-Target language for this thesis is SPARK 2005. SPARK 2014 tools and especially multitasking capabilities were not ready, during the time when this thesis was written. Types: \lstinline{Float}, \lstinline{Character} and \lstinline{String} are also not part of this thesis, because of verification tools limitation. Thus, only \lstinline{Integer}, \lstinline{Enumeration}, \lstinline{Boolean} and \lstinline{Record} types are taken into account in mappings.
+The target language for this thesis is SPARK 2005. We evaluated SPARK 2014, but determined that, at the time when this thesis was written SPARK 2014 tools were not mature enough and multitasking facilities were not yet included in the language. Types: \lstinline{Float}, \lstinline{Character} and \lstinline{String} are also not part of this thesis, because of the limitations of SPARK 2005 verification tools limitation. Thus, only \lstinline{Integer}, \lstinline{Enumeration}, \lstinline{Boolean} and \lstinline{Record} types are taken into account in mappings.
 
-Each type is translated into simple type definition and protected type. Then it can be used in multitasking programs with Ravescar Profile. For every protected type only setter (\lstinline{Put}) and getter (\lstinline{Get}) subprograms are defined. It can be extended by developer during development phase. Protected objects can be also removed if they are not needed. Default value for priority, for each generated type is 10. It can be changed during development phase according to implementation details. Types: \lstinline{Integer}, \lstinline{Boolean} and \lstinline{Natural} are already defined in SPARK Ada, thus only protected objects are generated for them. AADL \lstinline{Base_Types} mapping to SPARK 2005 is presented in the Table \ref{table:aadl2spark_types_simple}.
+Each type is translated into simple type definition and protected type. Then it can be used in multitasking programs with the Ravenscar Profile. For every protected type only setter (\lstinline{Put}) and getter (\lstinline{Get}) subprograms are defined. The type can be extended by the developer during the development phase. Protected objects can be also removed if they are not needed. The default value for priority, for each generated type is 10. It can be changed during development phase to align with system goals. Types: \lstinline{Integer}, \lstinline{Boolean} and \lstinline{Natural} are already defined in SPARK Ada, thus only protected objects are generated for them. AADL \lstinline{Base_Types} mapping to SPARK 2005 is presented in the Table \ref{table:aadl2spark_types_simple}.
 
 \singlespacing
 \begin{center}
@@ -308,7 +308,7 @@ Each type is translated into simple type definition and protected type. Then it 
 \end{center}
 \doublespacing
 
-Type range is defined using AADL properties: \lstinline{Data_Model::Number_Representation}, \lstinline{Source_Data_Size} and \lstinline{Data_Model::Integer_Range}. When \lstinline{Data_Model::Integer_Range} property is not specified, then range is calculated. In case of \lstinline{Integer} representation range starts from negative value, for \lstinline{Unsigned} - from 0. Maximum value for \lstinline{Integer} is calculated using the formula \ref{eq:integer_max_formula}. 
+Type range is defined using AADL properties: \lstinline{Data_Model::Number_Representation}, \lstinline{Source_Data_Size} and \lstinline{Data_Model::Integer_Range}. When \lstinline{Data_Model::Integer_Range} property is not specified, then range is calculated. In case of \lstinline{Integer} representation, the range starts from negative value, for \lstinline{Unsigned} - from 0. The maximum value for \lstinline{Integer} is calculated using the formula \ref{eq:integer_max_formula}. 
 
 \begin{equation} \label{eq:integer_max_formula}
 	\text{Integer\_[Number\_Of\_Bytes * 8]\_Max} = 2^{\text{Number\_Of\_Bytes} * 8 - 1} - 1
@@ -324,7 +324,7 @@ The minimum value formula for Integer (\ref{eq:integer_min_formula}) and maximum
 	\text{Unsigned\_[Number\_Of\_Bytes * 8]\_Max} = 2^{\text{Number\_Of\_Bytes} * 8} - 1
 \end{equation}
 
-Mapping for enumeration types, presented in the Table \ref{table:aadl2spark_types_enums}, is pretty straightforward. BLESS properties are ignored in translation. In addition to simple types, protected types are generated.
+Mapping for enumeration types, presented in the Table \ref{table:aadl2spark_types_enums}, is straightforward. BLESS properties are ignored in translation. In addition to simple types, protected types are generated.
 
 \singlespacing
 \begin{center}
@@ -397,7 +397,7 @@ Mapping for enumeration types, presented in the Table \ref{table:aadl2spark_type
 \end{center}
 \doublespacing
 
-Sometimes it is pragmatic to define a type, which has exactly the same range like some already existing type. Especially when it is used for some specific calculations. E.g. measuring the speed. Let's say, that \lstinline{Unsigned_16} was used. Then, during development of next car model, it becomes not enough. In case when e.g. \lstinline{Speed_Type} is not defined, there are two possible resolutions. First: change definition (range) of \lstinline{Unsigned_16}. That is bad choice, especially because its name specify the range. Another reason: it might be used not only for measuring the Speed, but maybe also for fuel level, which range is still fine. Second option is to change \lstinline{Unsigned_16} to e.g. \lstinline{Unsigned_32} everywhere in Speed Control Module (and maybe also in some external modules). When \lstinline{Speed_Type} is defined and used everywhere for speed units, then only definition of \lstinline{Speed_Type} has to be changed. To define type, using existing type in AADL, derived type (defined with \lstinline{extends} keyword) or \lstinline{Data_Model::Base_Type} property can be used. Translation to SPARK Ada is shown in the Table \ref{table:aadl2spark_types_subtypes}. There are two ways to define type based on some other type in SPARK Ada:
+Sometimes it is pragmatic to define a type that has exactly the same range as an already existing type, especially when it is used for some specific calculations, e.g., measuring speed. Let's say, that \lstinline{Unsigned_16} was used. Then, during development of next car model, when a larger number of bits are required to hold anticipated values, it becomes not enough. In case when e.g., \lstinline{Speed_Type} is not defined, there are two possible resolutions. First: change definition (range) of \lstinline{Unsigned_16}. That is bad choice, especially because its name specify the range. Another reason: it might be used not only for measuring the Speed, but maybe also for fuel level, which range is still fine. Second option is to change \lstinline{Unsigned_16} to e.g. \lstinline{Unsigned_32} everywhere in Speed Control Module (and maybe also in some external modules). When \lstinline{Speed_Type} is defined and used everywhere for speed units, then only definition of \lstinline{Speed_Type} has to be changed. To define type, using existing type in AADL, derived type (defined with \lstinline{extends} keyword) or \lstinline{Data_Model::Base_Type} property can be used. Translation to SPARK Ada is shown in the Table \ref{table:aadl2spark_types_subtypes}. There are two ways to define type based on some other type in SPARK Ada:
 
 \begin{itemize}
 	\item subtype - it is compatible with its parent, in other words: parent type variable can be assigned to it, if its value is in the subtype range
@@ -866,7 +866,7 @@ Mappings of subprograms is also straightforward. However, it is different than m
 
 In SPARK Ada there are nested packages and child packages. Sample nested packages are shown in the Figure \ref{listing:nested_packages}. Equivalent child packages are shown in the Figure \ref{listing:child_packages}. The name of a child package consists of the parent unit's name followed by the child package's identifier, separated by a period (dot) '.'. Calling convention is the same for child and nested packages (e.g. \lstinline{P.N} in figures \ref{listing:nested_packages} and \ref{listing:child_packages}). However, there is a difference between nested packages and child packages. In nested package, declarations become visible as they are introduced, in textual order. For example, in the Figure \ref{listing:nested_packages} spec \lstinline{N} cannot refer to \lstinline{M} in any way. In case of child packages, with certain exceptions, all the functionality of the parent is available to a child and parent can access all its child packages. More precisely: all public and private declarations of the parent package are visible to all child packages. Private child package can be accessed only from parent's body.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 package P is
@@ -895,7 +895,7 @@ end P;
 \label{listing:nested_packages}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 package P is
@@ -930,7 +930,7 @@ There was an idea to create child package to encapsulate one feature group in it
 
 Figure \ref{listing:aadl_sample} presents sample AADL package with \lstinline{system} entity. It contains all types of ports described in Section \ref{codegen:mapping:ports} and one feature group with two ports as example of feature group mapping.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Some_Pkg
@@ -964,7 +964,7 @@ end Some_Pkg;
 
 For now, only single process SPARK Ada application is considered. Thus, ports are exposed only on system level. Communication between threads in process will be realized by protected objects and only SPARK annotations and data types will be needed as described in Section \ref{codegen:mapping:threads}. Based on ports mapping, presented in Section \ref{codegen:mapping:ports}, translation to SPARK Ada package is shown in the Figure \ref{listing:package_mapping_spec} and Figure \ref{listing:package_mapping_body}. 
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 package Some_Pkg
@@ -1012,7 +1012,7 @@ end Some_Pkg;
 \label{listing:package_mapping_spec}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 package body Some_Pkg
@@ -1272,10 +1272,10 @@ Example of communication between threads, in single process is depicted in the F
     \label{figure:port_communication_thread}
 \end{figure}
 
-\singlespacing
 \begin{table}[!ht]
 	\caption{AADL threads communication to SPARK Ada tasks communication translation}
 	\label{table:port_communication_thread}
+	\singlespacing
 	\centering
   	\begin{tabular}{ | p{3in} | p{3in} |}
 	  	%\multicolumn{1}{c}{\textbf{AADL/BLESS}} & \textbf{SPARK Ada}\\
@@ -1370,7 +1370,7 @@ Example of communication between threads, in single process is depicted in the F
 \end{table}
 \doublespacing
 
-Threads can be also placed in different packages. The same example of two threads within one process, but in different packages is presented in the Table \ref{table:port_communication_thread_different_pkg}. In this case, subprograms present in mapping table, in the Section \ref{codegen:port_communication} are also present in resulted translation. Moreover, body of procedure \lstinline{Receive_Some_Port} is implemented as a result of defined connection between threads in the process implementation, in AADL model.
+Threads can be also placed in different packages. The same example of two threads within one process, but in different packages is presented in the Table \ref{table:port_communication_thread_different_pkg}. In this case, subprograms present in mapping table, in Section \ref{codegen:port_communication} are also present in resulted translation. Moreover, body of procedure \lstinline{Receive_Some_Port} is implemented as a result of defined connection between threads in the process implementation, in AADL model.
 
 \clearpage
 
@@ -1531,13 +1531,13 @@ In the given example, communication is one way: from \lstinline{Pkg1} package to
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=0.3\textwidth]{figures/port-communication-thread-two-way.png}    	
+    	\includegraphics[width=0.4\textwidth]{figures/port-communication-thread-two-way.png}    	
     \end{center}
     \caption{Example of two way port communication between threads in different packages}
     \label{figure:port_communication_thread_two_way}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Pkg1TwoWay
@@ -1586,7 +1586,7 @@ end Pkg2TwoWay;
 
 This model, translated to SPARK Ada is presented in the Figure \ref{listing:port_communication_thread_two_way_spark_pkg1twoway} and Figure \ref{listing:port_communication_thread_two_way_spark_pkg2twoway}. It will not compile. GNAT compiler returns \lstinline{circular unit dependency} error. Additionally verification with SPARK Examiner returns error: \lstinline{Semantic Error 135 - The package Pkg2TwoWay is undeclared or not visible, or there is a circularity in the list of inherited packages}. Now, the problem is that two-way communication is allowed in AADL, but not in SPARK, nor even in Ada. This require further investigation, which is omitted in this thesis.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Base_Types;
@@ -1650,7 +1650,7 @@ end Pkg1TwoWay;
 \label{listing:port_communication_thread_two_way_spark_pkg1twoway}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Base_Types;
@@ -1720,7 +1720,7 @@ end Pkg2TwoWay;
 
 This Section is a concept, how communication between different systems can look like. AADL system consists of process(es) and process consists of threads. Ports would be exposed by package if they are specified in system entity. Communication between two systems cab be described by another system. Figure \ref{figure:port_communication} presents communication between two systems: panel and pump. AADL model of this system comprises 3 packages: \lstinline{Main}, \lstinline{Panel} and \lstinline{Pump}. They are presented in the figures \ref{listing:port_communication_panel}, \ref{listing:port_communication_pump} and \ref{listing:port_communication_main}. \lstinline{Panel} package has one thread \lstinline{Panel_Thread} with two \lstinline{out} ports: \lstinline{event port} and \lstinline{event data port}. Both ports are exposed by process \lstinline{panel_process} and then by system \lstinline{panel}. \lstinline{Pump} package has similar structure, but two \lstinline{in} ports. Both are also exposed by process (\lstinline{pump_process}) and system (\lstinline{pump}). Connection between these two packages are defined in \lstinline{Main} package.
 
-\begin{figure}[ht]%t=top, b=bottom, h=here
+\begin{figure}%[ht]%t=top, b=bottom, h=here
     \begin{center}
     	\includegraphics[width=0.6\textwidth]{figures/port-communication.png}    	
     \end{center}
@@ -1728,7 +1728,7 @@ This Section is a concept, how communication between different systems can look 
     \label{figure:port_communication}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Panel
@@ -1779,7 +1779,7 @@ end Panel;
 \label{listing:port_communication_panel}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Pump
@@ -1829,7 +1829,7 @@ end Pump;
 \label{listing:port_communication_pump}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=aadl, frame=single, gobble=0]
 package Main
@@ -1857,7 +1857,7 @@ end Main;
 
 Based on mappings from Section \ref{codegen:mapping}, conforming SPARK Ada code is presented in the figures \ref{listing:port_communication_spark_panel} and \ref{listing:port_communication_spark_panel}. There are two packages: \lstinline{Panel} and \lstinline{Pump}. \lstinline{Main} package is omitted. Both contain procedures representing ports interfaces, according to ports mapping from Section \ref{codegen:mapping:ports}. Additionally, both consists of empty thread declarations and bodies, which conforms to translations from Section \ref{codegen:mapping:threads}. However, in this case, both packages will work in different systems, thus different processes.  To enable communication between different systems, deployment methodology and the middle-ware layer has to be created. It will allow not only for system to system communication, but also for communication with devices. It is omitted in this thesis.
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Pump;
@@ -1916,7 +1916,7 @@ end Panel;
 \label{listing:port_communication_spark_panel}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Base_Types;

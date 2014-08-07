@@ -9,9 +9,9 @@
 % http://www.santoslab.org/pub/paper/LarsonEtAl13-PCA-Requirements-SEHC-preprint.pdf
 % http://ppahs.org/2012/05/30/patient-controlled-analgesia-pca-pumps-the-basics/
 
-\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{wrapfigure}{r}{0.5\textwidth}
   \begin{center}
-    \includegraphics[width=0.4\textwidth]{figures/pca-pump.png}
+    \includegraphics[width=0.5\textwidth]{figures/pca-pump.png}
   \end{center}
   \caption{Patient Controlled Analgesia (PCA) pump}
   \label{figure:pca-pump}
@@ -21,7 +21,7 @@ A Patient Controlled Analgesia (PCA) pump\footnote{http://ppahs.org/2012/05/30/p
 
 Figure \ref{figure:pca-pump} shows LifeCare PCA pump. On the left hand side, there is drug reservoir. On the right -  clinician panel, which allows to control the pump. Figure \ref{figure:alaris-pump} shows PCA Pump, made by company Alaris. 
 
-\begin{wrapfigure}{l}{0.4\textwidth}
+\begin{wrapfigure}{r}{0.4\textwidth}
   \begin{center}
     \includegraphics[width=0.4\textwidth]{figures/alaris-pump.png}
   \end{center}
@@ -29,7 +29,7 @@ Figure \ref{figure:pca-pump} shows LifeCare PCA pump. On the left hand side, the
   \label{figure:alaris-pump}
 \end{wrapfigure}
 
-A PCA pump is safety-critical device which works in standard process control loop depicted in the Figure \ref{figure:control-loop}. The controller obtains information about (observes) the process state from measured variables (feedback) and uses this information to initiate action by manipulating controlled variables to keep the process operating within predefined limits or set points (the goal) despite disturbances to the process, such as different air pressure or device position (gravity impact). In general, the maintenance of any open-system hierarchy (either biological or man-made) will require a set of processes in which there is communication of information for regulation or control \cite{SaferWorld}.
+A PCA pump is safety-critical device which works in standard process control loop, proposed by Leveson in \cite{SaferWorld}, depicted in the Figure \ref{figure:control-loop}. The controller obtains information about (observes) the process state from measured variables (feedback) and uses this information to initiate action by manipulating controlled variables to keep the process operating within predefined limits or set points (the goal) despite disturbances to the process, such as different air pressure or device position (gravity impact). In general, the maintenance of any open-system hierarchy (either biological or man-made) will require a set of processes in which there is communication of information for regulation or control \cite{SaferWorld}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -66,14 +66,14 @@ The conceptual model of Open PCA pump is depicted in the Figure \ref{figure:ice-
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-      \includegraphics[width=0.9\textwidth]{figures/ice-pca-pump.png}      
+      \includegraphics[width=0.8\textwidth]{figures/ice-pca-pump.png}      
     \end{center}
     \caption{Open PCA Pump concept}
     \label{figure:ice-pca-pump}
 \end{figure}
 
 Additionally, it cooperates with Drug Library, which contains information about drugs and their properties (like concentration). Data needed for pump operation, are captured on electronic prescription, which contains:
-\begin{itemize}
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
     \item Patient's name
     \item Drug name
     \item Drug code
@@ -93,7 +93,7 @@ Pain medication is prescribed by a licensed physician, which is dispensed by the
 The prescription captures all data needed for basal infusion and patient requested boluses (referred as bolus). In addition to that, Open PCA Pump allows Clinician Requested Bolus (refereed as square bolus). In order to do that, clinician has to enter the time (through PCA Pump panel) in which additional dose, equal to VTBI (Volume To Be Infused) specified in prescription, will be infused.
 
 There can occur situations in which the maximum drug amount infused may exceed the allowed limit. E.g. when clinician issues too many square boluses. In such case, pump is switched to Keep Vein Open (KVO) mode, which has 1 ml/hr drug rate. KVO is standard mode used in infusion pumps to prevent the vein from closing. Pump switches to KVO rate also when ICE interface requests it. It may happen e.g. if patient's oxygen level is low. To recover from KVO state, pump has to be restarted by clinician in order to continue operation. In Summary, Open PCA Pump has following modes:
-\begin{itemize}
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
     \item Stopped
     \item Basal rate
     \item Patient's bolus (bolus)
@@ -118,7 +118,7 @@ In addition to PCA Pump Requirements Document \cite{PcaReq}, Brian Larson create
     \label{figure:pca-pump-aadl-model}
 \end{figure}
 
-The AADL model captures the internal architecture of the device, while BLESS specifications capture its behavior. In appendix \ref{Appendix:AADL:RateController}, thread \lstinline{Rate_Controller} from the \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation, is presented. The thread declaration contains input and output ports. Some of them have BLESS assertions attached. These assertions are defined using the BLESS annex in the thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into a working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered.
+The AADL model captures the internal architecture of the device, while BLESS specifications capture its behavior. In Appendix \ref{Appendix:AADL:RateController}, thread \lstinline{Rate_Controller} from the \lstinline{PCA_Operation} component with BLESS assertions in thread declaration and BLESS behavioral description in thread implementation, is presented. The thread declaration contains input and output ports. Some of them have BLESS assertions attached. These assertions are defined using the BLESS annex in the thread implementation. In addition to assertions, states and transitions defined in thread implementation can potentially be translated into a working SPARK Ada program. Presence of timing properties in states and transitions makes translation extremely difficult, thus there are omitted in this thesis and only assertions are considered.
 
 
 \section{BeagleBoard-xM}
@@ -146,6 +146,6 @@ Pulse-width modulation (PWM) is a technique for controlling analog circuits with
     \label{figure:pwm}
 \end{figure}
 
-There is no existing SPARK Ada compiler running on ARM system. Hence, to compile SPARK Ada program for ARM device, cross-compiler is needed. There is GNAT compiler \cite{Horn:Thesis} created by AdaCore, but there was no cross-compiler for ARM. However, AdaCore was actively developing cross-compiler. They had a working version in 2013, but tested only on their target Android-based device. Cooperation with AdaCore (during work on this thesis) involved bundling and testing a cross compiler for ARM to produce code for the BeagleBoard-xM resulted in working cross-compiler. For now, the GNAT cross-compiler works only on Linux 32-bit operating system.
+There is no existing SPARK Ada compiler running on ARM system. Hence, to compile SPARK Ada program for ARM device, cross-compiler is needed. There is GNAT compiler \cite{Horn:Thesis} created by AdaCore, but there was no cross-compiler for ARM. However, AdaCore was actively developing cross-compiler. They had a working version in 2013, but tested only on their target Android-based device. This version was not working on BeagleBoard-xM platform with Angstrom Linux (configuration used in this thesis). Cooperation with AdaCore, involved bundling and testing a cross-compiler for ARM to produce code for the BeagleBoard-xM, resulted in working cross-compiler. For now, the GNAT cross-compiler works only on Linux 32-bit operating system (as a platform in which cross-compilation has to be performed).
 
 In addition to USB ports, BeagleBoard-xM has also a serial port and an Ethernet port. It allows to copy programs compiled on Linux, using all three types of ports. 
