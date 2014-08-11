@@ -1398,10 +1398,8 @@ with Pca_Properties,
 --#         Ice_Types,
 --#         Pca_Types;
 package Pca_Operation
---# own protected Bolus_Duration : Ice_Types.Minute_Store (Priority=>10);
---#     protected Infusion_Flow_Rate : PCA_Types.Flow_Rate_Store (Priority=>10);
+--# own protected Infusion_Flow_Rate : PCA_Types.Flow_Rate_Store (Priority=>10);
 --#     protected System_Status : Pca_Types.Status_Type_Store (Priority=>10);
---#     protected Rx : Pca_Types.Prescription_Store (Priority=>10);
 --#     task mdphw : Max_Drug_Per_Hour_Watcher;
 --#     task rc : Rate_Controller;
 --#     task pbc : Patient_Bolus_Checker;
@@ -1415,8 +1413,6 @@ is
     procedure Put_Clinician_Request_Bolus;
 
     procedure Put_Bolus_Duration (Bolus_Duration_In : Ice_Types.Minute);
-    --# global out Bolus_Duration;
-    --# derives Bolus_Duration from Bolus_Duration_In;
 
     procedure Get_Infusion_Flow_Rate (Infusion_Flow_Rate_Out : out Pca_Types.Flow_Rate);
     --# global in Infusion_Flow_Rate;
@@ -1427,8 +1423,6 @@ is
     --# derives System_Status_Out from System_Status;
 
     procedure Put_Rx (Rx_In : Pca_Types.Prescription);
-    --# global out Rx;
-    --# derives Rx from Rx_In;
 
 
     task type Max_Drug_Per_Hour_Watcher
@@ -1438,9 +1432,7 @@ is
     end Max_Drug_Per_Hour_Watcher;
 
     task type Rate_Controller
-    --# global in Rx;
-    --#        in Bolus_Duration;
-    --#        out Infusion_Flow_Rate;
+    --# global out Infusion_Flow_Rate;
     --#        out System_Status;
     is
         pragma Priority(10);
@@ -1465,10 +1457,8 @@ is
                      SquareBolusDone,
                      StartButton);
 
-    Bolus_Duration : Ice_Types.Minute_Store;
     Infusion_Flow_Rate : PCA_Types.Flow_Rate_Store;
     System_Status : Pca_Types.Status_Type_Store;
-    Rx : Pca_Types.Prescription_Store;
 
     mdphw : Max_Drug_Per_Hour_Watcher;
     rc : Rate_Controller;
@@ -1505,7 +1495,7 @@ is
     procedure Put_Bolus_Duration (Bolus_Duration_In : ICE_Types.Minute)
     is
     begin
-        Bolus_Duration.Put(Bolus_Duration_In);
+        -- TODO: implement data event handler
     end Put_Bolus_Duration;
 
     procedure Get_Infusion_Flow_Rate (Infusion_Flow_Rate_Out : out Pca_Types.Flow_Rate)
@@ -1523,7 +1513,7 @@ is
     procedure Put_Rx (Rx_In : Pca_Types.Prescription)
     is
     begin
-        Rx.Put(Rx_In);
+        -- TODO: implement data event handler
     end Put_Rx;
 
 

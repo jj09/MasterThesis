@@ -6,13 +6,18 @@
 \chapter{PCA Pump Prototype Implementation and Code Generation}
 \label{pcapumpimpl}
 
-This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})) and code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}). All programs presented in this section works the same on Intel processor (PC or MacBook) and on BeagleBoard-xM (ARM device).
+\begin{chapquote}{\textit{Albert Einstein}}
+``Imagination is more important than knowledge. \\
+Knowledge is limited. Imagination encircles the world.''
+\end{chapquote}
+
+This chapter describes running SPARK Ada programs on BeagleBoard-xM platform (\ref{pcapump:beagleboard}), implementation details of PCA pump prototype (\ref{pcapumpimpl:manual})) and code generation from simplified AADL/BLESS models of PCA pump (\ref{pcapumpimpl:codegen}). All programs presented in this section work the same on an Intel processor (PC or MacBook) and on the BeagleBoard-xM (ARM device).
 
 
 \section{Running SPARK Ada Programs on BeagleBoard-xM}
 \label{pcapumpimpl:beagleboard}
 
-To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see Section \ref{background:spark:gps}). To create "Hello, World!" application, new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, was added. The code is presented in the Figure \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
+To run SPARK Ada program on BeagleBoard-xM, it has to be cross-compiled. As an IDE for SPARK Ada development, GNAT Programming Studio (GPS) is used (see Section \ref{background:spark:gps}). To create a "Hello, World!" application, a new Ada project has been created (choosing Project/New... from the menu). Then main.adb file, with procedure Main printing "Hello, World!" in standard output, has been added. The code is presented in the Figure \ref{listing:HelloWorld}. It is valid Ada 2005 and Ada 2012 code.
 
 \begin{figure}[ht]
 \singlespacing
@@ -32,11 +37,11 @@ end Main;
 \end{figure}
 
 
-The main file has to be always specified in project file (\lstinline{.gpr}) in order to compile and link application, which can be runnable. It can be done in Project/Edit Project Properties (Figure \ref{figure:editprojectproperties}), tab: Main files (Figure \ref{figure:mainfiles}) or directly in project file (\lstinline{.gpr}).
+The main file has to be always specified in project file (\lstinline{.gpr}) in order to compile and link the application, which can be runnable. This can be done in Project/Edit Project Properties (Figure \ref{figure:editprojectproperties}), tab: Main files (Figure \ref{figure:mainfiles}) or directly in project file (\lstinline{.gpr}).
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3.2in]{figures/EditProjectProperties.png}    	
+    	\includegraphics[width=0.8\textwidth]{figures/EditProjectProperties.png}    	
     \end{center}
     \caption{Edit Project Properties}
     \label{figure:editprojectproperties}
@@ -44,20 +49,20 @@ The main file has to be always specified in project file (\lstinline{.gpr}) in o
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[width=3.2in]{figures/Properties-MainFiles.png}    	
+    	\includegraphics[width=0.7\textwidth]{figures/Properties-MainFiles.png}    	
     \end{center}
     \caption{Project Main files}
     \label{figure:mainfiles}
 \end{figure}
 
-To enable cross-compilation, for current version of cross-compiler, environmental variable \lstinline{\$ENV_PREFIX} has to be set to directory, which contains \lstinline{/lib} and \lstinline{/usr} directories. Latter should also contains \lstinline{/usr/lib} and \lstinline{/usr/include} subdirectories. After mentioned directories has been copied into \lstinline{/home/super/angstrom-arm} directory, \lstinline{\$ENV_PREFIX} has been exported with following command: \lstinline{export ENV_PREFIX=/home/super/angstrom-arm}. Entire project can be compiled and linked with following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (where \lstinline{helloworld.gpr} is GNAT Programming Studio project file). Additional flags can be specified in command line or directly in project file (manually or through GNAT Programming Studio Interface).
+To enable cross-compilation, for the current version of cross-compiler, the environmental variable \lstinline{ENV_PREFIX} has to be set to a directory that contains \lstinline{/lib} and \lstinline{/usr} directories. The \lstinline{/usr} directory should also contain \lstinline{/usr/lib} and \lstinline{/usr/include} subdirectories. After these directories are copied into \lstinline{/home/super/angstrom-arm} directory, the \lstinline{ENV_PREFIX} is exported with following command: \lstinline{export ENV_PREFIX=/home/super/angstrom-arm}. The entire project can be compiled and linked with following command: \lstinline{arm-linux-gnueabi-gnatmake -d -Phelloworld.gpr} (where \lstinline{helloworld.gpr} is GNAT Programming Studio project file). Additional flags can be specified in the command line or directly in the project file (manually or through GNAT Programming Studio Interface).
 
-More complex example, which takes advantage of SPARK contracts is presented in Section \ref{pcapumpimpl:beagleboard:odometer}.
+A more complex example, which takes advantage of SPARK contracts is presented in Section \ref{pcapumpimpl:beagleboard:odometer}.
 
 \subsection{Odometer}
 \label{pcapumpimpl:beagleboard:odometer}
 
-Odometer is a simple SPARK Ada program, which implements basic functions of standard Odometer. Figure \ref{listing:Odometer2005} shows Odometer in SPARK 2005.
+The Odometer example is a simple SPARK Ada program, which implements the basic functions of standard odometer. Figure \ref{listing:Odometer2005} shows Odometer in SPARK 2005.
 
 \begin{figure} %[ht]
 \singlespacing
@@ -122,18 +127,18 @@ end Odometer;
 \end{figure}
 
 There are 4 subprograms (2 procedures and 2 functions), which are globally available (through other packages and program units):
-\begin{itemize}
+\begin{itemize} %\itemsep1pt \parskip0pt \parsep0pt
     \item \lstinline{Zero_Trip} procedure - reset Odometer to 0
     \item \lstinline{Read_Trip} function - returns current distance
     \item \lstinline{Read_Total} function - returns total distance traveled
     \item \lstinline{Inc} procedure - increment total and current distance by 1
 \end{itemize}
 
-Given program contains code contracts. Tough it does not matter in compilation phase, it shows that SPARK verification tools can be used for given example. 
+The given program contains code contracts. Though it does not matter in compilation phase, it is used to illustrate how SPARK verification tools can be applied. 
 
-Annotation \lstinline{global} means that subprogram uses some global variable. Postfix in, out or in out means that particular variable is read, write or read and write respectively. Annotation \lstinline{derives} says that some variable value depends on other variables. E.g. in procedure \lstinline{Inc} variable \lstinline{Trip} is dependent on its current value (before procedure call). Annotations \lstinline{pre} and \lstinline{post} define pre- and postconditions of procedure. We can see, that in \lstinline{Zero_Trip} procedure postcondition requires that variable \lstinline{Trip} is equal to 0. In procedure \lstinline{Inc}, postconditions requires that variables \lstinline{Trip} and \lstinline{Total} are incremented by 1 ("\lstinline{~}" is the value of variable before procedure call). Annotation \lstinline{own} expose private variables for use in public methods specification. Annotation \lstinline{initializes} ensures that given variables are initializes. 
+Annotation \lstinline{global} means that subprogram uses some global variable. This information helps developer to avoid undesired side effects. The \lstinline{global} annotation has three possible postfixes: (1) \lstinline{in}, (2) \lstinline{out} and (3) \lstinline{in out}, which means that particular variable is read, write and read/write respectively. Annotation \lstinline{derives} says that some variable value depends on other variables, e.g., in procedure \lstinline{Inc} variable \lstinline{Trip} is dependent on its current value (before procedure call). Annotations \lstinline{pre} and \lstinline{post} define pre- and postconditions of procedure. We can see that in the \lstinline{Zero_Trip} procedure, the postcondition requires that variable \lstinline{Trip} is equal to 0. In procedure \lstinline{Inc}, postconditions require that variables \lstinline{Trip} and \lstinline{Total} are incremented by 1 (tilde appended at the end of variable name is the value of variable when the procedure is called). Annotation \lstinline{own} exposes private variables for use in specifications for public methods. Annotation \lstinline{initializes} announce required initialization of the given variables. 
 
-In order to test \lstinline{Odometer} package in runtime, the \lstinline{Main} procedure has been created. It is presented in the Figure \ref{listing:main}.
+In order to test \lstinline{Odometer} package at runtime, a \lstinline{Main} procedure has been created. It is presented in the Figure \ref{listing:main}.
 
 \begin{figure}[ht]
 \singlespacing
@@ -168,7 +173,7 @@ end Main;
 \label{listing:main}
 \end{figure}
 
-Odometer in SPARK 2005 works fine on BeagleBoard-xM. In order to test SPARK 2014 program, SPARK 2005 annotations has been converted into Ada 2012 contracts. Figure \ref{listing:Odometer2014} presents Odometer in SPARK 2014.
+Odometer in SPARK 2005 works fine on the BeagleBoard-xM using the cross compilation techniques introduced in the previous section. In order to test a SPARK 2014 version of the program, SPARK 2005 annotations have been converted into Ada 2012 contracts. Figure \ref{listing:Odometer2014} presents Odometer in SPARK 2014.
 
 \begin{figure}%[ht]
 \singlespacing
@@ -239,11 +244,11 @@ Odometer example was created to check possible limitations and issues related to
 \subsection{Multitasking Applications}
 \label{pcapumpimpl:beagleboard:multitasking}
 
-In Ada World, concurrency is referred as tasking and the task is the same construct as the thread in other programming languages. In Section \ref{pcapumpimpl:beagleboard:odometer}, single-tasking application was tested. This section presents simple Ada multitasking application and multitasking version of Odometer in SPARK 2005 from Section \ref{pcapumpimpl:beagleboard:odometer}. Both applications compiles correctly and works as expected on BeagleBoard-xM platform.
+In Ada World, concurrency is referred as tasking, and the task is the same construct as the thread in other programming languages. In Section \ref{pcapumpimpl:beagleboard:odometer}, a single-tasking application was tested. This section presents a simple Ada a multitasking application and multitasking version of Odometer in SPARK 2005 from Section \ref{pcapumpimpl:beagleboard:odometer}. Both applications compile correctly and work as expected on BeagleBoard-xM platform.
 
 \subsubsection{Ada Multitasking Application}
 
-Figure \ref{listing:HelloTasking} presents a simple multitasking application printing numbers in different time intervals, in Ada 2005. It is also valid code for Ada 2012. There are 3 tasks:
+Figure \ref{listing:HelloTasking} presents a simple Ada 2005 multitasking application that prints numbers in different time intervals. It is also valid code for Ada 2012. There are 3 tasks:
 \begin{itemize}
     \item Main task
     \item S (type: \lstinline{Seconds}) - simple counter printing numbers form 1 to 10 in every second
@@ -292,19 +297,19 @@ end Main;
 \label{listing:HelloTasking}
 \end{figure}
 
-The program works as expected on BleagleBoard-xM. This is not valid SPARK program though. As mentioned in Section \ref{background:spark:ravenscar}, tasks can be declared only in packages. Not in subprograms or in other tasks \cite{Barnes:Book}.
+The program works as expected on BleagleBoard-xM. This is not a valid SPARK program though. As mentioned in Section \ref{background:spark:ravenscar}, tasks can be declared only in packages. Not in subprograms or in other tasks \cite{Barnes:Book}.
 
 \subsubsection{SPARK Ada multitasking application}
 
-As mentioned in Section \ref{background:spark:ravenscar}, in SPARK 2005 multitasking is possible with Ravenscar Profile. Default profile - sequential -  does not enable tasking. In other words, SPARK tools cannot analyze and reason about programs if Ravenscar profile flag is not provided. In SPARK 2014 - for now tasking is not possible. It's part of SPARK 2014 road map to include support for tasking in the future. Thus, only SPARK 2005 application was tested.
+As mentioned in Section \ref{background:spark:ravenscar}, in SPARK 2005 multitasking is possible with Ravenscar Profile. Default profile - sequential -  does not enable tasking. In other words, SPARK 2005 tools cannot analyze and reason about programs if Ravenscar profile flag is not provided. In SPARK 2014 - for now tasking is not possible. It's part of SPARK 2014 road map to include support for tasking in the future. Thus, only the SPARK 2005 application was tested.
 
-Tested, multitasking application is extended version of Odometer (presented in the Figure \ref{listing:Odometer2005}). It has additional variable \lstinline{Speed}, procedure \lstinline{Set_Speed} and new task: \lstinline{Drive}. Thus, in total it has two tasks:
+The tested, multitasking application is an extended version of Odometer (presented in the Figure \ref{listing:Odometer2005}). It has additional variable \lstinline{Speed}, procedure \lstinline{Set_Speed} and new task: \lstinline{Drive}. Thus, in total it has two tasks:
 \begin{itemize}
     \item Main
     \item Drive
 \end{itemize}
 
-The \lstinline{Drive} task increase \lstinline{Total} and \lstinline{Trip} variables by \lstinline{Speed} (m/s) in every second. Extended Odometer is presented in the figures \ref{listing:Odometer2005Tasking_spec} and \ref{listing:Odometer2005Tasking_body}. 
+The \lstinline{Drive} task increase \lstinline{Total} and \lstinline{Trip} variables by \lstinline{Speed} (m/s) in every second. Extended Odometer is presented in Figure \ref{listing:Odometer2005Tasking_spec} and \ref{listing:Odometer2005Tasking_body}. 
 
 \begin{figure}%[ht]
 \singlespacing
@@ -429,17 +434,17 @@ There are two ways to access protected variable in task body:
     \item It has to be atomic type
 \end{itemize}
 
-Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then we get semantic error: \lstinline{Trip is a protected own variable}. To preserve pre- and postconditions from original Odometer, atomic types (\lstinline{Distance} and \lstinline{Meters_Per_Second}) has been used. The capability to specify pre- and postconditions has been preserved, but now application is not thread safe.
+Protected variables may not be used in proof contexts. Thus, if we try to use protected variable in proofs (pre- or postcondition), then we get semantic error: \lstinline{Trip is a protected own variable}. To preserve pre- and postconditions from original Odometer, atomic types (\lstinline{Distance} and \lstinline{Meters_Per_Second}) has been used. The capability to specify pre- and postconditions has been preserved, but now the application is not thread safe.
 
 
 \subsection{Controlling PCA Pump Actuator}
 \label{pcapumpimpl:beagleboard:pcapumpmotor}
 
-PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins. Three of them are PWM enable (pin 4 - mapped as \lstinline{GPIO_144}, pin 6 - \lstinline{GPIO_146} and pin 10 - \lstinline{GPIO_145}). All of these pins allow to control external device by specifying frequency and duty cycle. However it requires PWM driver.\footnote{http://beagleboard.org/project/PWM+driver+for+Beagle+Board/} PWM can be also simulated manually. To run the pump, pin has to be turned on and off with specified frequency. In order to do that, \lstinline{sleep} function can be used. 
+PCA pump prototype created as part of this thesis interacts with external device (physical pump) through General-purpose input/output (GPIO) pin. To control the pump, Pulse width modulation (described in \ref{pcapump:beagleboard}) is used. BeagleBoard-xM has 28 GPIO pins. Three of them are PWM enable (pin 4 - mapped as \lstinline{GPIO_144}, pin 6 - \lstinline{GPIO_146} and pin 10 - \lstinline{GPIO_145}). All of these pins allow to control external device by specifying frequency and duty cycle. However it requires PWM driver.\footnote{http://beagleboard.org/project/PWM+driver+for+Beagle+Board/} PWM can be also simulated manually. To run the pump, pin has to be turned on and off with specified frequency. In order to do that, a \lstinline{sleep} function can be used. 
 
 GPIO ports interact with the BeagleBoard platform through memory maps. This means that turning particular pin on or off is achieved by writing values into a memory segment associated with the pin. Memory segment is further mapped into file system. Memory maps are synchronized via continuous refresh loops.
 
-Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). In that purpose pin 28 is used. Figure \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
+Pin, used for controlling PCA pump, is the pin 14 (mapped as \lstinline{GPIO_162}). It is mapped into directory \lstinline{/sys/class/gpio/gpio162/}. To turn pin on, file \lstinline{/sys/class/gpio/gpio162/value} has to contain '1'. To turn it off - '0'. Pump is also connected to ground (GND). For that purpose pin 28 is used. Figure \ref{listing:SwitchingPin} shows simple bash script, which turns pin on and off every second. Before the pin can be used, it has to be opened by writing pin mapping number (in this case: 162 for pin 14) into \lstinline{/sys/class/gpio/export} file. When communication is over, connection should be closed with writing the same value to file \lstinline{/sys/class/gpio/unexport}. Setting 'high' (1) for 1 second and 'low' (0) also for 1 second gives 50\% duty cycle.
 
 \begin{figure}[ht]
 \singlespacing
@@ -477,10 +482,12 @@ cleanup
 \label{listing:SwitchingPin}
 \end{figure}
 
-Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. Bash script runs natively on Angstrom Linux. Java application - on JVM distribution for Angstrom. 
+Initial tests of interaction with pump actuator has been made in bash and Java, because it does not require cross-compilation. The bash script runs natively on Angstrom Linux. The Java application runs on the JVM distribution for Angstrom. 
+
+\clearpage
 
 BeagleBoard-xM with Linux Angstrom allows to install software packages using package manager \lstinline{opkg}.\footnote{http://wiki.openwrt.org/doc/techref/opkg} Packages feeds can be found on \lstinline{http://feeds.angstrom-distribution.org/feeds} and set in \lstinline{.conf} files in \lstinline{/etc/opkg} directory. In this thesis version 2012.01 of Angstrom (with Linux 3.0.14+) has been used and the following feeds:
-\begin{itemize}
+\begin{itemize} \itemsep0pt \parskip0pt \parsep0pt
 	\item \lstinline{base-feed.conf}: \lstinline{src/gz base http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/base}
 	\item \lstinline{beagleboard-feed.conf}: \lstinline{src/gz beagleboard http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/beagleboard}
 	\item \lstinline{debug-feed.conf}: \lstinline{src/gz debug http://feeds.angstrom-distribution.org/feeds/v2012.05/ipk/eglibc/armv7a/debug}
@@ -492,7 +499,7 @@ BeagleBoard-xM with Linux Angstrom allows to install software packages using pac
 
 Once, feeds are set, it is recommended to update list of available packages with command: \lstinline{opkg update}. To update all installed packages, following command has to be used: \lstinline{opkg upgrade}. To install Java runtime-environment (JVM), the following command can be used: \lstinline{opkg install openjdk-6-java}. Java Development Kit, which contains Java compiler and allows to compile Java programs on BeagleBoard, can be installed with: \lstinline{opkg install openjdk-6-jdk}.
 
-Similar program to bash script presented in the Figure \ref{listing:SwitchingPin}, but working for 20 seconds and terminating, written in Java is presented in the Figure \ref{listing:pca_java}. 
+A program similar to the bash script presented in Figure \ref{listing:SwitchingPin}, but working for 20 seconds and terminating, written in Java, is presented in Figure \ref{listing:pca_java}. 
 
 \begin{figure}[ht]
 \singlespacing
@@ -530,7 +537,7 @@ public class PcaMain {
 \label{listing:pca_java}
 \end{figure}
 
-Extended program from Figure \ref{listing:pca_java}, with procedures to start and stop the pump, written in Ada, is presented in the figures \ref{listing:pca_basic_spec} and \ref{listing:pca_basic_body}.
+The extended program from Figure \ref{listing:pca_java}, with procedures to start and stop the pump, written in Ada, is presented in Figure \ref{listing:pca_basic_spec} and \ref{listing:pca_basic_body}.
 
 \begin{figure}[ht]
 \singlespacing
@@ -548,7 +555,7 @@ end Pca_Pump;
 \label{listing:pca_basic_spec}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
 with Ada.Strings.Unbounded; use type Ada.Strings.Unbounded;
@@ -613,20 +620,21 @@ end Pca_Pump;
 \label{listing:pca_basic_body}
 \end{figure}
 
+\clearpage
 
 
 \section{Implementation Based on Requirements Document and AADL Models}
 \label{pcapumpimpl:manual}
 
-In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, simple PCA pump prototype has been created. Implemented prototype is multitasking application (using Ravenscar profile) running on BeagleBoard-xM. The base for implementation was \lstinline{Pca_Operation} package. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}. Thus, pump has three tasks in total:
-\begin{itemize}
+In order to confirm that implementation of PCA Pump, specified in Requirements Document, is feasible on BeagleBoard-xM, a simple PCA pump prototype has been created. The implemented prototype is multitasking application (using Ravenscar profile) running on BeagleBoard-xM. The base for implementation was \lstinline{Pca_Operation} package. Only two AADL threads are implemented: \lstinline{Rate_Controler} and \lstinline{Max_Drug_Per_Hour_Watcher}. Thus, the pump has three tasks in total:
+\begin{itemize} \itemsep0pt \parskip0pt \parsep0pt
     \item main task - interface for controlling and monitoring the pump
     \item \lstinline{Rate_Controller} - control the speed of infusion rate
     \item \lstinline{Max_Drug_Per_Hour_Watcher} - control over infusion
 \end{itemize}
 
 The first step was to translate types required by operation module. Strings and float types were skipped to keep verification simple (using only integer types and its subtypes). Besides that, all types from following packages are translated:
-\begin{itemize}
+\begin{itemize} \itemsep0pt \parskip0pt \parsep0pt
 	\item \lstinline{Base_Types}
 	\item \lstinline{Bless_Types}
 	\item \lstinline{Ice_Types}
@@ -634,7 +642,7 @@ The first step was to translate types required by operation module. Strings and 
 \end{itemize}
 
 The Open PCA pump, according to requirements document \cite{PcaReq}, has 5 operational modes:
-\begin{itemize}
+\begin{itemize} \itemsep0pt \parskip0pt \parsep0pt
 	\item Stopped: $\displaystyle\ F = 0 ml/hr$
 	\item Keep Vein Open (KVO): $\displaystyle\ F = 0.1 ml/hr$
 	\item Basal infusion: $\displaystyle\ F = F_{Basal}$
@@ -642,14 +650,14 @@ The Open PCA pump, according to requirements document \cite{PcaReq}, has 5 opera
 	\item Clinician bolus: $\displaystyle\ F = F_{Basal} + F_{Square_Bolus}$ (square bolus is calculated value: VTBI divided by the duration chosen by the clinician)
 \end{itemize}
 
-Requirements document does not specify implementation details. One of implementation decisions, which had to be made, was to decide how basal infusion will work. One solution was to run actuator continuously on speed calculated based on current flow rate. Another solution was to dose drug in 0.1 ml increments. This is how CADD-Prizm Ambulatory Infusion Pump \cite{CADD-PrizmAmbulatoryInfusionPump:Online} works and this implementation was chosen. It allows for easier bolus monitoring and calculations. Pump engine controller is separated module. It is written in Ada, so it will not be verified with SPARK tools. Using increments, instead of continues speed allows to issue request of 0.1 ml dose to engine module, and it is its responsibility to deliver requested amount of dose. Performing calculations based on speed changes would be much more complicated. For monitoring, amount of drug dosed in last hour (to guard against over infusion), array with size = (60 * 60) has been created. Its elements represents all seconds of last hour. Last element is incremented once request to the engine is issued. This is done in \lstinline{Rate_Controller} task. \lstinline{Max_Drug_Per_Hour_Watcher} checks dosed amount by summing all elements. It also shifts array in every second, so doses older than 1 hour are not take into account anymore.
+The requirements document does not specify implementation details. One of implementation decisions, which had to be made, was to decide how basal infusion will work. One solution was to run actuator continuously on speed calculated based on current flow rate. Another solution was to dose drug in 0.1 ml increments. This is how CADD-Prizm Ambulatory Infusion Pump \cite{CADD-PrizmAmbulatoryInfusionPump:Online} works, and this implementation was chosen. It allows for easier bolus monitoring and calculations. The pump engine controller is in a separate module. It is written in Ada, so it will not be verified with SPARK tools. Using increments, instead of continuous speed allows to issue requests of 0.1 ml dose to the engine module, and it is its responsibility to deliver requested amount of dose. Performing calculations based on speed changes would be much more complicated. For monitoring, amount of drug dosed in last hour (to guard against over infusion), array with size = (60 * 60) has been created. Its elements represents all seconds of last hour. Last element is incremented once request to the engine is issued. This is done in \lstinline{Rate_Controller} task. \lstinline{Max_Drug_Per_Hour_Watcher} checks dosed amount by summing all elements. It also shifts the array in every second, so doses older than 1 hour are not take into account anymore.
 
 To avoid using floating point types, internal calculations are in micro liters: 1 micro liter ($\mu$l) = 0.001 ml, thus 1 ml = 1000$\mu$l.
 
-In real-world applications, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation or being separated entities on which SPARK tools are not run. \lstinline{Pca_Engine} package is separated entity, which control the pump actuator. It use Ada features not present in SPARK, thus it is not verified by SPARK tools. 
+In real-world applications that use SPARK, the embedded critical components are written in SPARK while the non-critical components are written in Ada. Components written in Ada should be hidden for SPARK Examiner with \lstinline{--# hide} annotation or being separated entities on which SPARK tools are not run. \lstinline{Pca_Engine} package is separated entity, which control the pump actuator. It uses Ada features not present in SPARK, thus it is not verified by SPARK tools. 
 
-Implemented PCA pump prototype is console Ada application with textual interface, which has following functionalities:
-\begin{itemize}
+The implemented PCA pump prototype is a console Ada application with a textual interface, which has following functionalities:
+\begin{itemize} \itemsep0pt \parskip0pt \parsep0pt
 	\item Entering prescription, which comprises of following parameters:
 		\begin{itemize}
 			\item Basal flow rate
@@ -681,5 +689,5 @@ The code of implemented PCA Pump Prototype, along with mapped types, is attached
 
 The original AADL/BLESS models were simplified and truncated to demonstrate sample translation. Finally only \lstinline{PCA_Operation} module with 3 threads (\lstinline{Max_Drug_Per_Hour_Watcher}, \lstinline{Rate_Controller}, \lstinline{Patient_Bolus_Checker}), types definitions (\lstinline{Base_Types}, \lstinline{PCA_Types}, \lstinline{ICE_Types}, \lstinline{Bless_Types}) and property set \lstinline{PCA_Properties} were used as the source for code translation. Simplified AADL/BLESS models can be found in Appendix \ref{Appendix:AADL}. The translation was performed based on translation schemes from chapter \ref{codegen}. Appendix \ref{Appendix:pca_generated} contains translated PCA pump code. 
 
-Raw, translated code cannot be verified with SPARK tools, because it contains not implemented parts. E.g. translated from BLESS assertions, which are defined but not implemented in models. Once, these missing parts will be implemented, code can be verified.
+Raw, translated code cannot be verified with SPARK tools, because it contains unimplemented parts. One example is the code resulting from translation from BLESS assertions, which are defined but not implemented in models. Once these missing parts will be implemented, code can be verified.
 

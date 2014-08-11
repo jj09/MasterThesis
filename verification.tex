@@ -5,7 +5,11 @@
 \chapter{Verification}
 \label{verification}
 
-% meeting with Hatcliff: check for runtime exceptions, flow analysis based on derives, see photo/whiteboard
+\begin{chapquote}{\textit{Leonardo da Vinci}}
+``It had long since come to my attention that people of accomplishment rarely sat back and let things happen to them. They went out and happened to things.''
+\end{chapquote}
+
+The goal of verification process presented in this chapter is to check for run-time errors and show by example how to fix them with the SPARK verification tools. In the future, the same strategy can be used for verification of requirements specified by BLESS annexes in AADL models.
 
 The strategy for Software Verification using SPARK tools is as follows. First, Examiner generates and discharge some Verification Conditions (VCs) and Dead Path Conjectures (DPCs). Next, SPARKSimp runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. SPARKSimp runs also ZombieScope to analyze DPCs and ViCToR to discharge VCs (not discharged by Examiner nor Simplifier) with SMT Solver. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness. This approach is presented in the Figure \ref{figure:sparkverificationstrategy}. Detailed overview of SPARK verification tools can be found in chapter 12 of SPARK book \cite{Barnes:Book}.
 
@@ -680,13 +684,13 @@ Once annotation is added, \lstinline{Pca_Operation} package specification passes
 \begin{figure}
 \singlespacing
 \begin{lstlisting}[language=ada, frame=single, gobble=0]
+pca_operation.adb:53:9: Flow Error  30 - The variable Bolus_Duration_In is imported but neither referenced nor exported.
+pca_operation.adb:72:9: Flow Error  30 - The variable Rx_In is imported but neither referenced nor exported.
 pca_operation.adb:82:9: Flow Error  30 - The variable Infusion_Flow_Rate is imported but neither referenced nor exported.
-pca_operation.adb:92:9: Flow Error  30 - The variable Bolus_Duration is imported but neither referenced nor exported.
 pca_operation.adb:92:9: Flow Error  32 - The variable Infusion_Flow_Rate is neither imported nor defined.
 pca_operation.adb:92:9: Flow Error  31 - The variable Infusion_Flow_Rate is exported but not (internally) defined.
 pca_operation.adb:92:9: Flow Error  32 - The variable System_Status is neither imported nor defined.
 pca_operation.adb:92:9: Flow Error  31 - The variable System_Status is exported but not (internally) defined.
-pca_operation.adb:92:9: Flow Error  30 - The variable Rx is imported but neither referenced nor exported.
 pca_operation.adb:92:9: Warning 400 - Variable la is declared but not used.
 pca_operation.adb:101:9: Flow Error  35 - Importation of the initial value of variable Ada.Real_Time.ClockTime is ineffective.
 \end{lstlisting}
@@ -1071,3 +1075,10 @@ pca_pump_no_refinement.ads:31:80: info: precondition proved
 \caption{GNATprove verification summary of module for dose monitoring in SPARK 2014 without variable refinement}
 \label{listing:pca_pump_move_dosed_unit_spark2014_gnatprove_no_refinement}
 \end{figure}
+
+
+\section{Assessment}
+\label{verification:assessment}
+
+Verification presented in this chapter allowed to detect potentially dangerous run-time exceptions (e.g., overflow). In the future, it can be used also for verification of requirements specified by BLESS in AADL models. SPARK Examiner was helpful during implementation in flow errors detection, which indicates when package implementation does not conform to its specification.
+

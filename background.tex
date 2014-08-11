@@ -6,6 +6,11 @@
 \chapter{Background}
 \label{background}
 
+\begin{chapquote}{\textit{Aldous Huxley}}
+``Experience is not what happens to you; \\
+it's what you do with what happens to you.''
+\end{chapquote}
+
 This chapter is a brief introduction of all technologies and tools used in this thesis. They are: AADL modeling language, BLESS (AADL annex language), SPARK Ada programming language and its verification tools. There is also an overview of the context in which this work has been done: Integrated Clinical Environment (ICE) standard and PCA pump (ICE compliant device). This is followed by main topic of the thesis: code generation from AADL and analysis of existing AADL translators (Ocarina, RAMSES).
 
 
@@ -20,7 +25,7 @@ Figure \ref{figure:ice} presents high-level overview of one particular applicati
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
-    	\includegraphics[height=3.5in]{figures/ice.png}   	
+    	\includegraphics[width=0.95\textwidth]{figures/ice.png}   	
     \end{center}
     \caption{ICE Closed Loop Control}
     \label{figure:ice}
@@ -63,7 +68,7 @@ MDCF uses a publish-subscribe architecture for communication between components:
 
 AADL stands for Architecture Analysis \& Design Language. It is used to model embedded and real-time systems. AADL allows for description of both software and hardware parts of a system. It can be used not only for design phase of software development process, but also for analysis, verification, and code generation.
 
-AADL has its roots in DARPA\footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler.\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/} AADL is develop by SAE AADL standard committee.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page} AADL version 2.0 was published in January 2009. The most recent version (2.1) was published in September 2012.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}
+AADL has its roots in DARPA\footnote{http://www.darpa.mil} funded research. The first version (1.0) was approved in 2004 under technical leadership of Peter Feiler.\footnote{http://wiki.sei.cmu.edu/aadl/index.php/The\_Story\_of\_AADL/} AADL is develop by SAE AADL standard committee.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Main\_Page} AADL version 2.0 was published in January 2009. The most recent version (2.1\footnote{https://wiki.sei.cmu.edu/aadl/images/d/d2/AADL\_V2.1\_Syntax\_Card.pdf}) was published in September 2012.\footnote{https://wiki.sei.cmu.edu/aadl/index.php/Standardization}
 
 AADL is a language for Model-Based Engineering \cite{AadlBook}. It can be represented in textual and graphical form. There are tools, like plug-in for OSATE (see Section \ref{background:aadl:osate}) that enable transformation of textual representation into graphical or XML. 
 
