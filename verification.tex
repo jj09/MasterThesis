@@ -9,24 +9,24 @@
 ``It had long since come to my attention that people of accomplishment rarely sat back and let things happen to them. They went out and happened to things.''
 \end{chapquote}
 
-The goal of verification process presented in this chapter is to check for run-time errors and show by example how to fix them with the SPARK verification tools. In the future, the same strategy can be used for verification of requirements specified by BLESS annexes in AADL models.
+The goal of verification process presented in this chapter is to check for run-time errors and show by example how to fix them with the SPARK verification tools. In the future, the same strategy can be used for verification of requirements specified by BLESS annexes in AADL models. As a reminder to the reader, the SPARK 2005 has been identified (as opposed to SPARK 2014, which is still under development) as the most appropriate and capable for the development and verification needs of this thesis work (at the time when this thesis has been written).
 
-The strategy for Software Verification using SPARK tools is as follows. First, Examiner generates and discharge some Verification Conditions (VCs) and Dead Path Conjectures (DPCs). Next, SPARKSimp runs Simplifier to simplify and discharge some (or all) VCs, which were not discharged by Examiner. SPARKSimp runs also ZombieScope to analyze DPCs and ViCToR to discharge VCs (not discharged by Examiner nor Simplifier) with SMT Solver. To get summary of results, POGS report is generated. In case, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness. This approach is presented in the Figure \ref{figure:sparkverificationstrategy}. Detailed overview of SPARK verification tools can be found in chapter 12 of SPARK book \cite{Barnes:Book}.
+The strategy for Software Verification using SPARK 2005 tools is as follows \cite{Barnes:Book}. First, Examiner generates Verification Conditions (VCs) and Dead Path Conjectures (DPCs). Some VCs that can be discharged by simple rewriting are also simplify and discharged by Examiner. Next, SPARKSimp runs Simplifier to simplify and discharge some (or all) VCs that were not discharged by Examiner. SPARKSimp also runs ZombieScope to analyze DPCs and ViCToR to discharge VCs (not discharged by Examiner nor Simplifier) with SMT Solver technology. To provide a summary of verification results, a POGS report is generated. To this standard SPARK 2005 tool chain, Bakar Kiasan symbolic execution tools (developed by the Kansas State University SAnToS research group) has been added. Specifically, when not all Verification Conditions are discharged, analysis continues with Bakar Kiasan. After fixes are made with Kiasan help, Examiner and SPARKSimp tools are run again to confirm correctness. This approach is presented in the Figure \ref{figure:sparkverificationstrategy}. Detailed overview of SPARK verification tools can be found in chapter 12 of SPARK book \cite{Barnes:Book}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
         \includegraphics[width=1.0\textwidth]{figures/spark-verification.png}        
     \end{center}
-    \caption{SPARK verification strategy}
+    \caption{Applied Verification strategy}
     \label{figure:sparkverificationstrategy}
 \end{figure}
 
-\section{Verification of Implemented Prototype}
+\section{Verification of Implemented PCA Pump Prototype}
 \label{verification:prototype}
 
-During PCA pump prototype implementation, syntax was regularly checked with SPARK Examiner. Complete, manually implemented prototype, which can be found in Appendix \ref{Appendix:pca_ravenscar}, was verified with strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of POGS report summary, is presented in the Figure \ref{listing:pca_ravenscar:pogs}. Full report can be found in Appendix \ref{Appendix:pca_ravenscar:pogs}.
+During PCA Pump Prototype implementation, program syntax was regularly checked with SPARK Examiner. The complete, manually implemented prototype, which can be found in Appendix \ref{Appendix:pca_ravenscar}, was verified with the strategy given at the beginning of this chapter (excluding Bakar Kiasan, which does not handle Ravenscar programs). Thus SPARK Examiner, SPARKSimp (Simplifier, ZombieScope and ViCToR) and POGS were used. Package \lstinline{Pca_Engine} was excluded from verification, using \lstinline{--# hide} annotation, because it contains Ada code, which is non-valid SPARK. The result of this analysis, in the form of a POGS report summary, is presented in the Figure \ref{listing:pca_ravenscar:pogs}. The full report can be found in Appendix \ref{Appendix:pca_ravenscar:pogs}.
 
-POGS report shows that 30\% (90) of VCs were discharged by Examiner and 61\% (183) by Simplifier. There are 29 undischarged VCs. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:sparkverification:sireum}, Bakar Kiasan does not support Ravenscar profile. Thus, to be able to analyze monitoring dosed amount of drug, separate, sequential module was created. Verification process of this module is described in Section \ref{verification:pcapump:monitoring}.
+The POGS report shows that 30\% (90) of VCs were discharged by Examiner and 61\% (183) by Simplifier. There are 29 undischarged VCs. All of them are caused by possible overflows and array index out of bounds. In addition to VCs, DPCs were generated and 32 dead paths were found. Some undischarged VCs and dead paths come from procedures responsible for maximum dose monitoring. As mentioned in chapter \ref{background:sparkverification:sireum}, Bakar Kiasan does not support Ravenscar profile. For the demonstration purpose, sequential module for dose monitoring has been created in order to analyze undischarged VCs. Verification process of this module is described in Section \ref{verification:pcapump:monitoring}.
 
 \begin{figure}
 \singlespacing
@@ -100,7 +100,7 @@ Totals:               302         90        183         29 <<<
 \section{Monitoring Dosed Amount}
 \label{verification:pcapump:monitoring}
 
-This section is case study of verification of module responsible for tracking dosed amount of drug. The module was created with sequential profile, based on implemented PCA prototype presented in Appendix \ref{Appendix:pca_ravenscar}. Isolated module is presented in the Figure \ref{listing:pcapump_dosemonitor}.
+This section is a case study of verifying the SPARK module responsible for tracking the dosed amount of drug. The module was created in the sequential SPARK 2005 profile, based on implemented PCA prototype presented in Appendix \ref{Appendix:pca_ravenscar}. The isolated module implementation is presented in the Figure \ref{listing:pcapump_dosemonitor}.
 
 \begin{figure}
 \singlespacing
@@ -167,7 +167,7 @@ end Pca_Pump;
 \label{listing:pcapump_dosemonitor}
 \end{figure}
 
-Verification strategy is the same like described at the beginning of the chapter and depicted in the Figure \ref{figure:sparkverificationstrategy}. First, program is verified with Examiner, SPARKSimp (Simplifier, ZombieScope and Victor). Verification report is generated by POGS. In case of any issues, verification is continued with Bakar Kiasan, which gives more user friendly experience that POGS report and generated VC files. 
+Verification strategy is based on Figure \ref{figure:sparkverificationstrategy}. First, the program is verified with Examiner, SPARKSimp (Simplifier, ZombieScope and Victor). A Verification report is generated by POGS. In case of any unfinished verification steps, verification is continued with Bakar Kiasan, which gives more user friendly experience that POGS report and generated VC files. It may be preferable to use Bakar Kiasan first, but in this thesis SPARK 2005 verification tools created by AdaCore and Altran were used first to indicate not verified code.
 
 First verification report generated by POGS is presented in the Figure \ref{listing:pcapump_dosemonitor_pogs}. It indicates presence of three undischarged (not proved) VCs.
 
@@ -238,7 +238,7 @@ Totals:                15          3          9          3 <<<
 \label{listing:pcapump_dosemonitor_pogs}
 \end{figure}
 
-Next, according to verification strategy, Bakar Kiasan was run. Kiasan report is presented in the Figure \ref{figure:sparkverification:kiasanreport1}.
+Next, according to verification strategy, instead of VC analysis Bakar Kiasan was run to find out why program is not fully verified. Kiasan report is presented in the Figure \ref{figure:sparkverification:kiasanreport1}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -248,7 +248,7 @@ Next, according to verification strategy, Bakar Kiasan was run. Kiasan report is
     \label{figure:sparkverification:kiasanreport1}
 \end{figure}
 
-First issue we can notice is problem with data types' ranges. To solve it (in SPARK 2005) configuration file \lstinline{Standard.ads} (presented in the Figure \ref{figure:sparkverification:config}) was created. Kiasan verification report created after that is presented in the Figure \ref{figure:sparkverification:kiasanreport2}. Number of errors is reduced, but there is still problem with range violation.
+The first issue we can notice is problem with data types' ranges indicated by Exception cases, e.g., \lstinline{Read_Dosed:0 Range violation (LOWER) at Pca_Pump.Read_Dosed:[14,15]} (presented in Figure \ref{figure:sparkverification:kiasanreport1}). To solve it (in SPARK 2005) configuration file \lstinline{Standard.ads} (presented in Figure \ref{figure:sparkverification:config}), which specifies \lstinline{Integer} type range, was created. This is information for verification tools, which may helps in verification. The Kiasan verification report generated after that is presented in Figure \ref{figure:sparkverification:kiasanreport2}. The number of errors is reduced, but now there is possible overflow violation indicated e.g. by Exception case 0 for \lstinline{Increase_Dosed} procedure: \lstinline{Arithmetic overflow violation (LOWER) at Pca_Pump.Increase_Dosed: [9,90]} (presented in Figure \ref{figure:sparkverification:kiasanreport2}).
 
 \begin{figure}
 \singlespacing
@@ -272,7 +272,7 @@ end Standard;
     \label{figure:sparkverification:kiasanreport2}
 \end{figure}
 
-From functional perspective, negative values are not needed it this case, thus new type \lstinline{Drug_Volume} type was created. \lstinline{Integer_Array} type was renamed to \lstinline{Doses_Array} and its type was changed to \lstinline{Drug_Volume}. Result of Kiasan analysis after this change is presented in the Figure \ref{figure:sparkverification:kiasanreport3}.
+From functional perspective, negative values are not needed it this case, thus new type \lstinline{Drug_Volume} type was created. \lstinline{Integer_Array} type was renamed to \lstinline{Doses_Array} and its type was changed to \lstinline{Drug_Volume}. Result of Kiasan analysis after this change is presented in Figure \ref{figure:sparkverification:kiasanreport3}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -282,7 +282,7 @@ From functional perspective, negative values are not needed it this case, thus n
     \label{figure:sparkverification:kiasanreport3}
 \end{figure}
 
-After this change, only upper overflow in \lstinline{Increase_Dosed} procedure error was left. Fix, for this is introduction of precondition for \lstinline{Increase_Dosed}: \lstinline{--# pre Read_Dosed(Dosed) <= Drug_Volume'Last - Dose_Volume;}. It caused semantic error (detected by Examiner): \lstinline{The identifier Read_Dosed is either undeclared or not visible at this point}. The reason of that is definition of \lstinline{Increase_Dosed} procedure before \lstinline{Read_Dosed} procedure. To fix, this \lstinline{Read_Dosed} procedure was moved before \lstinline{Increase_Dosed}. However, after that Examiner returned different error: \lstinline{Binary operator is not declared for types Drug_Volume and Dose_Volume__type}. To make operator visible, \lstinline{Dose_Volume} type has to be declared in \lstinline{--# own} annotation: \lstinline{--# Dose_Volume : Drug_Volume;}. After these fixes Kiasan analysis has be run again. Result is depicted in the Figure \ref{figure:sparkverification:kiasanreport4}.
+This change eliminated lower overflow, because now negative value cannot be added to any array element. Only upper overflow in \lstinline{Increase_Dosed} procedure error was left. The fix for this is the introduction of precondition for \lstinline{Increase_Dosed}: \lstinline{--# pre Read_Dosed(Dosed) <= Drug_Volume'Last - Dose_Volume;}. Addition of this contract caused semantic error (detected by Examiner): \lstinline{The identifier Read_Dosed is either undeclared or not visible at this point}. This error is caused by the definition of \lstinline{Increase_Dosed} procedure before \lstinline{Read_Dosed} procedure. To fix, this \lstinline{Read_Dosed} procedure was moved before \lstinline{Increase_Dosed}. However, after that Examiner returned different error: \lstinline{Binary operator is not declared for types Drug_Volume and Dose_Volume__type}. To make the operator visible, \lstinline{Dose_Volume} type has to be declared in \lstinline{--# own} annotation: \lstinline{--# Dose_Volume : Drug_Volume;}. After these fixes, Kiasan analysis has be run again. The result is depicted in the Figure \ref{figure:sparkverification:kiasanreport4}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -292,11 +292,11 @@ After this change, only upper overflow in \lstinline{Increase_Dosed} procedure e
     \label{figure:sparkverification:kiasanreport4}
 \end{figure}
 
-There were no error cases in \lstinline{Move_Dosed} and \lstinline{Increase_Dosed} procedures. Error case in \lstinline{Read_Dosed} is shown in the Figure \ref{figure:sparkverification:kiasanreport4}. It is \lstinline{ConstraintError: the value being assigned to Result is too small}. This error is not very imformative. After investigation and talk with Kiasan Developer, it was determined that there is a bug in Kiasan v1 (for SPARK 2005). More precisely: in checking overflows. For the purpose of verification \lstinline{Drug_Volume} type range was changed to $0 - (2^{15} - 1)$. It will give range up to around 1000000. Which is sufficient even if calculations are made in micro liters (as it is in case of PCA pump prototype implementation). 1000000 micro liters is 1000 ml, which is 1 liter. This is extreme amount of drug in case of PCA pump, according to Requirements Document \cite{PcaReq}. The bug with type ranges is fixed in Kiasan v2 (for SPARK 2014).
+There were no error cases in the \lstinline{Move_Dosed} and the \lstinline{Increase_Dosed} procedures. The error case in \lstinline{Read_Dosed} is shown in Figure \ref{figure:sparkverification:kiasanreport4}. It is \lstinline{ConstraintError: the value being assigned to Result is too small}. This error is not very informative. After investigation and talks with the Kiasan Developer, it was determined that there is a bug in Kiasan v1 (for SPARK 2005). More precisely: in handling overflows. For the purpose of verification, \lstinline{Drug_Volume} type range was changed to $0 - (2^{15} - 1)$. This will give range up to around 1000000, which is sufficient even if calculations are made in micro liters (as it is in case of PCA pump prototype implementation). 1000000 micro liters is 1000 ml, which is 1 liter. This is an extreme amount of drug in case of PCA pump, according to Requirements Document \cite{PcaReq}. The bug with type ranges is fixed in Kiasan v2 (for SPARK 2014).
 
-Another problem was the size of \lstinline{Dosed} array (3600 elements). Kiasan allows to set array bound and loop bound. Both had to be increased (from default 10). Another thing was computational complexity. For 3600 elements, state space grows exponentially and it takes a lot of time to analyze it. Thus, for verification purposes, array size was changed to 60 elements. Along with change to array bounds and loop bounds, also to 60.
+Another problem was the size of \lstinline{Dosed} array (3600 elements). Kiasan allows the developer to configure the array bound and loop bound. Both had to be increased (from default 10). Another thing was computational complexity. For 3600 elements, state space grows exponentially and it takes a lot of time to analyze it. Thus, for verification purposes, array size was changed to 60 elements along with change to array bounds and loop bounds, also to 60.
 
-After rerun Kiasan, there is valid test case for \lstinline{Read_Dose}, but there are also 59 Exception cases: \lstinline{Range violation (UPPER)}, which means possible overflow. One way of fix it, was to add \lstinline{--# assume} annotation to loop in function body, but Kiasan v1 does not support it. Another way was to add precondition, which assure, that sum of elements is lower than \lstinline{Drug_Volume'Last}. SPARK does not provide simple library for summing array (like Contracts language for Java provide). Thus, this function had to be implemented. Its implementation is the same like \lstinline{Read_Dosed}. It sum all elements of array. \lstinline{Sum} function specification and body is presented in the Figure \ref{listing:sum_function}.
+After rerunning Kiasan, there is valid test case for \lstinline{Read_Dose}, but there are also 59 Exception cases: \lstinline{Range violation (UPPER)}, which means possible overflow. One way of fix this problem, was to add an \lstinline{--# assume} annotation to loop in function body, stating that every sum operation in the loop will not cause overflow, but Kiasan v1 does not support \lstinline{assume} annotations. Another way was to add precondition that ensures, that the sum of elements is lower than \lstinline{Drug_Volume'Last}. SPARK does not provide simple library for summing an array (like the Contracts language for Java provides). Thus, this function had to be implemented. Its implementation is the same as \lstinline{Read_Dosed}. It sums all elements of array. The \lstinline{Sum} function specification and body is presented in the Figure \ref{listing:sum_function}.
 
 \begin{figure}
 \singlespacing
@@ -319,7 +319,7 @@ end Sum;
 \label{listing:sum_function}
 \end{figure}
 
-After rerunning Kiasan, only valid test case were found, which is depicted in the Figure \ref{figure:sparkverification:kiasanreport5}.
+After rerunning Kiasan, only valid test cases were found, which is depicted in the Figure \ref{figure:sparkverification:kiasanreport5}.
 
 \begin{figure}[ht]%t=top, b=bottom, h=here
     \begin{center}
@@ -349,7 +349,7 @@ The last thing which was improved by code contracts is checking if \lstinline{Mo
 
 After adding these postconditions Kiasan generates 2 test cases to check both mentioned scenarios. There is no error cases, which means that procedure works as expected. 
 
-Better way to validate such requirements is Unit testing. In Section \ref{verification:aunit}, there is overview of unit tests created to test behavior described above.
+Another way to validate such requirements is to create AUnit tests first. In Section \ref{verification:aunit}, there is an overview of unit tests created to test behavior described above. Furthermore, symbolic execution technique (used by Kiasan) allows to generate AUnit tests automatically, and this feature is under development in Kiasan v2.
 
 To validate changes made, while working with Kiasan, SPARK Examiner and SPARKSimp were rerun again. POGS report is presented in the Figure \ref{listing:pcapump_dosemonitor_pogs3}.
 
