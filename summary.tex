@@ -9,13 +9,13 @@
 ``Success is determined not by whether or not you face obstacles, but by your reaction to them. And if you look at these obstacles as a containing fence, they become your excuse for failure. If you look at them as a hurdle, each one strengthens you for the next.''
 \end{chapquote}
 
-In this thesis PCA Pump prototype, in SPARK 2005 with Ravenscar profile, has been created. It runs on BeagleBoard-xM platform and control physical device. Furthermore, AADL/BLESS to SPARK Ada translation is proposed. Based on that sample translation from simplified AADL models of PCA pump has been performed. At the end, example verification of created prototype, isolated module for dose monitoring and translated code has been shown. 
+In this thesis PCA Pump prototype, in SPARK 2005 with Ravenscar profile, has been created. It runs on BeagleBoard-xM platform and control physical device. Furthermore, AADL/BLESS to SPARK Ada translation is proposed. Based on that sample translation from simplified AADL models of PCA pump has been performed. At the end, example verification (targeting absence of runtime exceptions) of created PCA Pump Prototype, isolated module for dose monitoring and translated code has been shown. 
 
-All work done in this thesis targets SPARK 2005. SPARK 2014 and its tools (such as GNATprove) were not ready at the time, when this thesis was written. However, an example verification (of dose monitoring module, which has been translated to SPARK 2014) was presented.
+All work done in this thesis targets SPARK 2005. SPARK 2014 and its tools (such as GNATprove) were not completed at the time, when this thesis was written. However, an example verification (of dose monitoring module, which has been translated to SPARK 2014) was presented.
 
 % lack of resources
 % no access to real-live examples
-The biggest challenge during PCA pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it is required to isolate some functionalities or implement them in different way. Another issue was lack of resources and SPARK code samples. Especially industry code examples, which are keep secretly as intellectual property by companies. Available resources are usually small examples used in research or reference manuals, which were created couple years age. Although still valid, not updated for years.
+The biggest challenge during PCA pump development was the SPARK limitations. There are many common libraries, which cannot be verified by SPARK tools. Thus it is required to isolate some functionalities or implement them in different way. Another issue was lack of resources and SPARK code samples - especially realistic medical devices code examples, which are keep secretly as intellectual property by companies. Available resources are usually small examples used in research or reference manuals, which were created a number of years ago. Although still valid, these have not been updated or expanded for years.
 
 % everything 'under development'
 Furthermore, BLESS and SPARK are still under development. Thus, it was very hard to take advantage of all desirable capabilities (most of features are not yet implemented). An example may be lack of support for pre- and post conditions in RavenSPARK.
@@ -25,4 +25,4 @@ In addition to that, community working with above technologies is very small. On
 
 % proposed mapping is probably wrong
 % no consultancy with industry expert/programmer
-Proposed mapping from AADL to SPARK Ada is not consulted with industry engineers. Thus, it would be first thing to do, in order to continue this research. Lot of work can be done in this topic. It is described in chapter \ref{future_work}.
+Proposed mapping from AADL to SPARK Ada is not consulted with industry engineers. Thus, it would be first thing to do, in order to continue this research. A lot of work can be done in this topic, as is described in Chapter \ref{future_work}.
