@@ -349,7 +349,7 @@ The last thing which was improved by code contracts is checking if \lstinline{Mo
 
 After adding these postconditions Kiasan generates 2 test cases to check both mentioned scenarios. There is no error cases, which means that procedure works as expected. 
 
-Another way to validate such requirements is to create AUnit tests first. In Section \ref{verification:aunit}, there is an overview of unit tests created to test behavior described above. Furthermore, symbolic execution technique (used by Kiasan) allows to generate AUnit tests automatically, and this feature is under development in Kiasan v2.
+Another way to validate such requirements is to create AUnit tests. In Section \ref{verification:aunit}, there is an overview of unit tests created to test behavior described above. Furthermore, symbolic execution technique (used by Kiasan) allows to generate AUnit tests automatically, and this feature is under development in Kiasan v2.
 
 To validate changes made, while working with Kiasan, SPARK Examiner and SPARKSimp were rerun again. POGS report is presented in the Figure \ref{listing:pcapump_dosemonitor_pogs3}.
 
@@ -420,7 +420,7 @@ Totals:                19          1         14          4 <<<
 \label{listing:pcapump_dosemonitor_pogs3}
 \end{figure}
 
-There are 4 undischarged VCs, but total number of generated VCs is 19. In previous run there were only 15. Thus there is 4 new VCs and 2 of them are undischarged. The reason is introduction of \lstinline{Sum} function. Actually, all subprograms use it. To confirm this, look at all undischarged VCs. Which is: 1st VC in \lstinline{increase_dosed.siv} file (Figure \ref{listing:pcapump_undischarged_vc_increase_dosed}), 9th VC in \lstinline{move_dosed.siv} file (Figure \ref{listing:pcapump_undischarged_vc_move_dosed}), 3rd VC in \lstinline{read_dosed.vcg} file (Figure \ref{listing:pcapump_undischarged_vc_read_dosed}) and 3rd VC in \lstinline{sum.vcg} file (Figure \ref{listing:pcapump_undischarged_vc_sum}). They conform to subprograms: \lstinline{Increase_Dosed}, \lstinline{Move_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} respectively.
+There are 4 undischarged VCs, but total number of generated VCs is 19. In previous run there were only 15. Thus, there are 4 new VCs, and 2 of them are undischarged. The reason is introduction of \lstinline{Sum} function used by all subprograms. This can be confirmed by examining all undischarged VCs: 1st VC in \lstinline{increase_dosed.siv} file (Figure \ref{listing:pcapump_undischarged_vc_increase_dosed}), 9th VC in \lstinline{move_dosed.siv} file (Figure \ref{listing:pcapump_undischarged_vc_move_dosed}), 3rd VC in \lstinline{read_dosed.vcg} file (Figure \ref{listing:pcapump_undischarged_vc_read_dosed}) and 3rd VC in \lstinline{sum.vcg} file (Figure \ref{listing:pcapump_undischarged_vc_sum}). They derived form the subprograms: \lstinline{Increase_Dosed}, \lstinline{Move_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} respectively.
 
 \begin{figure}
 \singlespacing
@@ -521,11 +521,11 @@ C1:    result + element(arr, [loop__1__i]) <= 32767 .
 \label{listing:pcapump_undischarged_vc_sum}
 \end{figure}
 
-In \lstinline{Move_Dosed} procedure, tools cannot prove implications in post conditions. Fortunately, it is already proved by Bakar Kiasan. The problem in \lstinline{Increase_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} is the same. Tools cannot verify, that adding \lstinline{Result} and some element of \lstinline{Dosed} array will not cause overflow. Bakar Kiasan can prove correctness of \lstinline{Increase_Dosed} and \lstinline{Read_Dosed}. However only, with assumption that \lstinline{Sum} is correct. \lstinline{Sum} cannot be proved by Bakar Kiasan. Four exception cases indicating possible overflow are generated. Thus, the only way to prove correctness of this module is to assume, that proof function \lstinline{Sum} is correct.
+In \lstinline{Move_Dosed} procedure, the SPARK tools cannot prove the implications in post conditions. Fortunately, it is already proved by Bakar Kiasan. The problem in \lstinline{Increase_Dosed}, \lstinline{Read_Dosed} and \lstinline{Sum} is the same. The SPARK tools cannot verify, that adding \lstinline{Result} and some element of \lstinline{Dosed} array will not cause overflow. Bakar Kiasan can prove correctness of \lstinline{Increase_Dosed} and \lstinline{Read_Dosed}. However only, with assumption that \lstinline{Sum} is correct. Four exception cases indicating possible overflow are generated. Thus, the only way to discharge the verification obligation of this module is to assume that the proof function \lstinline{Sum} is correct.
 
 In procedure \lstinline{Move_Dosed}, there is one dead path found. POGS report gives only information where dead path exists, but not in which circumstances. The information about conditions, in which dead path occurs is stored in \lstinline{.dpc} file. The file path to concrete file is given in the POGS report just before summary table for procedure \lstinline{Move_Dosed}. In this case it is \lstinline{move_dosed.dpc} file. Figure \ref{listing:pcapump_dosemonitor_pogs3} presents truncated POGS report, but as an example, full POGS report of implemented PCA prototype can be found in Appendix \ref{Appendix:pca_ravenscar:pogs} (e.g. see line 50, which contains DPC analysis for \lstinline{Start_Pumping} procedure). 
 
-Relevant fragment, which applies to found dead path is presented in the Figure \ref{listing:pcapump_dosemonitor:dead_path}. It is a list of hypothesis, in which hypothesis 10 (H10) states that number of elements in \lstinline{Doses_Array} is 1 or less. In this case (or more precisely: in this path), \lstinline{for loop} will not be visited. \lstinline{Doses_Array} has always 60 elements, thus this path is impossible (dead). It does not mean something bad, because dead path indicate possible issues. In this case it is not issue. It is expected behavior.
+The relevant fragment, which applies to the found dead path is presented in the Figure \ref{listing:pcapump_dosemonitor:dead_path}. It is a list of hypothesis, in which hypothesis 10 (H10) states that number of elements in \lstinline{Doses_Array} is 1 or less. In this case (or more precisely: in this path), \lstinline{for loop} will not be visited. \lstinline{Doses_Array} has always 60 elements, thus this path is impossible (dead). It does not mean something bad, because dead path indicate possible issues. In this case it is not issue. It is expected behavior.
 
 \begin{figure}
 \singlespacing
@@ -560,7 +560,7 @@ C1:    false .
 \label{listing:pcapump_dosemonitor:dead_path}
 \end{figure}
 
-Complete code of module for dose monitoring, after changes described above, is presented in the figures \ref{listing:pcapump_dosemonitor:spark2005_spec} and \ref{listing:pcapump_dosemonitor:spark2005_body}.
+The complete code of the module for dose monitoring, after changes described above, is presented in Figures \ref{listing:pcapump_dosemonitor:spark2005_spec} and \ref{listing:pcapump_dosemonitor:spark2005_body}.
 
 \begin{figure}
 \singlespacing
@@ -655,14 +655,16 @@ end Pca_Pump;
 \label{listing:pcapump_dosemonitor:spark2005_body}
 \end{figure}
 
-Unfortunately, introduced changes (pre- and postconditions) cannot be applied to PCA pump prototype implementation, because - as mentioned in chapter \ref{background:sparkverification} - protected objects cannot be used in proof annotations (pre- and postconditions). However, code fixes made in this section can be applied. This shows, how code implemented based on translation from AADL/BLESS can be verified using SPARK tools.
+Code contracts (pre- and postconditions), added during this example verification process, cannot be applied to PCA Pump Prototype implementation, which use RavenSPARK, because they contains protected objects, and - as mentioned in chapter \ref{background:sparkverification} - protected objects cannot be used in proof annotations (pre- and postconditions). However, code fixes made in this section can be applied. This shows how code implemented based on translation from AADL/BLESS can be processed by SPARK tools to ensure absence of runtime exceptions.
 
 
 
 \section{Verification of Generated Code}
 \label{verification:generated}
 
-Code translated from AADL models is presented in Appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. It means, that discriminants or task annotation are expected here. In order to pass Examiner syntax check at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used. Complete task declaration is presented in the Figure \ref{listing:verification:pca_generated:patient_bolus_checker}.
+This section presents how automatically generated code can be verified using SPARK 2005 tools.
+
+Code translated from AADL models is presented in Appendix \ref{Appendix:pca_generated}. Verification with Examiner of package \lstinline{Pca_Operation} specification returns syntax error: \lstinline{Neither KNOWN_DISCRIMINANT_PART nor TASK_TYPE_ANNOTATION can start with reserved word "IS"}. This means that discriminants or task annotation are expected here. In order to pass Examiner syntax check, at least one annotation has to be declared. For demonstration purposes, \lstinline{Ada.Real_Time.ClockTime} is used, which announce usage of \lstinline{ClockTime} variable from \lstinline{Ada.Real_Time} library. The complete task declaration is presented in the Figure \ref{listing:verification:pca_generated:patient_bolus_checker}.
 
 \begin{figure}
 \singlespacing
@@ -679,7 +681,7 @@ end Patient_Bolus_Checker;
 \label{listing:verification:pca_generated:patient_bolus_checker}
 \end{figure}
 
-Once annotation is added, \lstinline{Pca_Operation} package specification passes Examiner syntax check. Verification of package body returns errors, which are caused by not implemented assertions (translated from BLESS). When all assertions are removed, only flow errors (presented in the Figure \ref{listing:verification:pca_generated:flow_errors}) are found by Examiner. 
+Once annotation is added, \lstinline{Pca_Operation} package specification passes Examiner syntax check. Verification of package body returns errors, which are caused by non-implemented assertions (translated from BLESS). When all such incomplete assertions are removed, only flow errors (presented in the Figure \ref{listing:verification:pca_generated:flow_errors}) are found by Examiner. 
 
 \begin{figure}
 \singlespacing
@@ -699,13 +701,13 @@ pca_operation.adb:101:9: Flow Error  35 - Importation of the initial value of va
 \label{listing:verification:pca_generated:flow_errors}
 \end{figure}
 
-This is nice indication what has to be implemented in particular parts of the program. It is recommended to not use VC and DPC generation until there are some syntax errors. When all errors are fixed, program can be initially verified as described in previous sections.
+This is a nice indication of what has to be implemented in particular parts of the program. It is recommended to not use VC and DPC generation until there are some syntax errors. When all errors are fixed, program can be initially verified as described in previous sections.
 
 
 \section{AUnit Tests}
 \label{verification:aunit}
 
-Better way to prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module, presented in Section \ref{verification:pcapump:monitoring}, is to create AUnit tests. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
+To prove expected behavior of \lstinline{Move_Dosed} in Dose monitoring module, presented in Section \ref{verification:pcapump:monitoring}, AUnit tests can be used. To check both behaviors of \lstinline{Move_Dosed} procedure, two tests have been created:
 \begin{itemize}
     \item \lstinline{Test_Move_Dosed_First_Element_Zero} - first element is 0, then after execution of the procedure dosed amount of drug should be not changed
     \item \lstinline{Test_Move_Dosed_First_Element_Not_Zero} - first element is greater than 0, then after execution of the procedure dosed amount of drug should be smaller than before
@@ -765,7 +767,7 @@ end Test_Move_Dosed_First_Element_Not_Zero;
 \section{GNATprove}
 \label{verification:gnatprove}
 
-The sequential module for monitoring dosed amount verification presented in Section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in the figures \ref{listing:pca_pump_move_dosed_unit_spark2014_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_body}.
+The sequential module for monitoring dosed amount verification presented in Section \ref{verification:pcapump:monitoring} has been converted to SPARK 2014. For conversion, "SPARK 2005 to 2014" translator (created by AdaCore) has been used. Translated code is presented in Figures \ref{listing:pca_pump_move_dosed_unit_spark2014_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_body}.
 
 \begin{figure}
 \singlespacing
@@ -883,7 +885,7 @@ end Pca_Pump;
 \label{listing:pca_pump_move_dosed_unit_spark2014_body}
 \end{figure}
 
-In SPARK 2014, the \lstinline{Standard.ads} file with type ranges is not necessary, because it is handled by language. SPARK 2014 introduces notion of ghost functions. They are used to declare functions that are needed only in annotations. Proof function \lstinline{Sum} is defined as ghost function. In order to use private, global variables in package specification, abstract refinement and ghost functions (\lstinline{Dosed_State} and \lstinline{Dose_Volume_State}) have been used. The \lstinline{Pragma Unevaluated_Use_Of_Old} is used in order to avoid error: \lstinline{prefix of attribute "Old" that is potentially unevaluated must denote an entity}.
+In SPARK 2014, the \lstinline{Standard.ads} file with type ranges is not necessary, because it is handled by language. SPARK 2014 introduces notion of ghost functions. They are used to declare functions that are needed only in annotations. Proof function \lstinline{Sum} is defined as ghost function. In order to use private, global variables in package specification, abstract refinement and ghost functions (\lstinline{Dosed_State} and \lstinline{Dose_Volume_State}) have been used. The \lstinline{Pragma Unevaluated_Use_Of_Old} is used to avoid the error: \lstinline{prefix of attribute "Old" that is potentially unevaluated must denote an entity}.
 
 Above code has been verified with GNATprove tool. Data and information flow analysis did not return any warnings nor errors. Proof analysis was performed with the following parameters:
 \begin{itemize}
@@ -905,7 +907,7 @@ Proof analysis can be run from GPS (menu: SPARK 2014 / Prove All). There is GUI 
     \label{figure:gnatprove-settings}
 \end{figure}
 
-Summary of proof analysis is presented in the Figure \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove}. Proof analysis returned three warnings: \lstinline{overflow check might fail} and one warning: \lstinline{contract case might fail}. It indicates the same problem like in verification with SPARK 2005 tools: overflow hazard. Additionally, there is a warning (\lstinline{postcondition might fail}) caused by tools limitations. If state refinement is not used (i.e. refined variables are defined in package specification), this warning does not occur. The same program without abstract state is presented in the figures \ref{listing:pca_pump_move_dosed_unit_spark2014_no_refinement_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_no_refinement_body}. Its verification summary is shown in the Figure \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove_no_refinement}. 
+Summary of proof analysis is presented in the Figure \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove}. Proof analysis returned three warnings: \lstinline{overflow check might fail} and one warning: \lstinline{contract case might fail}. It indicates the same problem like in verification with SPARK 2005 tools: potential for overflow. Additionally, there is a warning (\lstinline{postcondition might fail}) caused by tools limitations, which are not able to infer dependency between ghost function \lstinline{Dosed_State} and array \lstinline{Dosed}. If state refinement is not used (i.e. refined variables are defined in package specification), and actual array is used in the postcondition (instead of ghost function), this warning does not occur. The same program without abstract state is presented in the figures \ref{listing:pca_pump_move_dosed_unit_spark2014_no_refinement_spec} and \ref{listing:pca_pump_move_dosed_unit_spark2014_no_refinement_body}. Its verification summary is shown in the Figure \ref{listing:pca_pump_move_dosed_unit_spark2014_gnatprove_no_refinement}. 
 
 %http://docs.adacore.com/spark2014-docs/html/ug/spark_2014.html#abstract-state-refined-state-and-initializes
 
